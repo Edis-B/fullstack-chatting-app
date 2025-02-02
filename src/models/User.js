@@ -3,7 +3,7 @@ import mongoose, { Schema, Types } from "mongoose"
 const userSchema = new Schema({
     username: String,
     passwordHash: String,
-    email: String,
+    email: String,      
     friends: [{
         _id: false,
         friend: {
