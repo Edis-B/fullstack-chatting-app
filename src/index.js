@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import handlebars from "express-handlebars";
+import cookieParser from "cookie-parser";
 
 import routes from "./routes.js";
 
@@ -30,6 +31,9 @@ app.set('views', './src/views');
 
 // Middleware
 app.use('/static', express.static('src/public'))
+
+app.use(cookieParser('my-secret-key'));
+
 app.use(express.urlencoded({ extended: false }));
 
 // Routing
@@ -45,7 +49,6 @@ app.get("*", (req, res) => {
 });
 
 // Start Server 
-
 app.listen(port, () => {
 	console.log(`Listening on http://localhost:${port}`);
 });

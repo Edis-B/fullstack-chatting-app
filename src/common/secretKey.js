@@ -1,0 +1,1 @@
+exports.cookieProtectorKey = 'my-secret-cookie-key';
