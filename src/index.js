@@ -9,7 +9,7 @@ const port = 5000;
 
 // DB Config
 try {
-    const uri = "mongodb://localhost:27017/MovieMagicDB";
+    const uri = "mongodb://localhost:27017/BlogApp";
 
 	await mongoose.connect(uri);
 	console.log("Successfully connected to DB");
@@ -26,9 +26,10 @@ app.engine(
 	})
 );
 app.set("view engine", "hbs");
+app.set('views', './src/views');
 
 // Middleware
-app.use('/static', express.static('public'))
+app.use('/static', express.static('src/public'))
 app.use(express.urlencoded({ extended: false }));
 
 // Routing
@@ -42,6 +43,8 @@ app.get("*", (req, res) => {
 	res.status(404);
 	res.render("404");
 });
+
+// Start Server 
 
 app.listen(port, () => {
 	console.log(`Listening on http://localhost:${port}`);
