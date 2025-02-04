@@ -1,1 +1,1 @@
-exports.cookieProtectorKey = 'my-secret-cookie-key';
+export const cookieProtectorKey = 'my-secret-cookie-key';

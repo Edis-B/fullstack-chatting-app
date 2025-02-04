@@ -35,4 +35,10 @@ userController.post("/login", async (req, res) => {
     return res.redirect('/login');
 });
 
+userController.post("/sendFriendRequest", async (req, res) => {
+    const result = await userService.sendFriendRequest(req);
+
+    res.redirect('/chats');
+})
+
 export default userController;

@@ -1,6 +1,6 @@
 import userModel from "../models/User.js";
-import cookieParser from "cookie-parser";
 import bcrypt from "bcrypt";
+import friendStatuses from "../common/friendStatusConstants.js";
 
 export default {
 	async createAccount(body) {
@@ -62,6 +62,7 @@ export default {
 
 		return true;
 	},
+	// Returns false or the user entity
 	async isLoggedIn(req) {
 		if (!req.cookies || !req.cookies.userId) {
 			return false;
@@ -72,8 +73,43 @@ export default {
 
 		if (expiryDate < Date.now) {
 			return false;
-		} 
+		}
 
-		return userModel.findOne().where("username").equals(parsedCookie.username);
-	}
+		return userModel
+			.findOne()
+			.where("username")
+			.equals(parsedCookie.username);
+	},
+	async getUserByUsername(username) {
+		if (!username) {
+			return;
+		}
+
+		return userModel.findOne().where("username").equals(username);
+	},
+	async sendFriendRequest(req) {
+		const sender = await this.isLoggedIn(req);
+
+		if (!!sender) {
+			return false;
+		}
+
+		const receiver = await this.getUserByUsername(req.body.receiver);
+
+		if (!!receiver) {
+			return false;
+		}
+
+		sender.friends.push({
+			_id: receiver._id,
+			status: friendStatuses.OUTGOING_REQUEST,
+		});
+		
+		receiver.friends.push({
+			_id: sender._id,
+			status: friendStatuses.INCOMING_REQUEST,
+		});
+
+		return true;
+	},
 };

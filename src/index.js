@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import handlebars from "express-handlebars";
 
 import cookieParser from "cookie-parser";
+import { cookieProtectorKey } from "./common/secretKey.js"
 import sessionMiddleware from "./middlewares/sessionMiddleware.js";
 
 import routes from "./routes.js";
@@ -37,7 +38,7 @@ app.set("views", "./src/views");
 
 // Middleware
 app.use("/static", express.static("src/public"));
-app.use(cookieParser("my-secret-key"));
+app.use(cookieParser(cookieProtectorKey));
 app.use(express.urlencoded({ extended: false, }));
 
 app.use((req, res, next) => sessionMiddleware.persistCookie(req, res, next));

@@ -1,18 +1,25 @@
-import mongoose, { Schema, Types } from "mongoose"
+import { Schema, Types, model } from "mongoose";
+import friendStatuses from "../common/friendStatusConstants.js";
 
 const userSchema = new Schema({
-    username: String,
-    passwordHash: String,
-    email: String,      
-    friends: [{
-        _id: false,
-        friend: {
-            type: Types.ObjectId,
-            ref: 'User'
-        }
-    }]
-})
+	username: String,
+	passwordHash: String,
+	email: String,
+	friends: [
+		{
+			_id: false,
+			friend: {
+				status: {
+					type: String,
+					enum: Object.values(friendStatuses),
+				},
+				type: Types.ObjectId,
+				ref: "User",
+			},
+		},
+	],
+});
 
-const userModel = mongoose.model('User', userSchema);
+const userModel = model("User", userSchema);
 
 export default userModel;
