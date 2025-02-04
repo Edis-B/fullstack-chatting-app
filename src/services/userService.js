@@ -46,11 +46,34 @@ export default {
 			return "Incorrect identifier or password";
 		}
 
-		res.cookie("test", "testing");
+		let { friends, _id, passwordHash, ...userIdCookie } = user.toObject();
 
-		if (body.rememberMe) {
-		}
+		const cookieExpirationDate = body.rememberMe
+			? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 Days
+			: new Date(Date.now() + 2 * 60 * 60 * 1000); // 2 Hours
+
+		userIdCookie.expires = cookieExpirationDate.toISOString();
+
+		res.cookie("userId", JSON.stringify(userIdCookie), {
+			httpOnly: true,
+			expires: cookieExpirationDate,
+			sameSite: "Strict",
+		});
 
 		return true;
 	},
+	async isLoggedIn(req) {
+		if (!req.cookies || !req.cookies.userId) {
+			return false;
+		}
+
+		const parsedCookie = JSON.parse(req.cookies.userId);
+		const expiryDate = new Date(parsedCookie.expires);
+
+		if (expiryDate < Date.now) {
+			return false;
+		} 
+
+		return userModel.findOne().where("username").equals(parsedCookie.username);
+	}
 };
