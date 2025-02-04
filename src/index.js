@@ -1,8 +1,10 @@
 import express from "express";
 import mongoose from "mongoose";
+
 import handlebars from "express-handlebars";
+
 import cookieParser from "cookie-parser";
-import sessionMiddle from "./middlewares/sessionMiddleware.js"
+import sessionMiddleware from "./middlewares/sessionMiddleware.js";
 
 import routes from "./routes.js";
 
@@ -11,7 +13,7 @@ const port = 5000;
 
 // DB Config
 try {
-    const uri = "mongodb://localhost:27017/BlogApp";
+	const uri = "mongodb://localhost:27017/BlogApp";
 
 	await mongoose.connect(uri);
 	console.log("Successfully connected to DB");
@@ -25,17 +27,20 @@ app.engine(
 	"hbs",
 	handlebars.engine({
 		extname: ".hbs",
+		helpers: {
+
+		},
 	})
 );
 app.set("view engine", "hbs");
-app.set('views', './src/views');
+app.set("views", "./src/views");
 
 // Middleware
-app.use('/static', express.static('src/public'))
-app.use(cookieParser('my-secret-key'));
-app.use(express.urlencoded({ extended: false }));
+app.use("/static", express.static("src/public"));
+app.use(cookieParser("my-secret-key"));
+app.use(express.urlencoded({ extended: false, }));
 
-app.use((req, res, next) => sessionMiddle(req, res, next));
+app.use((req, res, next) => sessionMiddleware.persistCookie(req, res, next));
 
 // Routing
 app.use(routes);
@@ -45,7 +50,7 @@ app.get("*", (req, res) => {
 	res.render("404");
 });
 
-// Start Server 
+// Start Server
 app.listen(port, () => {
 	console.log(`Listening on http://localhost:${port}`);
 });
