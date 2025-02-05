@@ -37,7 +37,7 @@ userController.post("/login", async (req, res) => {
 userController.post("/send-friend-request", async (req, res) => {
 	const result = await userService.sendFriendRequest(req);
 
-	res.redirect("/chats");
+	res.redirect("/chat");
 });
 
 export default userController;

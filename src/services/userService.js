@@ -46,7 +46,7 @@ export default {
 			return "Incorrect identifier or password";
 		}
 
-		let { friends, _id, passwordHash, ...userIdCookie } = user.toObject();
+		let { friends, passwordHash, ...userIdCookie } = user.toObject();
 
 		const cookieExpirationDate = body.rememberMe
 			? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 Days
