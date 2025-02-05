@@ -1,18 +1,12 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
 	const button = document.querySelector(".user-item.new-request");
 	const searchChat = document.querySelector(".search-bar-friends input");
-	let friends = getFriends();
+	const userList = document.querySelector(".user-list");
 
-	async function getFriends() {
-		const response = await fetch("/api/user/get-username", {
-			method: "GET",
-			credentials: "include"
-		});
-
-		const responseJSON = await response.json();
-
-		console.log(responseJSON);
-	}
+	const friends = await getFriends();
+	
+	await updateList();
+	searchChat.addEventListener("input", updateList);
 
 	button.addEventListener("click", async function () {
 		const username = prompt("Enter person's usename");
@@ -21,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			return;
 		}
 
-		const response = await fetch("/api/user/send-friend-request", {
+		const response = await fetch("/user/send-friend-request", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -30,11 +24,42 @@ document.addEventListener("DOMContentLoaded", function () {
 				receiver: username,
 			}),
 		});
-
-		console.log(response);
 	});
 
-	searchChat.addEventListener("input", async function () {
+	async function getFriends() {
+		const response = await fetch(`/api/user/get-user-friends`, {
+			method: "GET",
+		});
+
+		const friendsJSON = await response.json();
+
+		return friendsJSON.friends;
+	}
+
+	async function updateList() {
+		userList.innerHTML = "";
+
 		const filter = searchChat.value;
-	});
+
+		const friendsArr = friends.filter((x) =>
+			x.friend.username.toLowerCase().includes(filter.toLowerCase())
+		);
+
+		friendsArr.forEach((el) => {
+			const friend = el.friend;
+
+			const newDiv = document.createElement("div");
+			newDiv.classList.add("user-item");
+
+			newDiv.innerHTML = `				
+		<img
+		src="https://cdn-icons-png.flaticon.com/512/32/32339.png"
+		alt="User Avatar"
+		/>
+		<span class="user-name">${friend.username}</span>
+		`;
+
+			userList.appendChild(newDiv);
+		});
+	}
 });
