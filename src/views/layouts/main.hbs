@@ -13,8 +13,10 @@
 			</a>
 			<nav>
 				<ul>
-					{{#if isLoggedIn}}{{else}}
-						<li><a href="/login">Login</a></li>
+					{{#if isLoggedIn}}
+						<p>Welcome back!</p>
+					{{else}}
+						<li><a href="/user/login">Login</a></li>
 					{{/if}}
 				</ul>
 			</nav>

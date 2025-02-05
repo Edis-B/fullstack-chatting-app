@@ -2,7 +2,7 @@ import { Router } from "express";
 
 const chatsController = Router();
 
-chatsController.get("/chats", (req, res) => {
+chatsController.get("/", (req, res) => {
 	res.render("chats");
 });
 

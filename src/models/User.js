@@ -8,11 +8,11 @@ const userSchema = new Schema({
 	friends: [
 		{
 			_id: false,
+			status: {
+				type: String,
+				enum: Object.values(friendStatuses),
+			},
 			friend: {
-				status: {
-					type: String,
-					enum: Object.values(friendStatuses),
-				},
 				type: Types.ObjectId,
 				ref: "User",
 			},

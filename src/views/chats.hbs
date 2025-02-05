@@ -1,21 +1,26 @@
 <head>
-    <link rel="stylesheet" href="/static/css/chats-page.css">
+	<link rel="stylesheet" href="/static/css/chats-page.css" />
 </head>
 
 <div class="container">
 	<!-- User List Sidebar -->
 	<div class="user-list">
-		<div class="user-item">
-			<img src="https://via.placeholder.com/40" alt="User Avatar" />
-			<span class="user-name">John Doe</span>
+
+		<div class="user-item new-request">
+			<img
+				src="https://cdn-icons-png.flaticon.com/512/32/32339.png"
+				alt="User Avatar"
+			/>
+			<span class="user-name">Add new friend</span>
 		</div>
-		<div class="user-item">
-			<img src="https://via.placeholder.com/40" alt="User Avatar" />
-			<span class="user-name">Jane Smith</span>
-		</div>
-		<div class="user-item">
-			<img src="https://via.placeholder.com/40" alt="User Avatar" />
-			<span class="user-name">Michael Lee</span>
+
+		<!-- Search Bar -->
+		<div class="search-bar-friends">
+			<input
+				type="text"
+				placeholder="Search friends..."
+				class="search-input"
+			/>
 		</div>
 	</div>
 
@@ -33,3 +38,5 @@
 		</div>
 	</div>
 </div>
+
+<script src="static/script/chat-page.js"></script>

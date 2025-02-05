@@ -40,6 +40,7 @@ app.set("views", "./src/views");
 app.use("/static", express.static("src/public"));
 app.use(cookieParser(cookieProtectorKey));
 app.use(express.urlencoded({ extended: false, }));
+app.use(express.json());
 
 app.use((req, res, next) => sessionMiddleware.persistCookie(req, res, next));
 

@@ -71,7 +71,7 @@ export default {
 		const parsedCookie = JSON.parse(req.cookies.userId);
 		const expiryDate = new Date(parsedCookie.expires);
 
-		if (expiryDate < Date.now) {
+		if (expiryDate < Date.now()) {
 			return false;
 		}
 
@@ -89,27 +89,48 @@ export default {
 	},
 	async sendFriendRequest(req) {
 		const sender = await this.isLoggedIn(req);
-
-		if (!!sender) {
+		if (!sender) {
 			return false;
 		}
 
 		const receiver = await this.getUserByUsername(req.body.receiver);
-
-		if (!!receiver) {
+		if (!receiver || sender == receiver) {
 			return false;
 		}
 
-		sender.friends.push({
-			_id: receiver._id,
-			status: friendStatuses.OUTGOING_REQUEST,
-		});
-		
-		receiver.friends.push({
-			_id: sender._id,
-			status: friendStatuses.INCOMING_REQUEST,
-		});
+		const areAlreadyConnected = sender.friends.includes(receiver._id);
+		if (areAlreadyConnected) {
+			return false;
+		}
+
+		try {
+			sender.friends.push({
+				status: friendStatuses.OUTGOING_REQUEST,
+				friend: receiver._id,
+			});
+			receiver.friends.push({
+				status: friendStatuses.INCOMING_REQUEST,
+				friend: sender._id,
+			});
+
+			await sender.save();
+			await receiver.save();
+		} catch (err) {
+			console.log(err);
+			return false;
+		}
 
 		return true;
+	},
+	async getAllFriendsOfUsername(username) {
+		const user = await this.getUserByUsername(username).populate("friends");
+
+		return user.friends;
+	},
+	async getAllFriendsOfCookie(req) {
+		let user = await this.isLoggedIn(req);
+		await user.populate("friends.friend");
+
+		return user.friends;
 	},
 };

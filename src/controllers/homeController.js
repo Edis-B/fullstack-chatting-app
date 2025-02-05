@@ -5,7 +5,7 @@ const homeController = Router();
 
 homeController.get("/", async (req, res) => {
     const message = await userService.isLoggedIn(req);
-
+    console.log(message);
 	res.render("home", { message });
 });
 
