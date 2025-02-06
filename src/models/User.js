@@ -18,6 +18,15 @@ const userSchema = new Schema({
 			},
 		},
 	],
+	chats: [
+		{
+			_id: false,
+			chat: {
+				type: Types.ObjectId,
+				ref: "Chat",
+			},
+		},
+	],
 });
 
 const userModel = model("User", userSchema);

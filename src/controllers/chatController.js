@@ -19,4 +19,9 @@ chatsController.get("/:id", async (req, res) => {
 	res.render("chats", { chatHistory });
 });
 
+chatsController.post("/send-message", async (req, res) => {
+	await chatService.sendMessage();
+})
+
+
 export default chatsController;

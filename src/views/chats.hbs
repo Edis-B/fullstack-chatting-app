@@ -1,5 +1,5 @@
 <head>
-	<script type="module" src="static/script/chat-page.js"></script>
+	<script src="static/script/chat-page.js"></script>
 	<link rel="stylesheet" href="/static/css/chat-page.css" />
 </head>
 
@@ -30,16 +30,20 @@
 
 	<!-- Chat Area -->
 	<div class="chat-area">
-		<div class="chat-header">John Doe</div>
+		{{!-- <div class="chat-header">{{John Doe}}</div> --}}
 		<div class="message-list">
-			<div class="message-item">Hello! How are you doing today?</div>
-			<div class="message-item sent">I'm doing great, thanks for asking!</div>
-			<div class="message-item">What about you?</div>
+			{{#each chatHistory}}
+
+				<div class="message-item">{{this.text}}</div>
+				<div class="message-item sent">{{this.text}}</div>
+
+			{{/each}}
 		</div>
-		<div class="message-input">
+
+		<form class="message-input" action="/chat/send-message" method="POST">
 			<input type="text" placeholder="Type a message..." />
-			<button>Send</button>
-		</div>
+			<button type="submit">Send</button>
+		</form>
 	</div>
 </div>
 

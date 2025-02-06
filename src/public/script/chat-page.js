@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 	const searchChat = document.querySelector(".search-bar-friends input");
 	const userList = document.querySelector(".user-list");
 
+	const username = await getUsernameFromCookie();
+
 	const chatTypes = {
 		DIRECT_MESSAGES: "direct messages",
 		GROUP_CHAT: "group chat",
@@ -72,7 +74,22 @@ document.addEventListener("DOMContentLoaded", async function () {
 		});
 	}
 
+	async function doesChatExist(receiver) {
+		const response = await fetch(
+			`/api/chat/does-chat-exist-cookie/${receiver}`,
+			{
+				method: "GET",
+			}
+		);
+
+		const responseJSON = await response.json();
+
+		console.log(responseJSON);
+	}
+
 	async function createDMChat(receiver) {
+		const chatExists = doesChatExist(receiver);
+
 		const confirmation = confirm("Would you like to start a new chat?");
 
 		if (!confirmation) {
@@ -86,11 +103,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 			},
 			body: JSON.stringify({
 				type: chatTypes.DIRECT_MESSAGES,
-				participants: [
-					{
-						participant: receiver,
-					},
-				],
+				participants: [receiver, username],
 			}),
 		});
 	}

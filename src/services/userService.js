@@ -129,8 +129,8 @@ export default {
 	},
 	async getAllFriendsOfCookie(req) {
 		let user = await this.isLoggedIn(req);
-		await user.populate("friends.friend");
+		const friends = (await user.populate("friends.friend")).friends;
 
-		return user.friends;
+		return friends;
 	},
 };
