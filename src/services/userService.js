@@ -5,15 +5,15 @@ import friendStatuses from "../common/friendStatusConstants.js";
 export default {
 	async createAccount(body) {
 		if (body.password !== body.confirmPassword) {
-			return "Passwords do not match";
+			throw new Error("Passwords do not match");
 		}
 
 		if (await userModel.findOne().where("username").equals(body.username)) {
-			return "Username is already taken";
+			throw new Error("Username is already taken");
 		}
 
 		if (await userModel.findOne().where("email").equals(body.email)) {
-			return "Email is already registered";
+			throw new Error("Email is already registered");
 		}
 
 		const saltRounds = 10;
@@ -63,7 +63,7 @@ export default {
 		return true;
 	},
 	// Returns false or the user entity
-	async isLoggedIn(req) {
+	getUserFromReq(req) {
 		if (!req.cookies || !req.cookies.userId) {
 			return false;
 		}
@@ -75,20 +75,20 @@ export default {
 			return false;
 		}
 
-		return userModel
-			.findOne()
-			.where("username")
-			.equals(parsedCookie.username);
+		const user = userModel
+			.findOne({ username: parsedCookie.username});
+
+		return user;
 	},
 	async getUserByUsername(username) {
 		if (!username) {
 			return;
 		}
 
-		return userModel.findOne().where("username").equals(username);
+		return userModel.findOne({ username: username });
 	},
 	async sendFriendRequest(req) {
-		const sender = await this.isLoggedIn(req);
+		const sender = await this.getUserFromReq(req);
 		if (!sender) {
 			return false;
 		}
@@ -127,9 +127,11 @@ export default {
 
 		return user.friends;
 	},
-	async getAllFriendsOfCookie(req) {
-		let user = await this.isLoggedIn(req);
+	async getAllChatsOfUser(req) {
+		let user = await userModel.findOne({ _id: req.user._id });
+
 		const friends = (await user.populate("friends.friend")).friends;
+		const chats = (await user.populate("chats.chat")).chats;
 
 		return friends;
 	},

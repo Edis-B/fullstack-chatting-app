@@ -9,7 +9,17 @@ chatApiController.get("/chat-types", (req, res) => {
 })
 
 chatApiController.get("/does-chat-exist-cookie/:receiver", async (req, res) => {
-    res.json(await chatService.checkIfDMsExistFromCookie(req, req.params.receiver));
+    res.json(await chatService.checkIfDMsExistWithUser(req, req.params.receiver));
 })
+
+chatApiController.get("/:id", async (req, res) => {
+	const chatHistory = await chatService.getChatHistory(req.params.id);
+
+	if (chatHistory == false) {
+		return res.status(400).json('Chat not created');
+	}
+
+	res.render("chats", { chatHistory });
+});
 
 export default chatApiController;

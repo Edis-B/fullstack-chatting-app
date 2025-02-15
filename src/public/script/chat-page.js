@@ -10,13 +10,13 @@ document.addEventListener("DOMContentLoaded", async function () {
 		GROUP_CHAT: "group chat",
 	};
 
-	const friends = await getFriends();
+	const chats = await getChats();
 
 	await updateList();
 	searchChat.addEventListener("input", async () => updateList);
 
 	button.addEventListener("click", async function () {
-		const username = prompt("Enter person's usename");
+		const username = prompt("Enter person's username");
 
 		if (!username) {
 			return;
@@ -33,22 +33,12 @@ document.addEventListener("DOMContentLoaded", async function () {
 		});
 	});
 
-	async function getFriends() {
-		const response = await fetch(`/api/user/get-user-friends`, {
-			method: "GET",
-		});
-
-		const friendsJSON = await response.json();
-
-		return friendsJSON.friends;
-	}
-
 	async function updateList() {
 		userList.innerHTML = "";
 
 		const filter = searchChat.value;
 
-		const friendsArr = friends.filter((x) =>
+		const friendsArr = chats.filter((x) =>
 			x.friend.username.toLowerCase().includes(filter.toLowerCase())
 		);
 
@@ -59,15 +49,15 @@ document.addEventListener("DOMContentLoaded", async function () {
 			newDiv.classList.add("user-item");
 
 			newDiv.innerHTML = `				
-			<img
-			src="https://cdn-icons-png.flaticon.com/512/32/32339.png"
-			alt="User Avatar"
-			/>
-			<span class="user-name">${friend.username}</span>
-			`;
+				<img
+				src="https://cdn-icons-png.flaticon.com/512/32/32339.png"
+				alt="User Avatar"
+				/>
+				<span class="user-name">${friend.username}</span>
+				`;
 
 			newDiv.addEventListener("click", () =>
-				createDMChat(friend.username)
+				goToChat(friend.username)
 			);
 
 			userList.appendChild(newDiv);
@@ -87,8 +77,12 @@ document.addEventListener("DOMContentLoaded", async function () {
 		console.log(responseJSON);
 	}
 
-	async function createDMChat(receiver) {
+	async function goToChat(receiver) {
 		const chatExists = doesChatExist(receiver);
+
+		if (chatExists) {
+			window.location.href = "/";
+		}
 
 		const confirmation = confirm("Would you like to start a new chat?");
 
@@ -108,3 +102,13 @@ document.addEventListener("DOMContentLoaded", async function () {
 		});
 	}
 });
+
+async function getChats() {
+	const response = await fetch(`/api/user/get-user-friends`, {
+		method: "GET",
+	});
+
+	const friendsJSON = await response.json();
+
+	return friendsJSON.friends;
+}

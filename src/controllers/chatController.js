@@ -13,12 +13,6 @@ chatsController.post("/create-new-chat", async (req, res) => {
 	res.redirect(`/chat/${newId}`);
 });
 
-chatsController.get("/:id", async (req, res) => {
-	const chatHistory = await chatService.getChatHistory(req.params.id);
-
-	res.render("chats", { chatHistory });
-});
-
 chatsController.post("/send-message", async (req, res) => {
 	await chatService.sendMessage();
 })

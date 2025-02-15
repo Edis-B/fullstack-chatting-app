@@ -9,11 +9,6 @@ export default {
 		let participantsPromises = [];
 		const info = req.body;
 
-		const currentUserId = new Types.ObjectId(
-			JSON.parse(req.cookies.userId)._id
-		);
-
-		console.log(info.participants);
 		for (const username of info.participants) {
 			participantsPromises.push(userModel.findOne({ username }));
 		}
@@ -84,14 +79,35 @@ export default {
 		return newChatId;
 	},
 	async getChatHistory(id) {
-		const chat = chatModel.findOne({ _id: id }).populate("messages");
+		const chat = chatModel
+			.findOne({ _id: id })
+			.populate("messages.message");
+
+		if (!chat) {
+			return false;
+		}
 
 		return chat.messages;
 	},
 	async sendMessage() {},
-	async checkIfDMsExistFromCookie(req, receiver) {
-		const user = await userService.isLoggedIn(req);
-		await user.populate("chats.chat");
+	async checkIfDMsExistWithUser(req, receiverUsername) {
+		const receiverId = (
+			await userService.getUserByUsername(receiverUsername)
+		)._id;
+
+		const userQuery = userModel.findOne({ _id: req.user._id });
+
+		const userObj = await userQuery
+			.populate({
+				path: "chats.chat",
+				match: { "participants.participant": receiverId },
+				populate: {
+					path: "participants.participant",
+				},
+			})
+			.exec();
+
+		console.log(JSON.stringify(userObj, null, 4));
 
 		const chatId = false;
 
