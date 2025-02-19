@@ -3,6 +3,7 @@ import userModel from "../models/User.js";
 
 export async function isLoggedInLocal(req, res, next) {
 	res.locals.isLoggedIn = !!req.user;
+	
 	next();
 }
 

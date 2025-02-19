@@ -44,9 +44,9 @@ app.use(cookieParser(cookieProtectorKey));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use((req, res, next) => isLoggedInLocal(req, res, next));
-app.use((req, res, next) => attachUserToRequest(req, res, next));
 app.use((req, res, next) => sessionMiddleware.persistCookie(req, res, next));
+app.use((req, res, next) => attachUserToRequest(req, res, next));
+app.use((req, res, next) => isLoggedInLocal(req, res, next));
 
 // Routing
 app.use(routes);
