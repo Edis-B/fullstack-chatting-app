@@ -1,5 +1,4 @@
 import React from "react";
-import "../css/Chat.css"; // Optional for additional styles
 
 export default function Chat() {
 	return (

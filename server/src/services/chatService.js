@@ -5,40 +5,42 @@ import { Types } from "mongoose";
 import userService from "./userService.js";
 
 export default {
+	// Creates new chat with given participants and chat type
 	async createNewChat(req) {
 		let participantsPromises = [];
-		const info = req.body;
+		const { participants, type } = req.body;
 
-		for (const username of info.participants) {
+		for (const username of participants) {
 			participantsPromises.push(userModel.findOne({ username }));
 		}
 
 		const participantsArr = await Promise.all(participantsPromises); // Resolve all promises at once
 
 		let newChat = {
-			type: info.type,
+			type: type,
 			participants: participantsArr.map((x) => ({ participant: x })),
 		};
 
-		if (info.type == chatTypes.DIRECT_MESSAGES) {
+		if (type == chatTypes.DIRECT_MESSAGES) {
 			for (let part of participantsArr) {
-				const populatedPart = await part.populate({
+				const populatedParticipants = await part.populate({
 					path: "chats.chat",
 					match: { type: chatTypes.DIRECT_MESSAGES },
 					populate: { path: "participants.participant" },
 				});
 
-				const populatedPartObj = populatedPart.toObject();
+				const populatedParticipantsObj =
+					populatedParticipants.toObject();
 
 				let exists = false;
 
 				try {
-					exists = populatedPartObj.chats.some((chat) =>
+					exists = populatedParticipantsObj.chats.some((chat) =>
 						chat.chat.participants.some((participant) =>
 							participantsArr.some(
 								(participantInArr) =>
 									participantInArr._id.toString() !=
-										populatedPartObj._id.toString() &&
+										populatedParticipantsObj._id.toString() &&
 									participant.participant._id.toString() ===
 										participantInArr._id.toString()
 							)
@@ -89,7 +91,9 @@ export default {
 
 		return chat.messages;
 	},
-	async sendMessage() {},
+	async sendMessage() {
+		
+	},
 	async checkIfDMsExistWithUser(req, receiverUsername) {
 		const receiverId = (
 			await userService.getUserByUsername(receiverUsername)

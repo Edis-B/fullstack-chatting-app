@@ -12,6 +12,7 @@
     "color-convert": "^2.0.1",
     "color-name": "^1.1.4",
     "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
     "cross-spawn": "^7.0.6",
     "eastasianwidth": "^0.2.0",
     "emoji-regex": "^9.2.2",

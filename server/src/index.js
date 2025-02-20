@@ -1,16 +1,15 @@
 import express from "express";
 import mongoose from "mongoose";
-
-import handlebars from "express-handlebars";
-
+import cors from "cors";
 import cookieParser from "cookie-parser";
+
 import { cookieProtectorKey } from "./common/secretKey.js";
 import sessionMiddleware from "./middlewares/sessionMiddleware.js";
+import { frontEnd } from "./common/appConstants.js";
 import {
 	isLoggedInLocal,
 	attachUserToRequest,
 } from "./middlewares/authMiddleware.js";
-
 import routes from "./routes.js";
 
 const app = express();
@@ -27,18 +26,9 @@ try {
 	console.log(err.message);
 }
 
-// View engine
-app.engine(
-	"hbs",
-	handlebars.engine({
-		extname: ".hbs",
-		helpers: {},
-	})
-);
-app.set("view engine", "hbs");
-app.set("views", "./src/views");
-
 // Middleware
+app.use(cors({ origin: frontEnd, credentials: true })); // React frontend
+
 app.use("/static", express.static("src/public"));
 app.use(cookieParser(cookieProtectorKey));
 app.use(express.urlencoded({ extended: false }));
@@ -53,7 +43,6 @@ app.use(routes);
 
 app.get("*", (req, res) => {
 	res.status(404);
-	res.render("404");
 });
 
 // Start Server

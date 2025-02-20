@@ -1,6 +1,7 @@
 import { Router } from "express";
-import chatTypes from "../../common/chatTypeConstants.js";
-import chatService from "../../services/chatService.js";
+
+import chatTypes from "../common/chatTypeConstants.js";
+import chatService from "../services/chatService.js";
 
 const chatApiController = Router();
 
@@ -19,7 +20,23 @@ chatApiController.get("/:id", async (req, res) => {
 		return res.status(400).json('Chat not created');
 	}
 
-	res.render("chats", { chatHistory });
+	res.json(chatHistory);
 });
+
+chatApiController.post("/create-new-chat", async (req, res) => {
+	const newId = await chatService.createNewChat(req);
+
+	if (!newId) {
+		res.json('Something went wrong')
+	}
+
+	res.json(`Chat created ${newId}`);
+});
+
+chatApiController.post("/send-message", async (req, res) => {
+	await chatService.sendMessage();
+
+	res.json()
+})
 
 export default chatApiController;

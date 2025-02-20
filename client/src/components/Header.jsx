@@ -23,23 +23,13 @@ export default function Header() {
 					<div className="collapse navbar-collapse" id="navbarNav">
 						<ul className="navbar-nav ms-auto">
 							<li className="nav-item">
-								<Link className="nav-link text-white" to="/">
-									Home
-								</Link>
-							</li>
-							<li className="nav-item">
-								<Link className="nav-link text-white" to="/friends">
-									Friends
-								</Link>
-							</li>
-							<li className="nav-item">
 								<Link className="nav-link text-white" to="/chats">
 									Chats
 								</Link>
 							</li>
 							<li className="nav-item">
-								<Link className="nav-link text-white" to="/notifications">
-									Notifications
+								<Link className="nav-link text-white" to="/catalog">
+									Catalog
 								</Link>
 							</li>
 						</ul>
