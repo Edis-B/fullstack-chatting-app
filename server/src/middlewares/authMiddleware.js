@@ -9,7 +9,6 @@ export async function isLoggedInLocal(req, res, next) {
 
 export async function attachUserToRequest(req, res, next) {
 	req.user = await userService.getUserFromReq(req); 
-
 	next();
 }
 

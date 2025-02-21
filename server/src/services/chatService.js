@@ -91,13 +91,16 @@ export default {
 
 		return chat.messages;
 	},
-	async sendMessage() {
-		
-	},
-	async checkIfDMsExistWithUser(req, receiverUsername) {
+	async sendMessage() {},
+	async checkIfDMsExistWithUser(req) {
+		const receiverUsername = req.query.receiverUsername;
 		const receiverId = (
 			await userService.getUserByUsername(receiverUsername)
 		)._id;
+
+		if (!receiverId || !req.user) {
+			throw new Error("Sender or receiver not found!");
+		}
 
 		const userQuery = userModel.findOne({ _id: req.user._id });
 
@@ -112,6 +115,7 @@ export default {
 			.exec();
 
 		console.log(JSON.stringify(userObj, null, 4));
+		console.log(userObj.chats[0].chat);
 
 		const chatId = false;
 

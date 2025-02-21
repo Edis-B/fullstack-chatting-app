@@ -1,9 +1,10 @@
 import userModel from "../models/User.js";
 import bcrypt from "bcrypt";
 import friendStatuses from "../common/friendStatusConstants.js";
+import { attachAuthCookie } from "../utils/authUtils.js";
 
 export default {
-	async createAccount(body) {
+	async registerUser(res, body) {
 		if (body.password !== body.confirmPassword) {
 			throw new Error("Passwords do not match");
 		}
@@ -16,11 +17,16 @@ export default {
 			throw new Error("Email is already registered");
 		}
 
-		const saltRounds = 10;
-		const salt = await bcrypt.genSalt(saltRounds);
-		const passwordHash = await bcrypt.hash(body.password, salt);
+		try {
+			var userId = await userModel.create({ ...body });
+		} catch (err) {
+			throw new Error(
+				"There was an error creating registering the account!"
+			);
+		}
 
-		userModel.create({ ...body, passwordHash });
+		const user = await userModel.findOne({ _id: userId });
+		attachAuthCookie(res, user, false);
 
 		return true;
 	},
@@ -33,34 +39,29 @@ export default {
 			.equals(body.identifier);
 
 		if (!user) {
-			return "Incorrect identifier or password";
+			throw new Error("Incorrect identifier or password");
 		}
 
 		// Compare the provided password with the stored password hash
 		let isPasswordValid = await bcrypt.compare(
 			body.password,
-			user.passwordHash
+			user.password
 		);
 
 		if (!isPasswordValid) {
-			return "Incorrect identifier or password";
+			throw new Error("Incorrect identifier or password");
 		}
-
-		let { friends, passwordHash, ...userIdCookie } = user.toObject();
-
-		const cookieExpirationDate = body.rememberMe
-			? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 Days
-			: new Date(Date.now() + 2 * 60 * 60 * 1000); // 2 Hours
-
-		userIdCookie.expires = cookieExpirationDate.toISOString();
-
-		res.cookie("userId", JSON.stringify(userIdCookie), {
-			httpOnly: true,
-			expires: cookieExpirationDate,
-			sameSite: "Strict",
-		});
+		//sss
+		attachAuthCookie(res, user, body.rememberMe);
 
 		return true;
+	},
+	logoutUser(req, res) {
+		if (!req.user) {
+			throw new Error("User is not logged in!");
+		}
+
+		res.clearCookie("userId");
 	},
 	// Returns false or the user entity
 	getUserFromReq(req) {
@@ -75,8 +76,7 @@ export default {
 			return false;
 		}
 
-		const user = userModel
-			.findOne({ username: parsedCookie.username});
+		const user = userModel.findOne({ username: parsedCookie.username });
 
 		return user;
 	},
@@ -88,7 +88,7 @@ export default {
 		return userModel.findOne({ username: username });
 	},
 	async sendFriendRequest(req) {
-		const sender = await this.getUserFromReq(req);
+		const sender = req.user;
 		if (!sender) {
 			return false;
 		}
@@ -134,5 +134,10 @@ export default {
 		const chats = (await user.populate("chats.chat")).chats;
 
 		return friends;
+	},
+	async getPeopleByUserSubstring(usernameSubstr) {
+		return await userModel
+			.find({ username: { $regex: usernameSubstr, $options: "i" } })
+			.limit(10);
 	},
 };

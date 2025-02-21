@@ -12,8 +12,6 @@ import Register from "./components/Register";
 import "./css/style.css";
 
 function App() {
-	console.log("hello1");
-
 	return (
 		<BrowserRouter>
 			<Routes>

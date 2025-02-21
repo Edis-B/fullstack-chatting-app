@@ -24,6 +24,7 @@
     "is-fullwidth-code-point": "^3.0.0",
     "isexe": "^2.0.0",
     "jackspeak": "^4.0.2",
+    "jsonwebtoken": "^9.0.2",
     "lru-cache": "^11.0.2",
     "minimatch": "^10.0.1",
     "minimist": "^1.2.8",

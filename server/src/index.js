@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
-import { cookieProtectorKey } from "./common/secretKey.js";
+import { cookieProtectorKey } from "./common/secretKeys.js";
 import sessionMiddleware from "./middlewares/sessionMiddleware.js";
 import { frontEnd } from "./common/appConstants.js";
 import {

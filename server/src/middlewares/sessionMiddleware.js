@@ -7,14 +7,12 @@ export default {
     
             // Check if it expires in less then 30 minutes
             if (expiryDate - Date.now() < 30 * 60 * 1000) {
-                // Add 1 hour
                 userIdCookieParsed.expires = Date.now() + 60 * 60 * 1000;
     
                 res.cookie("userId", JSON.stringify(userIdCookieParsed), {
                     httpOnly: true,
-                    secure: true,
                     maxAge: 60 * 60 * 1000, // Extend expiration to 1 hour from this request
-                    sameSite: "Strict"
+                    sameSite: "Lax"
                 });
             }
         }
