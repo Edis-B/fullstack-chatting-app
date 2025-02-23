@@ -1,5 +1,6 @@
 import { Error, Types } from "mongoose";
 
+import messageModel from "../models/Message.js";
 import chatModel from "../models/Chat.js";
 import chatTypes from "../common/chatTypeConstants.js";
 import userModel from "../models/User.js";
@@ -72,20 +73,60 @@ export default {
 			});
 		}
 	},
-	async getChatHistory(id) {
-		const chat = chatModel
-			.findOne({ _id: id })
-			.populate("messages.message");
+	async getChatHistory(req) {
+		const chatQuery = chatModel.findOne({ _id: req.query.chatId });
 
-		console.log(JSON.stringify(chat, null, 10));
+		const chat = await chatQuery
+			.populate({
+				path: "messages",
+				populate: {
+					path: "user",
+				},
+			})
+			.lean();
 
 		if (!chat) {
 			throw new Error("Chat not found!");
 		}
 
-		return chat.messages;
+		const messageObjs = chat.messages;
+
+		for (const message of messageObjs) {
+			if (message.user.username == req.user.username) {
+				message.isMine = true;
+			} else {
+				message.isMine = false;
+			}
+		}
+
+		return messageObjs;
 	},
-	async sendMessage() {},
+	async sendMessage(req) {
+		if (!req.user) {
+			throw new Error("Not Logged in!");
+		}
+
+		if (!req.body) {
+			throw new Error("No info sent");
+		}
+
+		const { chat, text } = req.body;
+
+		const newMessage = await messageModel.create({
+			text,
+			chat,
+			date: Date.now(),
+			user: req.user._id,
+		});
+
+		await chatModel.findByIdAndUpdate(chat, {
+			$push: {
+				messages: newMessage._id,
+			},
+		});
+
+		return newMessage._id;
+	},
 	async checkIfDMsExistWithUser(req) {
 		const receiverUser = await userService.getUserByUsername(
 			req.query.receiverUsername

@@ -33,14 +33,18 @@ chatApiController.post("/create-new-chat", async (req, res) => {
 });
 
 chatApiController.post("/send-message", async (req, res) => {
-	await chatService.sendMessage();
-
-	res.json();
+	try {
+		const result = await chatService.sendMessage(req);
+		res.json(result);
+	} catch (err) {
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
+	}
 });
 
 chatApiController.get("/get-chat-history", async (req, res) => {
 	try {
-		const result = await chatService.getChatHistory(req.query.chatId);
+		const result = await chatService.getChatHistory(req);
 		res.json(result);
 	} catch (err) {
 		const errMessage = getErrorMessage(err);

@@ -1,5 +1,4 @@
 import { Schema, Types, model } from "mongoose";
-// import friendStatuses from "../common/friendStatusConstants.js";
 
 const messageSchema = new Schema({
     text: String,
