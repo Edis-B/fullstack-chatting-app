@@ -13,12 +13,16 @@ userApiController.get("/get-user-friends", async (req, res) => {
 });
 
 userApiController.get("/get-username", (req, res) => {
-	res.json({ username: req.user.username });
+	if (!req.user) {
+		return res.status(400).json(null);
+	}
+	
+	res.json(req.user.username);
 });
 
 userApiController.get("/get-users-by-username", async (req, res) => {
 	console.log(req.query.usernameSubstr);
-	
+
 	const result = await userService.getPeopleByUserSubstring(
 		req.query.usernameSubstr
 	);
@@ -39,9 +43,15 @@ userApiController.post("/register", async (req, res) => {
 });
 
 userApiController.post("/login", async (req, res) => {
-	const result = await userService.loginUser(req.body, res);
+	try {
+		const result = await userService.loginUser(req.body, res);
+		res.json(result);
+		
+	} catch (err) {
+		const errMessage = getErrorMessage(err)
+		res.status(400).json(errMessage);
+	}
 
-	res.json(result);
 });
 
 userApiController.get("/logout", (req, res) => {
@@ -56,9 +66,14 @@ userApiController.get("/logout", (req, res) => {
 });
 
 userApiController.post("/send-friend-request", async (req, res) => {
-	const result = await userService.sendFriendRequest(req);
+	try {
+		const result = await userService.sendFriendRequest(req);
+		res.json(result);
 
-	res.json(result);
+	} catch (err) {
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
+	}
 });
 
 export default userApiController;

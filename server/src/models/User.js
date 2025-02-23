@@ -31,11 +31,14 @@ const userSchema = new Schema({
 	],
 });
 
-userSchema.pre("save", async function () {
+userSchema.pre("save", async function (next) {
+	if (!this.isModified("password")) {
+        return next(); // Skip hashing if password is unchanged
+    }
+
 	const saltRounds = 10;
 	this.password = await bcrypt.hash(this.password, saltRounds);
-
-	this.image = "https://i.pinimg.com/736x/c0/27/be/c027bec07c2dc08b9df60921dfd539bd.jpg";
+	next();
 });
 
 const userModel = model("User", userSchema);

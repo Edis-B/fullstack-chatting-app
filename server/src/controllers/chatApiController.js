@@ -13,38 +13,39 @@ chatApiController.get("/chat-types", (req, res) => {
 chatApiController.get("/does-chat-exist-with-cookie", async (req, res) => {
 	try {
 		const result = await chatService.checkIfDMsExistWithUser(req);
-		res.json(result);
-
+		res.json({ chatId: result, exists: !!result });
 	} catch (err) {
 		const errMessage = getErrorMessage(err);
-		res.json(errMessage);
+		res.status(400).json(errMessage);
 	}
-});
-
-chatApiController.get("/:id", async (req, res) => {
-	const chatHistory = await chatService.getChatHistory(req.params.id);
-
-	if (chatHistory == false) {
-		return res.status(400).json("Chat not created");
-	}
-
-	res.json(chatHistory);
 });
 
 chatApiController.post("/create-new-chat", async (req, res) => {
-	const newId = await chatService.createNewChat(req);
-
-	if (!newId) {
-		res.json("Something went wrong");
+	try {
+		const newId = await chatService.createNewChat(req);
+		if (!newId) {
+			return res.json("Something went wrong");
+		}
+		res.json(newId);
+	} catch (err) {
+		res.status(400).json(getErrorMessage(err));
 	}
-
-	res.json(newId);
 });
 
 chatApiController.post("/send-message", async (req, res) => {
 	await chatService.sendMessage();
 
 	res.json();
+});
+
+chatApiController.get("/get-chat-history", async (req, res) => {
+	try {
+		const result = await chatService.getChatHistory(req.query.chatId);
+		res.json(result);
+	} catch (err) {
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
+	}
 });
 
 export default chatApiController;

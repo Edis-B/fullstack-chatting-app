@@ -13,14 +13,16 @@
 		},
 		{
 			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen",
+			"internalConsoleOptions": "openOnSessionStart",
 			"name": "nodemon",
 			"program": "${workspaceFolder}/server/src/index.js",
+			"cwd": "${workspaceFolder}/server",
 			"request": "launch",
 			"restart": true,
 			"runtimeExecutable": "nodemon",
 			"skipFiles": ["<node_internals>/**"],
-			"type": "node"
+			"type": "node",
+			"sourceMaps": true
 		}
 	],
 	"compounds": [

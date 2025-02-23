@@ -48,4 +48,6 @@ app.get("*", (req, res) => {
 // Start Server
 app.listen(port, () => {
 	console.log(`Listening on http://localhost:${port}`);
+	console.log(`Front-End on ${frontEnd}`);
+
 });

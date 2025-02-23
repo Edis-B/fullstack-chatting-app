@@ -25,7 +25,13 @@ export default {
 			);
 		}
 
-		const user = await userModel.findOne({ _id: userId });
+		const user = await userModel.findOne({
+			_id: userId,
+			image:
+				body.image ??
+				"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTugGK9j-9h5_GoIWKVFC4m2yg-Sxs-N50A-w&s",
+		});
+
 		attachAuthCookie(res, user, false);
 
 		return true;
@@ -36,7 +42,8 @@ export default {
 		let user = await userModel
 			.findOne()
 			.where(isEmail ? "email" : "username")
-			.equals(body.identifier);
+			.equals(body.identifier)
+			.exec();
 
 		if (!user) {
 			throw new Error("Incorrect identifier or password");
@@ -90,17 +97,20 @@ export default {
 	async sendFriendRequest(req) {
 		const sender = req.user;
 		if (!sender) {
-			return false;
+			throw new Error("Not Logged in!");
 		}
 
 		const receiver = await this.getUserByUsername(req.body.receiver);
-		if (!receiver || sender == receiver) {
-			return false;
+		if (!receiver || sender.username === receiver.username) {
+			throw new Error("Invalid friend request!");
 		}
 
-		const areAlreadyConnected = sender.friends.includes(receiver._id);
+		const areAlreadyConnected = sender.friends.some((x) => {
+			return x.friend.equals(receiver._id);
+		});
+
 		if (areAlreadyConnected) {
-			return false;
+			throw new Error("You are already friends with user!");
 		}
 
 		try {
@@ -116,11 +126,10 @@ export default {
 			await sender.save();
 			await receiver.save();
 		} catch (err) {
-			console.log(err);
-			return false;
+			throw new Error("There has been an error!");
 		}
 
-		return true;
+		return "Sent friend request successfully!";
 	},
 	async getAllFriendsOfUsername(username) {
 		const user = await this.getUserByUsername(username).populate("friends");
