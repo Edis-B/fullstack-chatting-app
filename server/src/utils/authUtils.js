@@ -14,7 +14,7 @@ export function isValidToken(token) {
 }
 
 export function attachAuthCookie(res, user, rememberMe) {
-	let { friends, password, ...userIdCookie } = user.toObject();
+	let { friends, password, ...userIdCookie } = user;
 
 	const cookieExpirationDate = rememberMe
 		? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 Days

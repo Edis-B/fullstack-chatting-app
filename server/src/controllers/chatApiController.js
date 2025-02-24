@@ -10,6 +10,16 @@ chatApiController.get("/chat-types", (req, res) => {
 	res.json(chatTypes);
 });
 
+chatApiController.get("/get-users-chats", async (req, res) => {
+	try {
+		const result = await chatService.getUsersChats(req);
+		res.json(result);
+	} catch (err) {
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
+	}
+});
+
 chatApiController.get("/does-chat-exist-with-cookie", async (req, res) => {
 	try {
 		const result = await chatService.checkIfDMsExistWithUser(req);

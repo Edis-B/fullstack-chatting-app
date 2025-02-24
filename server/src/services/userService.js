@@ -17,24 +17,24 @@ export default {
 			throw new Error("Email is already registered");
 		}
 
+		let user;
 		try {
-			var userId = await userModel.create({ ...body });
+			user = await userModel.create({
+				...body,
+				image:
+					body.image ??
+					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTugGK9j-9h5_GoIWKVFC4m2yg-Sxs-N50A-w&s",
+			});
 		} catch (err) {
 			throw new Error(
 				"There was an error creating registering the account!"
 			);
 		}
 
-		const user = await userModel.findOne({
-			_id: userId,
-			image:
-				body.image ??
-				"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTugGK9j-9h5_GoIWKVFC4m2yg-Sxs-N50A-w&s",
-		});
-
+		user = user.toObject();
 		attachAuthCookie(res, user, false);
 
-		return true;
+		return "Successfully registered!";
 	},
 	async loginUser(body, res) {
 		let isEmail = body.identifier.includes("@");
@@ -43,7 +43,7 @@ export default {
 			.findOne()
 			.where(isEmail ? "email" : "username")
 			.equals(body.identifier)
-			.exec();
+			.lean();
 
 		if (!user) {
 			throw new Error("Incorrect identifier or password");
@@ -58,7 +58,7 @@ export default {
 		if (!isPasswordValid) {
 			throw new Error("Incorrect identifier or password");
 		}
-		//sss
+		
 		attachAuthCookie(res, user, body.rememberMe);
 
 		return true;
@@ -145,7 +145,7 @@ export default {
 		return friends;
 	},
 	async getPeopleByUserSubstring(req) {
-		const exclude = req.query.exclude === 'true';
+		const exclude = req.query.exclude === "true";
 		const filter = {
 			username: { $regex: req.query.usernameSubstr, $options: "i" },
 		};

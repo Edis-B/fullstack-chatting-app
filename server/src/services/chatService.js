@@ -170,26 +170,47 @@ export default {
 			.populate("participants.participant")
 			.lean();
 
+		const result = this.getChatInfo(chat, req.user.id);
+
+		return { image: result.chatImage, name: result.chatName };
+	},
+	async getUsersChats(req) {
+		if (!req.user) {
+			throw new Error("Not Logged in!");
+		}
+
+		const user = await userModel
+			.findById(req.user.id)
+			.populate({
+				path: "chats.chat",
+				populate: "participants.participant"
+			})
+			.lean();
+
+		const chatInfos = user.chats.map((chatObj) => {
+			return this.getChatInfo(chatObj.chat, req.user.id);
+		});
+
+		return chatInfos;
+	},
+	getChatInfo(chat, userId) {
 		let chatName, chatImage;
 		const participantsObjs = chat.participants;
-		console.log(JSON.stringify(participantsObjs, null, 10));
 
 		if (chat.type == chatTypes.DIRECT_MESSAGES) {
 			const participantObj =
 				participantsObjs.filter(
-					(obj) => !obj.participant._id.equals(req.user.id)
+					(obj) => !obj.participant._id.equals(userId)
 				)[0] ?? null;
 
 			if (!participantObj) {
 				throw new Error("Recepient not found!");
 			}
-			
+
 			chatName = participantObj.participant.username;
 			chatImage = participantObj.participant.image;
+
+			return { chatName, chatImage, _id: chat._id };
 		}
-
-		console.log(JSON.stringify(chat, null, 10));
-
-		return { image: chatImage, name: chatName };
 	},
 };

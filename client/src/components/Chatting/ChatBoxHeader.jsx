@@ -35,7 +35,7 @@ export default function ChatBoxHeader(props) {
 			}
 			return data;
 		} catch (err) {
-			alert("There has been an error");
+			alert(`There has been an error: ${err}`);
 			console.log(err);
 		}
 	}

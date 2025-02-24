@@ -3,17 +3,56 @@ import { host, client } from "../../common/appConstants.js";
 
 export default function UserList() {
 	const [search, setSearch] = useState();
+	const [chats, setChats] = useState([]);
 	const [users, setUsers] = useState([]);
+	const [showChats, setShowChats] = useState(true);
 	const [selectedUser, setSelectedUser] = useState(null);
 
 	// Search bar
 	useEffect(() => {
 		const delayDebounce = setTimeout(async () => {
-			await fetchUsers(search);
+			if (!search) {
+				setShowChats(true);
+				return;
+			}
+
+			const allUsers = await fetchUsers(search);
+
+			setUsers(allUsers);
+			setShowChats(false);
 		}, 500);
 
 		return () => clearTimeout(delayDebounce);
 	}, [search]);
+
+	useEffect(() => {
+		async function setChatsEffect() {
+			const chatsData = await fetchChats();
+
+			setChats(chatsData);
+		}
+
+		setChatsEffect();
+	}, []);
+
+	async function fetchChats() {
+		try {
+			const response = await fetch(`${host}/chat/get-users-chats`, {
+				method: "GET",
+				credentials: "include",
+			});
+
+			const data = await response.json();
+			if (!response.ok) {
+				alert(data);
+			}
+
+			return data;
+		} catch (err) {
+			alert(`There has been an error: ${err}`);
+			console.log(err);
+		}
+	}
 
 	async function fetchUsers(substring) {
 		try {
@@ -30,13 +69,13 @@ export default function UserList() {
 			);
 
 			const data = await response.json();
-			setUsers(data);
+			return data;
 		} catch (err) {
-			console.error(`There has been an error: ${err}`);
+			alert(`There has been an error: ${err}`);
 		}
 	}
 
-    async function sendFriendRequest(username) {
+	async function sendFriendRequest(username) {
 		try {
 			const response = await fetch(`${host}/user/send-friend-request`, {
 				method: "POST",
@@ -91,7 +130,7 @@ export default function UserList() {
 			});
 
 			const data2 = await response2.json();
-			
+
 			if (data2) {
 				return (window.location.href = `${client}/chats/${data2}`);
 			}
@@ -100,7 +139,7 @@ export default function UserList() {
 		}
 	}
 
-    function toggleUserMenu(username) {
+	function toggleUserMenu(username) {
 		const set = selectedUser === username ? null : username;
 
 		setSelectedUser(set);
@@ -119,7 +158,7 @@ export default function UserList() {
 			/>
 
 			<ul className="list-group mt-3">
-				{Array.isArray(users) &&
+				{(!showChats && Array.isArray(users)) &&
 					users.map((user) => (
 						<li
 							key={user._id}
@@ -167,6 +206,26 @@ export default function UserList() {
 									</button>
 								</div>
 							)}
+						</li>
+					))}
+
+				{(showChats && Array.isArray(chats)) &&
+					chats.map((chat) => (
+						<li
+							key={chat._id}
+							className="list-group-item d-flex align-items-center"
+						>
+							<img
+								src={chat.chatImage}
+								className="rounded-circle"
+								style={{
+									width: "40px",
+									height: "40px",
+									objectFit: "cover",
+								}}
+							/>
+
+							{chat.chatName}
 						</li>
 					))}
 			</ul>

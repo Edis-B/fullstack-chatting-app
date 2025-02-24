@@ -2,7 +2,6 @@ import { Router } from "express";
 
 import userService from "../services/userService.js";
 import { getErrorMessage } from "../utils/errorUtils.js";
-import { attachAuthCookie } from "../utils/authUtils.js";
 
 const userApiController = Router();
 
