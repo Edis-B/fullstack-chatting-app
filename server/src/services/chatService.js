@@ -160,4 +160,36 @@ export default {
 
 		return userObj.chats[0].chat._id;
 	},
+	async getChatHeader(req) {
+		if (!req.user) {
+			throw new Error("Not Logged in!");
+		}
+
+		const chat = await chatModel
+			.findById(req.query.chatId)
+			.populate("participants.participant")
+			.lean();
+
+		let chatName, chatImage;
+		const participantsObjs = chat.participants;
+		console.log(JSON.stringify(participantsObjs, null, 10));
+
+		if (chat.type == chatTypes.DIRECT_MESSAGES) {
+			const participantObj =
+				participantsObjs.filter(
+					(obj) => !obj.participant._id.equals(req.user.id)
+				)[0] ?? null;
+
+			if (!participantObj) {
+				throw new Error("Recepient not found!");
+			}
+			
+			chatName = participantObj.participant.username;
+			chatImage = participantObj.participant.image;
+		}
+
+		console.log(JSON.stringify(chat, null, 10));
+
+		return { image: chatImage, name: chatName };
+	},
 };

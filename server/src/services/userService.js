@@ -144,9 +144,16 @@ export default {
 
 		return friends;
 	},
-	async getPeopleByUserSubstring(usernameSubstr) {
-		return await userModel
-			.find({ username: { $regex: usernameSubstr, $options: "i" } })
-			.limit(10);
+	async getPeopleByUserSubstring(req) {
+		const exclude = req.query.exclude === 'true';
+		const filter = {
+			username: { $regex: req.query.usernameSubstr, $options: "i" },
+		};
+
+		if (exclude && req.user) {
+			filter.username.$ne = req.user.username;
+		}
+
+		return await userModel.find(filter).limit(10);
 	},
 };

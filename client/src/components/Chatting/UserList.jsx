@@ -22,7 +22,7 @@ export default function UserList() {
 			}
 
 			const response = await fetch(
-				`${host}/user/get-users-by-username?usernameSubstr=${substring}`,
+				`${host}/user/get-users-by-username?usernameSubstr=${substring}&exclude=true`,
 				{
 					method: "GET",
 					credentials: "include",

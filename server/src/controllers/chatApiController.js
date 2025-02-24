@@ -52,4 +52,14 @@ chatApiController.get("/get-chat-history", async (req, res) => {
 	}
 });
 
+chatApiController.get("/get-chat-header", async (req, res) => {
+	try {
+		const result = await chatService.getChatHeader(req);
+		res.json(result);
+	} catch (err) {
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
+	}
+});
+
 export default chatApiController;
