@@ -1,9 +1,23 @@
+import { io } from "socket.io-client";
+import { useEffect, useState } from "react";
 import { host } from "../../common/appConstants.js";
 
+const socket = io(host);
+
 export default function MessageInput(props) {
-	const text = document.getElementById("messageInput");
+	const chatId = props.chatId;
+	const [message, setMessage] = useState("");
+
+	function sendMessage(room, messageData) {
+		socket.emit("send_message", { room, message: messageData });
+		setMessage("");
+	}
 
 	async function sendButtonHandler() {
+		if (!message) {
+			return;
+		}
+
 		const response = await fetch(`${host}/chat/send-message`, {
 			method: "POST",
 			headers: {
@@ -11,18 +25,18 @@ export default function MessageInput(props) {
 			},
 			credentials: "include",
 			body: JSON.stringify({
-				chat: props.chatId,
-				text: text.value,
+				chat: chatId,
+				text: message,
 			}),
 		});
 
 		const data = await response.json();
-		
+
 		if (!response.ok) {
-			alert(data)
+			alert(`There has been an error: ${data}`);
 		}
-		
-		console.log(data);
+
+		sendMessage(chatId, data);
 	}
 
 	return (
@@ -31,6 +45,8 @@ export default function MessageInput(props) {
 				type="text"
 				className="form-control"
 				placeholder="Type a message..."
+				onChange={(e) => setMessage(e.target.value)}
+				value={message}
 				id="messageInput"
 			/>
 			<button

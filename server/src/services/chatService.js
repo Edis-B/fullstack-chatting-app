@@ -89,17 +89,7 @@ export default {
 			throw new Error("Chat not found!");
 		}
 
-		const messageObjs = chat.messages;
-
-		for (const message of messageObjs) {
-			if (message.user.username == req.user.username) {
-				message.isMine = true;
-			} else {
-				message.isMine = false;
-			}
-		}
-
-		return messageObjs;
+		return chat.messages;
 	},
 	async sendMessage(req) {
 		if (!req.user) {
@@ -119,13 +109,15 @@ export default {
 			user: req.user._id,
 		});
 
+		const populatedMessage = await newMessage.populate("user");
+
 		await chatModel.findByIdAndUpdate(chat, {
 			$push: {
 				messages: newMessage._id,
 			},
 		});
 
-		return newMessage._id;
+		return populatedMessage.toObject();
 	},
 	async checkIfDMsExistWithUser(req) {
 		const receiverUser = await userService.getUserByUsername(
@@ -183,7 +175,7 @@ export default {
 			.findById(req.user.id)
 			.populate({
 				path: "chats.chat",
-				populate: "participants.participant"
+				populate: "participants.participant",
 			})
 			.lean();
 
