@@ -2,22 +2,23 @@ import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
 import { host } from "../../common/appConstants.js";
 
-const socket = io(host);
 
 export default function MessageInput(props) {
+	const socket = io(host);
+	
 	const chatId = props.chatId;
 	const [message, setMessage] = useState("");
-
+	
 	function sendMessage(room, messageData) {
 		socket.emit("send_message", { room, message: messageData });
 		setMessage("");
 	}
-
+	
 	async function sendButtonHandler() {
 		if (!message) {
 			return;
 		}
-
+		
 		const response = await fetch(`${host}/chat/send-message`, {
 			method: "POST",
 			headers: {
@@ -29,16 +30,16 @@ export default function MessageInput(props) {
 				text: message,
 			}),
 		});
-
+		
 		const data = await response.json();
-
+		
 		if (!response.ok) {
 			alert(`There has been an error: ${data}`);
 		}
-
+		
 		sendMessage(chatId, data);
 	}
-
+	
 	return (
 		<div className="d-flex mt-auto">
 			<input

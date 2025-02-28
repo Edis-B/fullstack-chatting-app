@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom"
 import { host, client } from "../../common/appConstants.js";
+import { frontEnd } from "../../../../server/src/common/appConstants.js";
 
 export default function UserList() {
 	const [search, setSearch] = useState();
@@ -158,7 +160,8 @@ export default function UserList() {
 			/>
 
 			<ul className="list-group mt-3">
-				{(!showChats && Array.isArray(users)) &&
+				{!showChats &&
+					Array.isArray(users) &&
 					users.map((user) => (
 						<li
 							key={user._id}
@@ -209,23 +212,29 @@ export default function UserList() {
 						</li>
 					))}
 
-				{(showChats && Array.isArray(chats)) &&
+				{showChats &&
+					Array.isArray(chats) &&
 					chats.map((chat) => (
 						<li
 							key={chat._id}
-							className="list-group-item d-flex align-items-center"
+							className="list-group-item d-flex cursor-pointer"
 						>
-							<img
-								src={chat.chatImage}
-								className="rounded-circle"
-								style={{
-									width: "40px",
-									height: "40px",
-									objectFit: "cover",
-								}}
-							/>
+							<Link
+								to={`/chats/${chat._id}`}
+								className="text-decoration-none text-dark w-100 d-flex align-items-center"
+							>
+								<img
+									src={chat.chatImage}
+									className="rounded-circle m-2"
+									style={{
+										width: "40px",
+										height: "40px",
+										objectFit: "cover",
+									}}
+								/>
 
-							{chat.chatName}
+								{chat.chatName}
+							</Link>
 						</li>
 					))}
 			</ul>

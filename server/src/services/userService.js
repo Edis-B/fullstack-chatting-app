@@ -36,10 +36,58 @@ export default {
 
 		return "Successfully registered!";
 	},
-	async loginUser(body, res) {
-		let isEmail = body.identifier.includes("@");
+	async getUserProfileData(req) {
+		let id,
+			owner = false;
+		if (req.query.userId) {
+			id = req.query.userId;
+		} else {
+			owner = true;
+			id = req.user.id;
+		}
 
-		let user = await userModel
+		const user = userModel
+			.findById(id)
+			.select("username image banner about posts friends photos");
+
+		if (!user) {
+			throw new Error("User not found!");
+		}
+
+		const userObj = await user.populate("posts").lean();
+		if (!owner) {
+			if (req.user) {
+				const currentUser = await userModel
+					.findById(req.user.id)
+					.select({
+						friends: {
+							$elemMatch: { friend: userObj._id },
+						},
+					});
+
+				if (currentUser.friends.length > 0) {
+					userObj.ourStatus = currentUser.friends[0].status;
+				} else {
+					userObj.ourStatus = friendStatuses.NOT_FRIENDS;
+				}
+			}
+
+			userObj.friends = userObj.friends.filter(
+				(f) => f.status === friendStatuses.FRIENDS
+			);
+		}
+
+		await userModel.populate(userObj, {
+			path: "friends.friend",
+			select: "username image",
+		});
+
+		return { ...userObj, owner };
+	},
+	async loginUser(body, res) {
+		const isEmail = body.identifier.includes("@");
+
+		const user = await userModel
 			.findOne()
 			.where(isEmail ? "email" : "username")
 			.equals(body.identifier)
@@ -50,7 +98,7 @@ export default {
 		}
 
 		// Compare the provided password with the stored password hash
-		let isPasswordValid = await bcrypt.compare(
+		const isPasswordValid = await bcrypt.compare(
 			body.password,
 			user.password
 		);
@@ -58,7 +106,7 @@ export default {
 		if (!isPasswordValid) {
 			throw new Error("Incorrect identifier or password");
 		}
-		
+
 		attachAuthCookie(res, user, body.rememberMe);
 
 		return true;
@@ -126,6 +174,8 @@ export default {
 			await sender.save();
 			await receiver.save();
 		} catch (err) {
+			console.log(err);
+
 			throw new Error("There has been an error!");
 		}
 
@@ -157,3 +207,13 @@ export default {
 		return await userModel.find(filter).limit(10);
 	},
 };
+
+export function autherize(req, role) {
+	if (role && !req.user.roles.role) {
+		throw new Error("Unauthorized!");
+	}
+
+	if (!req.user) {
+		throw new Error("Not logged in!");
+	}
+}

@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { host } from "../../common/appConstants.js";
 
 export default function ChatBoxHeader(props) {
-	const [header, setHeader] = useState({});
 	const chatId = props.chatId;
+	const [header, setHeader] = useState({});
 
 	useEffect(() => {
 		async function setHeaderData() {
@@ -13,7 +13,7 @@ export default function ChatBoxHeader(props) {
 		}
 
 		setHeaderData();
-	}, []);
+	}, [chatId]);
 
 	async function fetchChatHeaderInfo() {
 		try {

@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
 
-import UserList from "./Chatting/UserList";
-import MessageInput from "./Chatting/MessageInput";
-import ChatBox from "./Chatting/ChatBox";
-import ChatBoxHeader from "./Chatting/ChatBoxHeader";
+import UserList from "./UserList";
+import MessageInput from "./MessageInput";
+import ChatBox from "./ChatBox";
+import ChatBoxHeader from "./ChatBoxHeader";
 
 export default function Chat() {
 	const params = useParams();

@@ -3,10 +3,39 @@ import bcrypt from "bcrypt";
 import friendStatuses from "../common/friendStatusConstants.js";
 
 const userSchema = new Schema({
-	username: String,
-	password: String,
-	email: String,
-	image: String,
+	username: {
+		type: String,
+		required: true,
+	},
+	password: {
+		type: String,
+		required: true,
+	},
+	email: {
+		type: String,
+		required: true,
+	},
+	about: String,
+	banner: {
+		type: String,
+		match: /^https?\:\/\//,
+	},
+	image: {
+		type: String,
+		required: true,
+		match: /^https?\:\/\/.+/,
+	},
+	photos: [
+		{
+			_id: false,
+			type: String,
+			match: /^https?\:\/\/.+/,
+		},
+	],
+	posts: {
+		type: Types.ObjectId,
+		ref: "Post",
+	},
 	friends: [
 		{
 			_id: false,
@@ -33,8 +62,8 @@ const userSchema = new Schema({
 
 userSchema.pre("save", async function (next) {
 	if (!this.isModified("password")) {
-        return next(); // Skip hashing if password is unchanged
-    }
+		return next(); // Skip hashing if password is unchanged
+	}
 
 	const saltRounds = 10;
 	this.password = await bcrypt.hash(this.password, saltRounds);

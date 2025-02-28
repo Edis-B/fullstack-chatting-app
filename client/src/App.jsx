@@ -1,13 +1,13 @@
-import { useState } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import Layout from "./components/Layout/Layout";
 
 import Home from "./components/Home";
-import Chat from "./components/Chat";
+import Chat from "./components/Chatting/Chat";
 import NotFound from "./components/NotFound";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import Profile from "./components/Profile/Profile";
 
 import "./css/style.css";
 
@@ -17,10 +17,16 @@ function App() {
 			<Routes>
 				<Route path="/" element={<Layout />}>
 					<Route index element={<Home />} />
+					
 					<Route path="/chats" element={<Chat />} />
 					<Route path="/chats/:id" element={<Chat />} />
+
 					<Route path="/login" element={<Login />} />
 					<Route path="/register" element={<Register />} />
+
+					<Route path="/profile" element={<Profile />} />
+					<Route path="/profile/:id" element={<Profile />} />
+
 					<Route path="*" element={<NotFound />} />
 				</Route>
 			</Routes>
