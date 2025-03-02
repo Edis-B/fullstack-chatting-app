@@ -46,15 +46,15 @@ export default {
 			id = req.user.id;
 		}
 
-		const user = userModel
+		const userObj = await userModel
 			.findById(id)
-			.select("username image banner about posts friends photos");
+			.select("username image banner about")
+			.lean();
 
-		if (!user) {
+		if (!userObj) {
 			throw new Error("User not found!");
 		}
 
-		const userObj = await user.populate("posts").lean();
 		if (!owner) {
 			if (req.user) {
 				const currentUser = await userModel
@@ -71,16 +71,7 @@ export default {
 					userObj.ourStatus = friendStatuses.NOT_FRIENDS;
 				}
 			}
-
-			userObj.friends = userObj.friends.filter(
-				(f) => f.status === friendStatuses.FRIENDS
-			);
 		}
-
-		await userModel.populate(userObj, {
-			path: "friends.friend",
-			select: "username image",
-		});
 
 		return { ...userObj, owner };
 	},
@@ -186,13 +177,23 @@ export default {
 
 		return user.friends;
 	},
-	async getAllChatsOfUser(req) {
-		let user = await userModel.findOne({ _id: req.user._id });
+	async getAllFriendsOfUser(req) {
+		let identifier = req.query.userId;
+		const user = await userModel.findById(identifier);
 
-		const friends = (await user.populate("friends.friend")).friends;
-		const chats = (await user.populate("chats.chat")).chats;
+		if (!user) {
+			throw new Error("User not found!");
+		}
 
-		return friends;
+		const userObj = await user.populate("friends.friend").lean();
+
+		if (!req.user || req.user.id != userObj._id) {
+			userObj.friends = userObj.friends.filter(
+				(f) => f.status === friendStatuses.FRIENDS
+			);
+		}
+
+		return userObj.friends;
 	},
 	async getPeopleByUserSubstring(req) {
 		const exclude = req.query.exclude === "true";

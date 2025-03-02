@@ -79,7 +79,7 @@ export default function Header() {
 							<li className="nav-item">
 								<Link
 									className="nav-link text-white"
-									to="/chats"
+									to="/chat"
 								>
 									Chats
 								</Link>

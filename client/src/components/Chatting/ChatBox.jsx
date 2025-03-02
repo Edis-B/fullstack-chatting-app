@@ -3,11 +3,12 @@ import { io } from "socket.io-client";
 
 import { host, client } from "../../common/appConstants.js";
 import ChatBoxHeader from "./ChatBoxHeader";
+import { useChat } from "../../contexts/ChatContext.jsx";
 
-export default function ChatBox(props) {
+export default function ChatBox() {
 	const socket = io(host);
 
-	const chatId = props.chatId;
+	const { chatId } = useChat();
 	const [currentUsername, setCurrentUsername] = useState("");
 	const [chatHistory, setChatHistory] = useState([]);
 
@@ -18,7 +19,7 @@ export default function ChatBox(props) {
 		return () => {
 			socket.off("receive_message", handleMessage);
 			socket.disconnect();
-		}
+		};
 	}, [chatId]);
 
 	async function fetchData() {

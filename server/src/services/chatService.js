@@ -51,6 +51,7 @@ export default {
 
 		return newChat._id;
 	},
+	async getLatestChatId(req) {},
 	async checkIfChatExists(participantsArr) {
 		for (let part of participantsArr) {
 			const populatedParticipant = await part.populate({
@@ -104,6 +105,7 @@ export default {
 
 		const newMessage = await messageModel.create({
 			text,
+			// chat id
 			chat,
 			date: Date.now(),
 			user: req.user._id,
@@ -112,6 +114,7 @@ export default {
 		const populatedMessage = await newMessage.populate("user");
 
 		await chatModel.findByIdAndUpdate(chat, {
+			updatedAt: Date.now(),
 			$push: {
 				messages: newMessage._id,
 			},
@@ -167,8 +170,10 @@ export default {
 		return { image: result.chatImage, name: result.chatName };
 	},
 	async getUsersChats(req) {
-		if (!req.user) {
-			throw new Error("Not Logged in!");
+		const identifier = req.query.userId ?? req.user?.id;
+
+		if (!identifier) {
+			throw new Error("Problem fetching user id!");
 		}
 
 		const user = await userModel
@@ -179,13 +184,19 @@ export default {
 			})
 			.lean();
 
-		const chatInfos = user.chats.map((chatObj) => {
+		if (!user) {
+			throw new Error("User not found");
+		}
+
+		let chatInfos = user.chats.map((chatObj) => {
 			return this.getChatInfo(chatObj.chat, req.user.id);
 		});
 
+		chatInfos = chatInfos.sort((a, b) => b.updatedAt - a.updatedAt)
+
 		return chatInfos;
 	},
-	getChatInfo(chat, userId) {
+	getChatInfo(chat /* JS object */, userId) {
 		let chatName, chatImage;
 		const participantsObjs = chat.participants;
 
@@ -202,7 +213,7 @@ export default {
 			chatName = participantObj.participant.username;
 			chatImage = participantObj.participant.image;
 
-			return { chatName, chatImage, _id: chat._id };
+			return { chatName, chatImage, _id: chat._id, updatedAt: chat.updatedAt };
 		}
 	},
 };

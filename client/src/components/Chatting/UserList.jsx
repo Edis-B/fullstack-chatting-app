@@ -1,14 +1,23 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { host, client } from "../../common/appConstants.js";
-import { frontEnd } from "../../../../server/src/common/appConstants.js";
+import { useChat } from "../../contexts/ChatContext.jsx";
 
 export default function UserList() {
+	const { id } = useParams();
+	const { chatId, setChatId } = useChat();
+
+	const navigate = useNavigate();
+
 	const [search, setSearch] = useState();
 	const [chats, setChats] = useState([]);
 	const [users, setUsers] = useState([]);
 	const [showChats, setShowChats] = useState(true);
 	const [selectedUser, setSelectedUser] = useState(null);
+
+	useEffect(() => {
+		fetchChats();
+	}, []);
 
 	// Search bar
 	useEffect(() => {
@@ -27,29 +36,28 @@ export default function UserList() {
 		return () => clearTimeout(delayDebounce);
 	}, [search]);
 
-	useEffect(() => {
-		async function setChatsEffect() {
-			const chatsData = await fetchChats();
-
-			setChats(chatsData);
-		}
-
-		setChatsEffect();
-	}, []);
-
 	async function fetchChats() {
 		try {
-			const response = await fetch(`${host}/chat/get-users-chats`, {
-				method: "GET",
-				credentials: "include",
-			});
+			const response = await fetch(
+				`${host}/chat/get-users-chats`,
+				{
+					method: "GET",
+					credentials: "include",
+				}
+			);
 
 			const data = await response.json();
 			if (!response.ok) {
 				alert(data);
 			}
 
-			return data;
+			if (!id) {
+				navigate(`/chat/${data[0]._id}`, { replace: true });
+				return;
+			}
+
+			setChatId(id);
+			setChats(data);
 		} catch (err) {
 			alert(`There has been an error: ${err}`);
 			console.log(err);
@@ -105,7 +113,7 @@ export default function UserList() {
 			const data = await response.json();
 
 			if (data.exists) {
-				return (window.location.href = `${client}/chats/${data.chatId}`);
+				return (window.location.href = `${client}/chat/${data.chatId}`);
 			}
 
 			let currentUser = await fetch(`${host}/user/get-username`, {
@@ -134,7 +142,7 @@ export default function UserList() {
 			const data2 = await response2.json();
 
 			if (data2) {
-				return (window.location.href = `${client}/chats/${data2}`);
+				return (window.location.href = `${client}/chat/${data2}`);
 			}
 		} catch (err) {
 			console.error("Error checking chat:", err);
@@ -220,7 +228,7 @@ export default function UserList() {
 							className="list-group-item d-flex cursor-pointer"
 						>
 							<Link
-								to={`/chats/${chat._id}`}
+								to={`/chat/${chat._id}`}
 								className="text-decoration-none text-dark w-100 d-flex align-items-center"
 							>
 								<img

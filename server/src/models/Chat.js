@@ -3,6 +3,10 @@ import chatTypes from "../common/chatTypeConstants.js";
 
 const chatSchema = new Schema({
 	name: String,
+	updatedAt: {
+		type: Date,
+		required: true,
+	},
 	type: {
 		type: String,
 		enum: Object.values(chatTypes),
@@ -17,7 +21,13 @@ const chatSchema = new Schema({
 			},
 		},
 	],
-	messages: [{ _id: false, type: Types.ObjectId, ref: "Message" }],
+	messages: [
+		{
+			_id: false,
+			type: Types.ObjectId,
+			ref: "Message",
+		},
+	],
 });
 
 const chatModel = model("Chat", chatSchema);

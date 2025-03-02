@@ -3,26 +3,23 @@ import { useParams } from "react-router-dom";
 import UserList from "./UserList";
 import MessageInput from "./MessageInput";
 import ChatBox from "./ChatBox";
-import ChatBoxHeader from "./ChatBoxHeader";
+import { ChatProvider } from "../../contexts/ChatContext";
 
 export default function Chat() {
-	const params = useParams();
-	const chatId = params.id;
-
 	return (
 		<div className="container-fluid chat-container d-flex">
-			{/* User List */}
-			<UserList />
+			<ChatProvider>
+				{/* User List */}
+				<UserList />
 
-			{chatId && (
-				<div className="chat-box p-3" style={{ flex: 4 }}>
+				<div className="chat-box p-3">
 					{/* Chat Box */}
-					<ChatBox chatId={chatId} />
+					<ChatBox />
 
 					{/* Message Input */}
-					<MessageInput chatId={chatId} />
+					<MessageInput />
 				</div>
-			)}
+			</ChatProvider>
 		</div>
 	);
 }

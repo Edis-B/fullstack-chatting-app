@@ -18,8 +18,8 @@ function App() {
 				<Route path="/" element={<Layout />}>
 					<Route index element={<Home />} />
 					
-					<Route path="/chats" element={<Chat />} />
-					<Route path="/chats/:id" element={<Chat />} />
+					<Route path="/chat" element={<Chat />} />
+					<Route path="/chat/:id" element={<Chat />} />
 
 					<Route path="/login" element={<Login />} />
 					<Route path="/register" element={<Register />} />

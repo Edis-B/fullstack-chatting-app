@@ -20,6 +20,8 @@ export default function Profile(props) {
 		fetchProfileData();
 	}, [userId]);
 
+	useEffect(() => {});
+
 	async function fetchProfileData() {
 		try {
 			const response = await fetch(
@@ -54,13 +56,18 @@ export default function Profile(props) {
 
 				<div className="ms-3">
 					<h2 className="mb-0">{profileData.username}</h2>
+					<p className="mb-0 text-muted">
+						{profileData.about ?? "No details yet."}
+					</p>
 				</div>
 
 				{profileData.owner ? (
 					<div className="ms-auto">
-						<button className="btn btn-primary">
-							Edit Profile
-						</button>
+						<Link>
+							<Link className="btn btn-primary">
+								Edit Profile
+							</Link>
+						</Link>
 						<button className="btn btn-outline-secondary">
 							Settings
 						</button>

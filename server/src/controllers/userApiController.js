@@ -9,16 +9,20 @@ userApiController.get("/get-user-profile-data", async (req, res) => {
 	try {
 		const result = await userService.getUserProfileData(req);
 		res.json(result);
-		
 	} catch (err) {
 		const errMessage = getErrorMessage(err);
 		res.status(400).json(errMessage);
 	}
 });
-userApiController.get("/get-user-friends", async (req, res) => {
-	const friends = await userService.getAllChatsOfUser(req);
 
-	res.json({ friends });
+userApiController.get("/get-user-friends", async (req, res) => {
+	try {
+		const friends = await userService.getAllFriendsOfUser(req);
+		res.json(friends);
+	} catch (err) {
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
+	}
 });
 
 userApiController.get("/get-image-url", async (req, res) => {

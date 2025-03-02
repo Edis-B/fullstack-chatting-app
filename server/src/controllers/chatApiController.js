@@ -6,6 +6,15 @@ import { getErrorMessage } from "../utils/errorUtils.js";
 
 const chatApiController = Router();
 
+chatApiController.get("/latest-chat's-id", async (req, res) => {
+	try {
+		const result = await chatService.getLatestChatId(req);
+		res.json(result);
+	} catch (err) {
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
+	}
+});
 chatApiController.get("/chat-types", (req, res) => {
 	res.json(chatTypes);
 });
