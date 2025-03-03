@@ -1,5 +1,3 @@
-import { useParams } from "react-router-dom";
-
 import UserList from "./UserList";
 import MessageInput from "./MessageInput";
 import ChatBox from "./ChatBox";

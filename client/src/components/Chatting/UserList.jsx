@@ -4,6 +4,8 @@ import { host, client } from "../../common/appConstants.js";
 import { useChat } from "../../contexts/ChatContext.jsx";
 import { useUser } from "../../contexts/UserContext.jsx";
 
+import { sendFriendRequest } from "../../services/userAPIs.js";
+
 export default function UserList() {
 	const { id } = useParams();
 
@@ -100,22 +102,6 @@ export default function UserList() {
 			return data;
 		} catch (err) {
 			console.log(err);
-		}
-	}
-
-	async function sendFriendRequest(username) {
-		try {
-			const response = await fetch(`${host}/user/send-friend-request`, {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				credentials: "include",
-				body: JSON.stringify({ receiver: username }),
-			});
-
-			const data = await response.json();
-			alert(data);
-		} catch (err) {
-			console.error("Error sending friend request:", err);
 		}
 	}
 
@@ -220,7 +206,7 @@ export default function UserList() {
 									<button
 										className="btn btn-sm btn-primary w-100 mb-1"
 										onClick={() =>
-											sendFriendRequest(user.username)
+											sendFriendRequest(userId, user._id)
 										}
 									>
 										Add Friend

@@ -37,17 +37,11 @@ export default {
 		return "Successfully registered!";
 	},
 	async getUserProfileData(req) {
-		let id,
-			owner = false;
-		if (req.query.userId) {
-			id = req.query.userId;
-		} else {
-			owner = true;
-			id = req.user.id;
-		}
+		const username = req.query.username;
+		const owner = req.user?.username === req.query.username;
 
 		const userObj = await userModel
-			.findById(id)
+			.findOne({ username: username })
 			.select("username image banner about")
 			.lean();
 
@@ -57,13 +51,13 @@ export default {
 
 		if (!owner) {
 			if (req.user) {
-				const currentUser = await userModel
-					.findById(req.user.id)
-					.select({
-						friends: {
-							$elemMatch: { friend: userObj._id },
-						},
-					});
+				const currentUser = (
+					await userModel.findById(req.user.id)
+				).toObject();
+
+				currentUser.friends = currentUser.friends.filter((fObj) =>
+					fObj.friend.equals(userObj._id)
+				);
 
 				if (currentUser.friends.length > 0) {
 					userObj.ourStatus = currentUser.friends[0].status;
@@ -133,45 +127,6 @@ export default {
 
 		return userModel.findOne({ username: username });
 	},
-	async sendFriendRequest(req) {
-		const sender = req.user;
-		if (!sender) {
-			throw new Error("Not Logged in!");
-		}
-
-		const receiver = await this.getUserByUsername(req.body.receiver);
-		if (!receiver || sender.username === receiver.username) {
-			throw new Error("Invalid friend request!");
-		}
-
-		const areAlreadyConnected = sender.friends.some((x) => {
-			return x.friend.equals(receiver._id);
-		});
-
-		if (areAlreadyConnected) {
-			throw new Error("You are already friends with user!");
-		}
-
-		try {
-			sender.friends.push({
-				status: friendStatuses.OUTGOING_REQUEST,
-				friend: receiver._id,
-			});
-			receiver.friends.push({
-				status: friendStatuses.INCOMING_REQUEST,
-				friend: sender._id,
-			});
-
-			await sender.save();
-			await receiver.save();
-		} catch (err) {
-			console.log(err);
-
-			throw new Error("There has been an error!");
-		}
-
-		return "Sent friend request successfully!";
-	},
 	async getAllFriendsOfUsername(username) {
 		const user = await this.getUserByUsername(username).populate("friends");
 
@@ -206,6 +161,207 @@ export default {
 		}
 
 		return await userModel.find(filter).limit(10);
+	},
+	async sendFriendRequest(req) {
+		const { senderId, receiverId } = req.body;
+
+		if (senderId != req.user?.id) {
+			throw new Error("Unauthorized");
+		}
+
+		const receiver = await userModel
+			.findById(receiverId)
+			.populate("friends.friend");
+
+		const receiverFriend = receiver.toObject().friends.filter((fObj) => {
+			const check = fObj.friend._id.toString() == senderId
+			return check;
+		});
+
+		let currentStatus;
+		if (receiverFriend.length > 0) {
+			currentStatus = receiver.friends[0].status;
+		}
+
+		if (receiverId === senderId) {
+			throw new Error("Invalid friend request!");
+		}
+
+		if (currentStatus === friendStatuses.INCOMING_REQUEST) {
+			throw new Error("Friend Request already active!");
+		}
+
+		const sender = await userModel.findById(senderId);
+
+		try {
+			sender.friends.push({
+				status: friendStatuses.OUTGOING_REQUEST,
+				friend: receiverId,
+			});
+
+			receiver.friends.push({
+				status: friendStatuses.INCOMING_REQUEST,
+				friend: senderId,
+			});
+
+			await sender.save();
+			await receiver.save();
+		} catch (err) {
+			console.log(err);
+			throw new Error("There has been an error!");
+		}
+
+		return "Sent friend request successfully!";
+	},
+	async acceptFriendRequest(req) {
+		const { senderId, receiverId } = req.body;
+
+		if (senderId != req.user?.id) {
+			throw new Error("Unauthorized");
+		}
+
+		const receiver = await userModel
+			.findById(receiverId)
+			.populate("friends.friend");
+
+		const receiverFriend = receiver
+			.toObject()
+			.friends.filter((fObj) => fObj.friend == senderId);
+
+		let currentStatus;
+		if (receiverFriend.length > 0) {
+			currentStatus = receiver.friends[0].status;
+		}
+
+		if (receiverId === senderId) {
+			throw new Error("Invalid friend request!");
+		}
+
+		if (currentStatus === friendStatuses.INCOMING_REQUEST) {
+			throw new Error("You are already friends with user!");
+		}
+
+		const sender = await userModel.findById(senderId);
+
+		try {
+			sender.friends.push({
+				status: friendStatuses.OUTGOING_REQUEST,
+				friend: receiverId,
+			});
+
+			receiver.friends.push({
+				status: friendStatuses.INCOMING_REQUEST,
+				friend: senderId,
+			});
+
+			await sender.save();
+			await receiver.save();
+		} catch (err) {
+			console.log(err);
+			throw new Error("There has been an error!");
+		}
+
+		return "Sent friend request successfully!";
+	},
+	async declineFriendRequest(req) {
+		const { senderId, receiverId } = req.body;
+
+		if (senderId != req.user?.id) {
+			throw new Error("Unauthorized");
+		}
+
+		const receiver = await userModel
+			.findById(receiverId)
+			.populate("friends.friend");
+
+		const receiverFriend = receiver
+			.toObject()
+			.friends.filter((fObj) => fObj.friend == senderId);
+
+		let currentStatus;
+		if (receiverFriend.length > 0) {
+			currentStatus = receiver.friends[0].status;
+		}
+
+		if (receiverId === senderId) {
+			throw new Error("Invalid friend request!");
+		}
+
+		if (currentStatus === friendStatuses.INCOMING_REQUEST) {
+			throw new Error("You are already friends with user!");
+		}
+
+		const sender = await userModel.findById(senderId);
+
+		try {
+			sender.friends.push({
+				status: friendStatuses.OUTGOING_REQUEST,
+				friend: receiverId,
+			});
+
+			receiver.friends.push({
+				status: friendStatuses.INCOMING_REQUEST,
+				friend: senderId,
+			});
+
+			await sender.save();
+			await receiver.save();
+		} catch (err) {
+			console.log(err);
+			throw new Error("There has been an error!");
+		}
+
+		return "Sent friend request successfully!";
+	},
+	async cancelFriendRequest(req) {
+		const { senderId, receiverId } = req.body;
+
+		if (senderId != req.user?.id) {
+			throw new Error("Unauthorized");
+		}
+
+		const receiver = await userModel
+			.findById(receiverId)
+			.populate("friends.friend");
+
+		const receiverFriend = receiver
+			.toObject()
+			.friends.filter((fObj) => fObj.friend == senderId);
+
+		let currentStatus;
+		if (receiverFriend.length > 0) {
+			currentStatus = receiver.friends[0].status;
+		}
+
+		if (receiverId === senderId) {
+			throw new Error("Invalid friend request!");
+		}
+
+		if (currentStatus === friendStatuses.INCOMING_REQUEST) {
+			throw new Error("You are already friends with user!");
+		}
+
+		const sender = await userModel.findById(senderId);
+
+		try {
+			sender.friends.push({
+				status: friendStatuses.OUTGOING_REQUEST,
+				friend: receiverId,
+			});
+
+			receiver.friends.push({
+				status: friendStatuses.INCOMING_REQUEST,
+				friend: senderId,
+			});
+
+			await sender.save();
+			await receiver.save();
+		} catch (err) {
+			console.log(err);
+			throw new Error("There has been an error!");
+		}
+
+		return "Sent friend request successfully!";
 	},
 };
 

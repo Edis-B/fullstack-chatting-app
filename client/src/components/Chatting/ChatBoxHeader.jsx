@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { host } from "../../common/appConstants.js";
-import { useChat } from "../../contexts/ChatContext.jsx"
+import { useChat } from "../../contexts/ChatContext.jsx";
+import { Link } from "react-router-dom";
 export default function ChatBoxHeader() {
 	const { chatId } = useChat();
 	const [header, setHeader] = useState({});
@@ -38,20 +39,24 @@ export default function ChatBoxHeader() {
 			console.log(err);
 		}
 	}
-	
+
 	if (!header) return <div>Loading...</div>; // Show a loading state
 
 	return (
-		<div className="chat-header d-flex align-items-center p-3 border-bottom">
-			<img
-				src={header.image || "https://via.placeholder.com/40"}
-				alt="User Profile"
-				className="rounded-circle me-2"
-				width="40"
-				height="40"
-			/>
+		<Link
+			to={`/profile/${header.username}`}
+		>
+			<div className="chat-header d-flex align-items-center p-3 border-bottom">
+				<img
+					src={header.image || "https://via.placeholder.com/40"}
+					alt="User Profile"
+					className="rounded-circle me-2"
+					width="40"
+					height="40"
+				/>
 
-			<h5 className="mb-0">{header.name || "Unknown User"}</h5>
-		</div>
+				<h5 className="mb-0">{header.name || "Unknown User"}</h5>
+			</div>
+		</Link>
 	);
 }

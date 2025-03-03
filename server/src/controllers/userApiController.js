@@ -5,8 +5,51 @@ import { getErrorMessage } from "../utils/errorUtils.js";
 
 const userApiController = Router();
 
+userApiController.post("/send-friend-request", async (req, res) => {
+	try {
+		const result = await userService.sendFriendRequest(req);
+		res.json(result);
+	} catch (err) {
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
+	}
+});
+
+userApiController.post("/accept-friend-request", async (req, res) => {
+	try {
+		const result = await userService.acceptFriendRequest(req);
+		res.json(result);
+	} catch (err) {
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
+	}
+});
+
+userApiController.post("/decline-friend-request", async (req, res) => {
+	try {
+		const result = await userService.declineFriendRequest(req);
+		res.json(result);
+	} catch (err) {
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
+	}
+});
+
+userApiController.post("/cancel-friend-request", async (req, res) => {
+	try {
+		const result = await userService.cancelFriendRequest(req);
+		res.json(result);
+	} catch (err) {
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
+	}
+});
+
 userApiController.get("/get-user-profile-data", async (req, res) => {
 	try {
+		if (!req.query.username) {
+			return res.json(req.user.username);
+		}
 		const result = await userService.getUserProfileData(req);
 		res.json(result);
 	} catch (err) {

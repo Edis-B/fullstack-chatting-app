@@ -1,10 +1,15 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { host } from "../../common/appConstants.js";
+import { useUser } from "../../contexts/UserContext.jsx";
 
-export default function Profile(props) {
-	const params = useParams();
-	const userId = params.id ?? props.userId ?? "";
+export default function Profile() {
+	const navigate = useNavigate();
+
+	const { profileUsername } = useParams();
+	const { userId } = useUser();
+
+	const [username, setUsername] = useState(null);
 	const [profileData, setProfileData] = useState({});
 
 	const friendStatuses = {
@@ -17,15 +22,15 @@ export default function Profile(props) {
 	};
 
 	useEffect(() => {
-		fetchProfileData();
-	}, [userId]);
+		setUsername(profileUsername);
 
-	useEffect(() => {});
+		fetchProfileData();
+	}, [profileUsername, username]);
 
 	async function fetchProfileData() {
 		try {
 			const response = await fetch(
-				`${host}/user/get-user-profile-data?userId=${userId ?? ""}`,
+				`${host}/user/get-user-profile-data?username=${username ?? ""}`,
 				{
 					method: "GET",
 					credentials: "include",
@@ -34,9 +39,42 @@ export default function Profile(props) {
 
 			const data = await response.json();
 
+			if (!profileUsername) {
+				navigate(`/profile/${data}`);
+				return;
+			}
+
 			setProfileData(data);
 		} catch (err) {
 			console.log(err);
+		}
+	}
+
+	function friendStatusButton(status) {
+		if (status === friendStatuses.OUTGOING_REQUEST) {
+			return (
+				<button className="btn btn-outline-secondary">
+					Cancel request
+				</button>
+			);
+		} else if (status === friendStatuses.INCOMING_REQUEST) {
+			return (
+				<button className="btn btn-outline-secondary">
+					Decline request
+				</button>
+			);
+		} else if (status === friendStatuses.FRIENDS) {
+			return (
+				<button className="btn btn-outline-secondary">
+					Remove friend
+				</button>
+			);
+		} else if (status === friendStatuses.NOT_FRIENDS) {
+			return (
+				<button className="btn btn-outline-secondary">
+					Add friend
+				</button>
+			);
 		}
 	}
 
@@ -72,19 +110,12 @@ export default function Profile(props) {
 						</button>
 					</div>
 				) : (
-					<div className="ms-auto">
-						<button className="btn btn-primary">Message</button>
-						{profileData.ourStatus ===
-						friendStatuses.NOT_FRIENDS ? (
-							<button className="btn btn-outline-secondary">
-								Add friend
-							</button>
-						) : (
-							<button className="btn btn-outline-secondary">
-								Unfriend
-							</button>
-						)}
-					</div>
+					!!userId && (
+						<div className="ms-auto">
+							<button className="btn btn-primary">Message</button>
+							{friendStatusButton(profileData.ourStatus)}
+						</div>
+					)
 				)}
 			</div>
 			{/* Navigation Tabs */}
