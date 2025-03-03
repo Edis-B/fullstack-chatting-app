@@ -4,23 +4,26 @@ import { io } from "socket.io-client";
 import { host, client } from "../../common/appConstants.js";
 import ChatBoxHeader from "./ChatBoxHeader";
 import { useChat } from "../../contexts/ChatContext.jsx";
+import { useUser } from "../../contexts/UserContext.jsx";
 
 export default function ChatBox() {
-	const socket = io(host);
-
+	const { socket } = useUser();
 	const { chatId } = useChat();
 	const [currentUsername, setCurrentUsername] = useState("");
 	const [chatHistory, setChatHistory] = useState([]);
 
 	useEffect(() => {
 		fetchData();
+		
+		if (socket) {
+			socket.on("receive_message", handleMessage);
 
-		// Cleanup
-		return () => {
-			socket.off("receive_message", handleMessage);
-			socket.disconnect();
-		};
-	}, [chatId]);
+			// Cleanup
+			return () => {
+				socket.off("receive_message", handleMessage);
+			};
+		}
+	}, [chatId, socket]);
 
 	async function fetchData() {
 		if (!chatId) {
@@ -36,21 +39,19 @@ export default function ChatBox() {
 			const data = await response.json();
 			setCurrentUsername(data);
 		} catch (err) {
-			alert(`There has been an error: ${err}}`);
+			console.log(err);
 		}
 
 		const messages = await fetchChatHistory(chatId);
 		if (messages) {
 			setChatHistory(messages);
 		}
-
-		socket.emit("join_room", chatId);
-
-		socket.on("receive_message", handleMessage);
 	}
 
 	const handleMessage = (data) => {
-		setChatHistory((prev) => [...prev, data]);
+		if (data.message.chat === chatId) {
+			setChatHistory((prev) => [...prev, data.message]);
+		}
 	};
 
 	async function fetchChatHistory(id) {

@@ -10,11 +10,6 @@ export default function Register() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		// if (password !== confirmPassword) {
-		//     alert("Passwords do not match!");
-		//     return;
-		// }
-
 		try {
 			const response = await fetch(`${host}/user/register`, {
 				method: "POST",
@@ -36,9 +31,8 @@ export default function Register() {
 			} else {
 				alert(data);
 			}
-		} catch (error) {
-			console.error("Error:", error);
-			alert("Something went wrong. Please try again.");
+		} catch (err) {
+			console.log(err);
 		}
 	};
 

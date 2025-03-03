@@ -36,7 +36,6 @@ export default function Profile(props) {
 
 			setProfileData(data);
 		} catch (err) {
-			alert(`There has been an error: ${err}`);
 			console.log(err);
 		}
 	}

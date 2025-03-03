@@ -101,26 +101,44 @@ export default {
 			throw new Error("No info sent");
 		}
 
-		const { chat, text } = req.body;
+		const { chat: chatId, text } = req.body;
 
 		const newMessage = await messageModel.create({
 			text,
 			// chat id
-			chat,
+			chat: chatId,
 			date: Date.now(),
-			user: req.user._id,
+			user: req.user.id,
 		});
 
-		const populatedMessage = await newMessage.populate("user");
+		const populatedMessage = (
+			await newMessage.populate({ path: "user" })
+		).toObject();
 
-		await chatModel.findByIdAndUpdate(chat, {
-			updatedAt: Date.now(),
-			$push: {
-				messages: newMessage._id,
-			},
+		const updatedChat = await chatModel
+			.findByIdAndUpdate(
+				chatId,
+				{
+					updatedAt: Date.now(),
+					$push: {
+						messages: newMessage._id,
+					},
+				},
+				{ new: true }
+			)
+			.lean();
+
+		const additionalInfo = await this.getChatInfo(chatId, req.user.id);
+		let messageData = {
+			message: { ...populatedMessage },
+			header: { ...additionalInfo },
+		};
+
+		messageData.participants = updatedChat.participants.map((pObj) => {
+			return pObj.participant;
 		});
 
-		return populatedMessage.toObject();
+		return messageData;
 	},
 	async checkIfDMsExistWithUser(req) {
 		const receiverUser = await userService.getUserByUsername(
@@ -160,29 +178,18 @@ export default {
 			throw new Error("Not Logged in!");
 		}
 
-		const chat = await chatModel
-			.findById(req.query.chatId)
-			.populate("participants.participant")
-			.lean();
-
-		const result = this.getChatInfo(chat, req.user.id);
+		const result = await this.getChatInfo(req.query.chatId, req.user.id);
 
 		return { image: result.chatImage, name: result.chatName };
 	},
-	async getUsersChats(req) {
+	async getUserChats(req) {
 		const identifier = req.query.userId ?? req.user?.id;
 
 		if (!identifier) {
 			throw new Error("Problem fetching user id!");
 		}
 
-		const user = await userModel
-			.findById(req.user.id)
-			.populate({
-				path: "chats.chat",
-				populate: "participants.participant",
-			})
-			.lean();
+		const user = await userModel.findById(req.user.id).lean();
 
 		if (!user) {
 			throw new Error("User not found");
@@ -191,12 +198,23 @@ export default {
 		let chatInfos = user.chats.map((chatObj) => {
 			return this.getChatInfo(chatObj.chat, req.user.id);
 		});
-
-		chatInfos = chatInfos.sort((a, b) => b.updatedAt - a.updatedAt)
+		chatInfos = await Promise.all(chatInfos);
+		chatInfos = chatInfos.sort((a, b) => b.updatedAt - a.updatedAt);
 
 		return chatInfos;
-	},
-	getChatInfo(chat /* JS object */, userId) {
+	}, //
+	async getChatInfo(chatId /* JS object */, userId) {
+		const chat = await chatModel
+			.findById(chatId)
+			.populate([
+				{ path: "participants.participant" },
+				{
+					path: "messages",
+					options: { sort: { date: -1 }, limit: 1 },
+				},
+			])
+			.lean();
+
 		let chatName, chatImage;
 		const participantsObjs = chat.participants;
 
@@ -213,7 +231,16 @@ export default {
 			chatName = participantObj.participant.username;
 			chatImage = participantObj.participant.image;
 
-			return { chatName, chatImage, _id: chat._id, updatedAt: chat.updatedAt };
+			return {
+				chatName,
+				chatImage,
+				chatId: chat._id,
+				updatedAt: chat.updatedAt,
+				lastMessage: {
+					owner: chat.messages[0].user,
+					text: chat.messages[0].text,
+				},
+			};
 		}
 	},
 };

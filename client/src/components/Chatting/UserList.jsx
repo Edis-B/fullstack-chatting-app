@@ -2,9 +2,12 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { host, client } from "../../common/appConstants.js";
 import { useChat } from "../../contexts/ChatContext.jsx";
+import { useUser } from "../../contexts/UserContext.jsx";
 
 export default function UserList() {
 	const { id } = useParams();
+
+	const { userId, socket } = useUser();
 	const { chatId, setChatId } = useChat();
 
 	const navigate = useNavigate();
@@ -16,8 +19,15 @@ export default function UserList() {
 	const [selectedUser, setSelectedUser] = useState(null);
 
 	useEffect(() => {
+		if (socket) {
+			socket.on("receive_message", handleMessage);
+		}
+	}, [socket]);
+
+	useEffect(() => {
+		setChatId(id ?? "");
 		fetchChats();
-	}, []);
+	}, [id]);
 
 	// Search bar
 	useEffect(() => {
@@ -36,15 +46,25 @@ export default function UserList() {
 		return () => clearTimeout(delayDebounce);
 	}, [search]);
 
+	const handleMessage = (data) => {
+		setChats((prev) => {
+			const indexOfUpdated = prev.findIndex(
+				(c) => c.chatId === data.header.chatId
+			);
+
+			const updatedChat = data.header;
+			const updatedChats = prev.filter((_, i) => i !== indexOfUpdated);
+
+			return [updatedChat, ...updatedChats];
+		});
+	};
+
 	async function fetchChats() {
 		try {
-			const response = await fetch(
-				`${host}/chat/get-users-chats`,
-				{
-					method: "GET",
-					credentials: "include",
-				}
-			);
+			const response = await fetch(`${host}/chat/get-user-chats`, {
+				method: "GET",
+				credentials: "include",
+			});
 
 			const data = await response.json();
 			if (!response.ok) {
@@ -52,14 +72,12 @@ export default function UserList() {
 			}
 
 			if (!id) {
-				navigate(`/chat/${data[0]._id}`, { replace: true });
+				navigate(`/chat/${data[0].chatId}`, { replace: true });
 				return;
 			}
 
-			setChatId(id);
 			setChats(data);
 		} catch (err) {
-			alert(`There has been an error: ${err}`);
 			console.log(err);
 		}
 	}
@@ -81,7 +99,7 @@ export default function UserList() {
 			const data = await response.json();
 			return data;
 		} catch (err) {
-			alert(`There has been an error: ${err}`);
+			console.log(err);
 		}
 	}
 
@@ -224,11 +242,11 @@ export default function UserList() {
 					Array.isArray(chats) &&
 					chats.map((chat) => (
 						<li
-							key={chat._id}
+							key={chat.chatId}
 							className="list-group-item d-flex cursor-pointer"
 						>
 							<Link
-								to={`/chat/${chat._id}`}
+								to={`/chat/${chat.chatId}`}
 								className="text-decoration-none text-dark w-100 d-flex align-items-center"
 							>
 								<img
@@ -240,8 +258,15 @@ export default function UserList() {
 										objectFit: "cover",
 									}}
 								/>
-
-								{chat.chatName}
+								<div>
+									<p className="m-0">{chat.chatName}</p>
+									<p className="m-0 text-muted">
+										{chat.lastMessage.owner === userId
+											? "You"
+											: chat.chatName}
+										: {chat.lastMessage.text}
+									</p>
+								</div>
 							</Link>
 						</li>
 					))}

@@ -35,10 +35,12 @@ export default function ChatBoxHeader() {
 			}
 			return data;
 		} catch (err) {
-			alert(`There has been an error: ${err}`);
 			console.log(err);
 		}
 	}
+	
+	if (!header) return <div>Loading...</div>; // Show a loading state
+
 	return (
 		<div className="chat-header d-flex align-items-center p-3 border-bottom">
 			<img

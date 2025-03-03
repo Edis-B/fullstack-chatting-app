@@ -19,9 +19,9 @@ chatApiController.get("/chat-types", (req, res) => {
 	res.json(chatTypes);
 });
 
-chatApiController.get("/get-users-chats", async (req, res) => {
+chatApiController.get("/get-user-chats", async (req, res) => {
 	try {
-		const result = await chatService.getUsersChats(req);
+		const result = await chatService.getUserChats(req);
 		res.json(result);
 	} catch (err) {
 		const errMessage = getErrorMessage(err);

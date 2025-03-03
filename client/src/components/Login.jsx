@@ -30,8 +30,7 @@ export default function Login() {
 				alert(data);
 			}
 		} catch (error) {
-			console.error("Error:", error);
-			alert("Something went wrong. Please try again.");
+			console.log(err);
 		}
 	};
 

@@ -1,19 +1,25 @@
 export function setUpSocket(io) {
 	io.on("connection", (socket) => {
-		console.log(`User connected: ${socket.id}`);
+		const userId = socket.handshake.query.userId;
 
-		socket.on("join_room", (room) => {
-			socket.join(room);
-			console.log(`User ${socket.id} joined room: ${room}`);
-		});
+		if (userId) {
+			socket.join(userId); // Join socket to room based on userId
+			console.log(`User ${userId} connected`);
 
-		socket.on("send_message", ({ room, message }) => {
-			io.to(room).emit("receive_message", message);
-            console.log(`Room: ${room} sent message: ${message}`);
-		});
+			// Handle disconnect
+			socket.on("disconnect", () => {
+				console.log(`User ${userId} disconnected`);
+			});
 
-		socket.on("disconnect", () => {
-			console.log(`User disconnected: ${socket.id}`);
-		});
+			socket.on("send_message", ({ receiverIds, message }) => {
+				receiverIds.forEach((receiverId) => {
+					console.log(`Emit to ${receiverId}`);
+
+					io.to(receiverId).emit("receive_message", {
+						...message,
+					});
+				});
+			});
+		}
 	});
 }

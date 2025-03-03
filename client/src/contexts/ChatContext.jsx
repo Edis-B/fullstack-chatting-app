@@ -1,9 +1,9 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
-const ChatContext = createContext(); 
+const ChatContext = createContext();
 
 export function ChatProvider({ children }) {
-	const [chatId, setChatId] = useState(null); 
+	const [chatId, setChatId] = useState(null);
 
 	return (
 		<ChatContext.Provider value={{ chatId, setChatId }}>
@@ -13,5 +13,5 @@ export function ChatProvider({ children }) {
 }
 
 export function useChat() {
-	return useContext(ChatContext); 
+	return useContext(ChatContext);
 }

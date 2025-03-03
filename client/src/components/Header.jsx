@@ -6,10 +6,10 @@ export default function Header() {
 	const [image, setImage] = useState("");
 
 	useEffect(() => {
-		setUserImageUrl();
+		fetchUserImageUrl();
 	}, []);
 
-	async function setUserImageUrl() {
+	async function fetchUserImageUrl() {
 		try {
 			const response = await fetch(`${host}/user/get-image-url`, {
 				method: "GET",
@@ -18,7 +18,6 @@ export default function Header() {
 			const data = await response.json();
 			setImage(data);
 		} catch (err) {
-			alert(`There has been an error: ${err}`);
 			console.log(err);
 		}
 	}

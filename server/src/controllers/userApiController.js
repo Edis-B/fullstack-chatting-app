@@ -15,6 +15,18 @@ userApiController.get("/get-user-profile-data", async (req, res) => {
 	}
 });
 
+userApiController.get("/get-user-id", async (req, res) => {
+	try {
+		if (!req.user) {
+			throw new Error("User not logged in!");
+		}
+		res.json(req.user.id);
+	} catch (err) {
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
+	}
+});
+
 userApiController.get("/get-user-friends", async (req, res) => {
 	try {
 		const friends = await userService.getAllFriendsOfUser(req);

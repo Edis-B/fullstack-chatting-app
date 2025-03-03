@@ -1,16 +1,16 @@
-import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
 import { host } from "../../common/appConstants.js";
 import { useChat } from "../../contexts/ChatContext.jsx";
+import { useUser } from "../../contexts/UserContext.jsx";
 
 export default function MessageInput() {
-	const socket = io(host);
-
+	const { socket } = useUser();
 	const { chatId } = useChat();
+	
 	const [message, setMessage] = useState("");
 
-	function sendMessage(room, messageData) {
-		socket.emit("send_message", { room, message: messageData });
+	function sendMessage(messageData) {
+		socket.emit("send_message", { receiverIds: messageData.participants, message: messageData });
 		setMessage("");
 	}
 
@@ -34,10 +34,10 @@ export default function MessageInput() {
 		const data = await response.json();
 
 		if (!response.ok) {
-			alert(`There has been an error: ${data}`);
+			console.log(data);
 		}
 
-		sendMessage(chatId, data);
+		sendMessage(data);
 	}
 
 	return (
