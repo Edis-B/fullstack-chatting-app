@@ -37,11 +37,11 @@ export default {
 		return "Successfully registered!";
 	},
 	async getUserProfileData(req) {
-		const username = req.query.username;
-		const owner = req.user?.username === req.query.username;
+		const identifier = req.query.userId;
+		const owner = req.user?.id === req.query.userId;
 
 		const userObj = await userModel
-			.findOne({ username: username })
+			.findById(identifier)
 			.select("username image banner about")
 			.lean();
 
@@ -165,6 +165,10 @@ export default {
 	async sendFriendRequest(req) {
 		const { senderId, receiverId } = req.body;
 
+		if (receiverId === senderId) {
+			throw new Error("Invalid friend request!");
+		}
+
 		if (senderId != req.user?.id) {
 			throw new Error("Unauthorized");
 		}
@@ -174,7 +178,7 @@ export default {
 			.populate("friends.friend");
 
 		const receiverFriend = receiver.toObject().friends.filter((fObj) => {
-			const check = fObj.friend._id.toString() == senderId
+			const check = fObj.friend._id.toString() == senderId;
 			return check;
 		});
 
@@ -183,12 +187,12 @@ export default {
 			currentStatus = receiver.friends[0].status;
 		}
 
-		if (receiverId === senderId) {
-			throw new Error("Invalid friend request!");
-		}
-
 		if (currentStatus === friendStatuses.INCOMING_REQUEST) {
 			throw new Error("Friend Request already active!");
+		}
+
+		if (currentStatus && currentStatus !== friendStatuses.NOT_FRIENDS) {
+			throw new Error("Cannot send friend request!");
 		}
 
 		const sender = await userModel.findById(senderId);
@@ -216,6 +220,10 @@ export default {
 	async acceptFriendRequest(req) {
 		const { senderId, receiverId } = req.body;
 
+		if (receiverId === senderId) {
+			throw new Error("Invalid friend request!");
+		}
+
 		if (senderId != req.user?.id) {
 			throw new Error("Unauthorized");
 		}
@@ -224,48 +232,61 @@ export default {
 			.findById(receiverId)
 			.populate("friends.friend");
 
-		const receiverFriend = receiver
-			.toObject()
-			.friends.filter((fObj) => fObj.friend == senderId);
+		const receiverFriend = receiver.toObject().friends.filter((fObj) => {
+			const check = fObj.friend._id.toString() == senderId;
+			return check;
+		});
 
 		let currentStatus;
 		if (receiverFriend.length > 0) {
 			currentStatus = receiver.friends[0].status;
 		}
 
-		if (receiverId === senderId) {
-			throw new Error("Invalid friend request!");
+		if (currentStatus === friendStatuses.FRIENDS) {
+			throw new Error("Already friends with user!");
 		}
 
-		if (currentStatus === friendStatuses.INCOMING_REQUEST) {
-			throw new Error("You are already friends with user!");
+		if (currentStatus !== friendStatuses.OUTGOING_REQUEST) {
+			throw new Error("Cannot accept friend request!");
 		}
-
-		const sender = await userModel.findById(senderId);
 
 		try {
-			sender.friends.push({
-				status: friendStatuses.OUTGOING_REQUEST,
-				friend: receiverId,
-			});
-
-			receiver.friends.push({
-				status: friendStatuses.INCOMING_REQUEST,
-				friend: senderId,
-			});
-
-			await sender.save();
-			await receiver.save();
+			await userModel.bulkWrite([
+				{
+					updateOne: {
+						filter: { _id: senderId, "friends.friend": receiverId },
+						update: {
+							$set: {
+								"friends.$.status": friendStatuses.FRIENDS,
+							},
+						},
+					},
+				},
+				{
+					updateOne: {
+						filter: { _id: receiverId, "friends.friend": senderId },
+						update: {
+							$set: {
+								"friends.$.status": friendStatuses.FRIENDS,
+							},
+						},
+					},
+				},
+			]);
 		} catch (err) {
 			console.log(err);
 			throw new Error("There has been an error!");
 		}
 
-		return "Sent friend request successfully!";
+		return "Friend request accepted successfully!";
 	},
 	async declineFriendRequest(req) {
 		const { senderId, receiverId } = req.body;
 
+		if (receiverId === senderId) {
+			throw new Error("Invalid friend request!");
+		}
+
 		if (senderId != req.user?.id) {
 			throw new Error("Unauthorized");
 		}
@@ -274,48 +295,44 @@ export default {
 			.findById(receiverId)
 			.populate("friends.friend");
 
-		const receiverFriend = receiver
-			.toObject()
-			.friends.filter((fObj) => fObj.friend == senderId);
+		const receiverFriend = receiver.toObject().friends.filter((fObj) => {
+			const check = fObj.friend._id.toString() == senderId;
+			return check;
+		});
 
 		let currentStatus;
 		if (receiverFriend.length > 0) {
 			currentStatus = receiver.friends[0].status;
 		}
 
-		if (receiverId === senderId) {
-			throw new Error("Invalid friend request!");
+		if (currentStatus !== friendStatuses.OUTGOING_REQUEST) {
+			throw new Error("Cannot decline friend request!");
 		}
-
-		if (currentStatus === friendStatuses.INCOMING_REQUEST) {
-			throw new Error("You are already friends with user!");
-		}
-
-		const sender = await userModel.findById(senderId);
 
 		try {
-			sender.friends.push({
-				status: friendStatuses.OUTGOING_REQUEST,
-				friend: receiverId,
-			});
+			await userModel.updateOne(
+				{ _id: receiverId },
+				{ $pull: { friends: senderId } }
+			);
 
-			receiver.friends.push({
-				status: friendStatuses.INCOMING_REQUEST,
-				friend: senderId,
-			});
-
-			await sender.save();
-			await receiver.save();
+			await userModel.updateOne(
+				{ _id: senderId },
+				{ $pull: { friends: receiverId } }
+			);
 		} catch (err) {
 			console.log(err);
 			throw new Error("There has been an error!");
 		}
 
-		return "Sent friend request successfully!";
+		return "Declined friend request successfully!";
 	},
 	async cancelFriendRequest(req) {
 		const { senderId, receiverId } = req.body;
 
+		if (receiverId === senderId) {
+			throw new Error("Cannot cancel friend request!");
+		}
+
 		if (senderId != req.user?.id) {
 			throw new Error("Unauthorized");
 		}
@@ -324,44 +341,39 @@ export default {
 			.findById(receiverId)
 			.populate("friends.friend");
 
-		const receiverFriend = receiver
-			.toObject()
-			.friends.filter((fObj) => fObj.friend == senderId);
+		const receiverFriend = receiver.toObject().friends.filter((fObj) => {
+			const check = fObj.friend._id.toString() == senderId;
+			return check;
+		});
 
 		let currentStatus;
 		if (receiverFriend.length > 0) {
 			currentStatus = receiver.friends[0].status;
 		}
 
-		if (receiverId === senderId) {
-			throw new Error("Invalid friend request!");
+		if (
+			!currentStatus ||
+			currentStatus !== friendStatuses.INCOMING_REQUEST
+		) {
+			throw new Error("No friend request to decline!");
 		}
-
-		if (currentStatus === friendStatuses.INCOMING_REQUEST) {
-			throw new Error("You are already friends with user!");
-		}
-
-		const sender = await userModel.findById(senderId);
 
 		try {
-			sender.friends.push({
-				status: friendStatuses.OUTGOING_REQUEST,
-				friend: receiverId,
-			});
+			await userModel.updateOne(
+				{ _id: receiverId },
+				{ $pull: { friends: senderId } }
+			);
 
-			receiver.friends.push({
-				status: friendStatuses.INCOMING_REQUEST,
-				friend: senderId,
-			});
-
-			await sender.save();
-			await receiver.save();
+			await userModel.updateOne(
+				{ _id: senderId },
+				{ $pull: { friends: receiverId } }
+			);
 		} catch (err) {
 			console.log(err);
 			throw new Error("There has been an error!");
 		}
 
-		return "Sent friend request successfully!";
+		return "Canceled friend request successfully!";
 	},
 };
 
@@ -369,7 +381,6 @@ export function autherize(req, role) {
 	if (role && !req.user.roles.role) {
 		throw new Error("Unauthorized!");
 	}
-
 	if (!req.user) {
 		throw new Error("Not logged in!");
 	}

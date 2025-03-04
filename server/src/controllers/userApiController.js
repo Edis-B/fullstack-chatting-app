@@ -47,8 +47,8 @@ userApiController.post("/cancel-friend-request", async (req, res) => {
 
 userApiController.get("/get-user-profile-data", async (req, res) => {
 	try {
-		if (!req.query.username) {
-			return res.json(req.user.username);
+		if (!req.query.userId) {
+			return res.json(req.user?.id);
 		}
 		const result = await userService.getUserProfileData(req);
 		res.json(result);

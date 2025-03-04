@@ -2,14 +2,21 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { host } from "../../common/appConstants.js";
 import { useUser } from "../../contexts/UserContext.jsx";
+import {
+	acceptFriendRequest,
+	cancelFriendRequest,
+	declineFriendRequest,
+	sendFriendRequest,
+} from "../../services/userAPIs.js";
+import Friends from "./Friends";
 
 export default function Profile() {
 	const navigate = useNavigate();
 
-	const { profileUsername } = useParams();
+	const { profileUserId } = useParams();
 	const { userId } = useUser();
 
-	const [username, setUsername] = useState(null);
+	const [profileId, setProfileId] = useState(null);
 	const [profileData, setProfileData] = useState({});
 
 	const friendStatuses = {
@@ -22,15 +29,15 @@ export default function Profile() {
 	};
 
 	useEffect(() => {
-		setUsername(profileUsername);
+		setProfileId(profileUserId);
 
 		fetchProfileData();
-	}, [profileUsername, username]);
+	}, [profileUserId, profileId]);
 
 	async function fetchProfileData() {
 		try {
 			const response = await fetch(
-				`${host}/user/get-user-profile-data?username=${username ?? ""}`,
+				`${host}/user/get-user-profile-data?userId=${profileId ?? ""}`,
 				{
 					method: "GET",
 					credentials: "include",
@@ -39,7 +46,7 @@ export default function Profile() {
 
 			const data = await response.json();
 
-			if (!profileUsername) {
+			if (!profileUserId) {
 				navigate(`/profile/${data}`);
 				return;
 			}
@@ -53,25 +60,39 @@ export default function Profile() {
 	function friendStatusButton(status) {
 		if (status === friendStatuses.OUTGOING_REQUEST) {
 			return (
-				<button className="btn btn-outline-secondary">
+				<button
+					className="btn btn-outline-secondary"
+					onClick={(e) => cancelFriendRequest(userId, profileId)}
+				>
 					Cancel request
 				</button>
 			);
 		} else if (status === friendStatuses.INCOMING_REQUEST) {
 			return (
-				<button className="btn btn-outline-secondary">
-					Decline request
-				</button>
+				<>
+					<button
+						className="btn btn-outline-secondary"
+						onClick={(e) => declineFriendRequest(userId, profileId)}
+					>
+						Decline request
+					</button>
+
+					<button
+						className="btn btn-outline-secondary"
+						onClick={(e) => acceptFriendRequest(userId, profileId)}
+					>
+						Accept request
+					</button>
+				</>
 			);
 		} else if (status === friendStatuses.FRIENDS) {
+			return;
+		} else if (!status || status === friendStatuses.NOT_FRIENDS) {
 			return (
-				<button className="btn btn-outline-secondary">
-					Remove friend
-				</button>
-			);
-		} else if (status === friendStatuses.NOT_FRIENDS) {
-			return (
-				<button className="btn btn-outline-secondary">
+				<button
+					className="btn btn-outline-secondary"
+					onClick={(e) => sendFriendRequest(userId, profileId)}
+				>
 					Add friend
 				</button>
 			);
@@ -100,11 +121,7 @@ export default function Profile() {
 
 				{profileData.owner ? (
 					<div className="ms-auto">
-						<Link>
-							<Link className="btn btn-primary">
-								Edit Profile
-							</Link>
-						</Link>
+						<Link className="btn btn-primary">Edit Profile</Link>
 						<button className="btn btn-outline-secondary">
 							Settings
 						</button>
@@ -141,43 +158,8 @@ export default function Profile() {
 					</a>
 				</li>
 			</ul>
-			{/* Posts Section */}
-			<div className="mt-3">
-				<div className="card mb-3">
-					<div className="card-body">
-						<div className="d-flex">
-							<img
-								src="https://via.placeholder.com/50"
-								className="rounded-circle me-2"
-								alt="Profile"
-							/>
-							<div>
-								<h6 className="mb-0">John Doe</h6>
-								<p className="text-muted small">2 hours ago</p>
-							</div>
-						</div>
-						<p className="mt-2">
-							Just enjoying a great day at the park! ☀️
-						</p>
-						<img
-							src="https://via.placeholder.com/600x300"
-							className="img-fluid rounded"
-							alt="Post Image"
-						/>
-						<div className="d-flex justify-content-between mt-3">
-							<button className="btn btn-outline-primary btn-sm">
-								Like
-							</button>
-							<button className="btn btn-outline-secondary btn-sm">
-								Comment
-							</button>
-							<button className="btn btn-outline-success btn-sm">
-								Share
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
+
+			<Friends />
 		</div>
 	);
 }

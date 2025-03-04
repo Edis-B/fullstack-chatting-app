@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { host } from "../common/appConstants.js";
+import { useUser } from "../contexts/UserContext.jsx";
 
 export default function Header() {
+	const { userId } = useUser();
 	const [image, setImage] = useState("");
 
 	useEffect(() => {
@@ -44,16 +46,18 @@ export default function Header() {
 						<ul className="navbar-nav ms-auto">
 							{!!image ? (
 								<li className="nav-item">
-									<img
-										src={image}
-										alt="Profile"
-										className="rounded-circle"
-										style={{
-											width: "40px",
-											height: "40px",
-											objectFit: "cover",
-										}}
-									/>
+									<Link to={`profile/${userId}`}>
+										<img
+											src={image}
+											alt="Profile"
+											className="rounded-circle"
+											style={{
+												width: "40px",
+												height: "40px",
+												objectFit: "cover",
+											}}
+										/>
+									</Link>
 								</li>
 							) : (
 								<li className="nav-item">

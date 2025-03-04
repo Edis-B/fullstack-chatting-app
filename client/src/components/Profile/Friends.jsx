@@ -1,13 +1,32 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { host } from "../../common/appConstants.js";
+import { useUser } from "../../contexts/UserContext.jsx";
 
 export default function Friends() {
+	const { userId } = useUser();
 	const [friends, setFriends] = useState({});
 
-	useEffect(() => {}, [userId]);
+	useEffect(() => {
+		fetchFriendsData();
+	}, [userId]);
 
 	async function fetchFriendsData() {
-		const response = await fetch(`${host}/get-user-friends?userId=${userId}`);
+		try {
+			const response = await fetch(
+				`${host}/get-user-friends?userId=${userId}`,
+				{
+					method: "GET",
+					credentials: "include",
+				}
+			);
+
+			const data = await response.json();
+
+			setFriends(data);
+		} catch (err) {
+			console.log(err);
+		}
 	}
 
 	return (
@@ -18,21 +37,25 @@ export default function Friends() {
 			<div className="card mb-3">
 				<div className="card-header">Current Friends</div>
 				<ul className="list-group list-group-flush">
-					<li className="list-group-item d-flex justify-content-between align-items-center">
-						<span>John Doe</span>
-						<a href="/profile/1" className="btn btn-primary btn-sm">
-							View
-						</a>
-					</li>
-					<li className="list-group-item d-flex justify-content-between align-items-center">
-						<span>Jane Smith</span>
-						<a href="/profile/2" className="btn btn-primary btn-sm">
-							View
-						</a>
-					</li>
-					<li className="list-group-item text-muted">
-						No friends yet.
-					</li>
+					{Array.isArray(friends) ? (
+						friends.map((friend) => {
+							return (
+								<li className="list-group-item d-flex justify-content-between align-items-center">
+									<span>{friend.username}</span>
+									<Link
+										to={`/profile/${friend._id}`}
+										className="btn btn-primary btn-sm"
+									>
+										View
+									</Link>
+								</li>
+							);
+						})
+					) : (
+						<li className="list-group-item text-muted">
+							No friends.
+						</li>
+					)}
 				</ul>
 			</div>
 
@@ -40,15 +63,25 @@ export default function Friends() {
 			<div className="card mb-3">
 				<div className="card-header">Incoming Friend Requests</div>
 				<ul className="list-group list-group-flush">
-					<li className="list-group-item d-flex justify-content-between align-items-center">
-						<span>Michael Johnson</span>
-						<button className="btn btn-success btn-sm">
-							Accept
-						</button>
-					</li>
-					<li className="list-group-item text-muted">
-						No incoming requests.
-					</li>
+					{Array.isArray(friends) ? (
+						friends.map((friend) => {
+							return (
+								<li className="list-group-item d-flex justify-content-between align-items-center">
+									<span>{friend.username}</span>
+									<Link
+										to={`/profile/${friend._id}`}
+										className="btn btn-primary btn-sm"
+									>
+										View
+									</Link>
+								</li>
+							);
+						})
+					) : (
+						<li className="list-group-item text-muted">
+							No friends.
+						</li>
+					)}
 				</ul>
 			</div>
 
@@ -56,12 +89,25 @@ export default function Friends() {
 			<div className="card mb-3">
 				<div className="card-header">Outgoing Friend Requests</div>
 				<ul className="list-group list-group-flush">
-					<li className="list-group-item">
-						Sarah Williams (Pending)
-					</li>
-					<li className="list-group-item text-muted">
-						No outgoing requests.
-					</li>
+					{Array.isArray(friends) ? (
+						friends.map((friend) => {
+							return (
+								<li className="list-group-item d-flex justify-content-between align-items-center">
+									<span>{friend.username}</span>
+									<Link
+										to={`/profile/${friend._id}`}
+										className="btn btn-primary btn-sm"
+									>
+										View
+									</Link>
+								</li>
+							);
+						})
+					) : (
+						<li className="list-group-item text-muted">
+							No friends.
+						</li>
+					)}
 				</ul>
 			</div>
 
@@ -69,10 +115,25 @@ export default function Friends() {
 			<div className="card mb-3">
 				<div className="card-header">Blocked Users</div>
 				<ul className="list-group list-group-flush">
-					<li className="list-group-item">Blocked User 1</li>
-					<li className="list-group-item text-muted">
-						No blocked users.
-					</li>
+					{Array.isArray(friends) ? (
+						friends.map((friend) => {
+							return (
+								<li className="list-group-item d-flex justify-content-between align-items-center">
+									<span>{friend.username}</span>
+									<Link
+										to={`/profile/${friend._id}`}
+										className="btn btn-primary btn-sm"
+									>
+										View
+									</Link>
+								</li>
+							);
+						})
+					) : (
+						<li className="list-group-item text-muted">
+							No friends.
+						</li>
+					)}
 				</ul>
 			</div>
 		</div>

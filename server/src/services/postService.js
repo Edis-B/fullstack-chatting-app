@@ -4,7 +4,11 @@ export default {
 	async getUserPosts(req) {
 		const identifier = req.query.userId;
 
-		const userObj = userModel.findById(identifier).populate("posts").lean();
+		const userObj = userModel
+			.findById(identifier)
+			.populate("posts")
+			.populate("user")
+			.lean();
 
 		if (!userObj) {
 			throw new Error("User not found!");

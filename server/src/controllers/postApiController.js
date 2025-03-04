@@ -1,6 +1,6 @@
 import { Router } from "express";
-import postService from "../services/postService";
-import { getErrorMessage } from "../utils/errorUtils";
+import postService from "../services/postService.js";
+import { getErrorMessage } from "../utils/errorUtils.js";
 
 const postApiController = Router()
 
