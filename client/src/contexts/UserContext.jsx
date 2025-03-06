@@ -7,6 +7,7 @@ const UserContext = createContext();
 export function UserProvider({ children }) {
 	const [userId, setUserId] = useState(null);
 	const [socket, setSocket] = useState(null);
+	const [error, setError] = useState(null);
 
 	useEffect(() => {
 		fetchUser();
@@ -45,7 +46,7 @@ export function UserProvider({ children }) {
 	}
 
 	return (
-		<UserContext.Provider value={{ userId, setUserId, socket, setSocket }}>
+		<UserContext.Provider value={{ userId, setUserId, socket, setSocket, error, setError }}>
 			{children}
 		</UserContext.Provider>
 	);

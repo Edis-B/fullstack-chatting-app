@@ -8,7 +8,7 @@ import NotFound from "./components/NotFound";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Profile from "./components/Profile/Profile";
-
+import CreatePost from "./components/Posts/CreatePost"
 import "./css/style.css";
 
 function App() {
@@ -25,7 +25,12 @@ function App() {
 					<Route path="/register" element={<Register />} />
 
 					<Route path="/profile" element={<Profile />} />
-					<Route path="/profile/:profileUserId" element={<Profile />} />
+					<Route
+						path="/profile/:profileUserId"
+						element={<Profile />}
+					/>
+
+					<Route path="/create-post" element={<CreatePost />} />
 
 					<Route path="*" element={<NotFound />} />
 				</Route>

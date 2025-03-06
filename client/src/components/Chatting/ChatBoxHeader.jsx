@@ -44,7 +44,7 @@ export default function ChatBoxHeader() {
 
 	return (
 		<Link
-			to={`/profile/${header.username}`}
+			to={`/profile/${header._id}`}
 		>
 			<div className="chat-header d-flex align-items-center p-3 border-bottom">
 				<img

@@ -140,15 +140,33 @@ export default {
 			throw new Error("User not found!");
 		}
 
-		const userObj = await user.populate("friends.friend").lean();
+		const userObj = (
+			await user.populate("friends.friend")
+		).toObject();
 
-		if (!req.user || req.user.id != userObj._id) {
-			userObj.friends = userObj.friends.filter(
-				(f) => f.status === friendStatuses.FRIENDS
-			);
+		const result = {};
+		result.friends = userObj.friends.filter(
+			(f) => f.status === friendStatuses.FRIENDS
+		);
+
+		result.owner = req.user?.id == userObj._id; 
+		if (!result.owner) {
+			return result;
 		}
 
-		return userObj.friends;
+		result.incoming = userObj.friends.filter(
+			(f) => f.status === friendStatuses.INCOMING_REQUEST
+		);
+
+		result.outgoing = userObj.friends.filter(
+			(f) => f.status === friendStatuses.OUTGOING_REQUEST
+		);
+
+		result.blocked = userObj.friends.filter(
+			(f) => f.status === friendStatuses.BLOCKED
+		);
+
+		return result;
 	},
 	async getPeopleByUserSubstring(req) {
 		const exclude = req.query.exclude === "true";

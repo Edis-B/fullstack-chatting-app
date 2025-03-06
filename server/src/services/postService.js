@@ -1,3 +1,4 @@
+import postModel from "../models/Post.js";
 import userModel from "../models/User.js";
 
 export default {
@@ -15,5 +16,26 @@ export default {
 		}
 
 		return userObj.posts;
+	},
+	async createPost(req) {
+		const { userId, content, images } = req.body;
+		if (req.user?.id != userId) {
+			throw new Error("Unauthorized");
+		}
+
+		const post = {
+			date: Date.now(),
+			user: userId,
+			content,
+			images,
+		};
+
+		const newPostId = await postModel.create(post);
+
+		userModel.findByIdAndUpdate(userId, {
+			$push: { posts: newPostId },
+		});
+
+		return "Successfully created post";
 	},
 };

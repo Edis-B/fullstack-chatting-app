@@ -178,9 +178,13 @@ export default {
 			throw new Error("Not Logged in!");
 		}
 
+		const id = (await chatModel.findById(req.query.chatId).lean()).participants.filter(
+			(p) => p.participant._id.toString() != req.user.id
+		)[0].participant;
+		
 		const result = await this.getChatInfo(req.query.chatId, req.user.id);
 
-		return { image: result.chatImage, name: result.chatName };
+		return { image: result.chatImage, name: result.chatName, _id: id };
 	},
 	async getUserChats(req) {
 		const identifier = req.query.userId ?? req.user?.id;
@@ -203,7 +207,7 @@ export default {
 
 		return chatInfos;
 	}, //
-	async getChatInfo(chatId /* JS object */, userId) {
+	async getChatInfo(chatId, userId) {
 		const chat = await chatModel
 			.findById(chatId)
 			.populate([

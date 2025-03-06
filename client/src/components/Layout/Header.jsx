@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { host } from "../common/appConstants.js";
-import { useUser } from "../contexts/UserContext.jsx";
+import { host } from "../../common/appConstants.js";
+import { useUser } from "../../contexts/UserContext.jsx";
 
 export default function Header() {
 	const { userId } = useUser();
