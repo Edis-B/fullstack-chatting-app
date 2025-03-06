@@ -16,10 +16,33 @@ export async function sendFriendRequest(senderId, receiverId) {
 
 		const data = await response.json();
 		console.log(data);
+		
+	} catch (err) {
+		console.log(err);
+	}
+}
+
+export async function unfriend(senderId, receiverId) {
+	try {
+		const response = await fetch(`${host}/user/unfriend`, {
+			method: "POST",
+			headers: {
+				"Content-type": "application/json",
+			},
+			body: JSON.stringify({
+				senderId,
+				receiverId,
+			}),
+			credentials: "include",
+		});
+
+		const data = await response.json();
+		console.log(data);
 
 	} catch (err) {
 		console.log(err);
 	}
+
 }
 
 export async function acceptFriendRequest(senderId, receiverId) {

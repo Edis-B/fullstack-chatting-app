@@ -140,16 +140,14 @@ export default {
 			throw new Error("User not found!");
 		}
 
-		const userObj = (
-			await user.populate("friends.friend")
-		).toObject();
+		const userObj = (await user.populate("friends.friend")).toObject();
 
 		const result = {};
 		result.friends = userObj.friends.filter(
 			(f) => f.status === friendStatuses.FRIENDS
 		);
 
-		result.owner = req.user?.id == userObj._id; 
+		result.owner = req.user?.id == userObj._id;
 		if (!result.owner) {
 			return result;
 		}
@@ -202,7 +200,7 @@ export default {
 
 		let currentStatus;
 		if (receiverFriend.length > 0) {
-			currentStatus = receiver.friends[0].status;
+			currentStatus = receiverFriend[0].status;
 		}
 
 		if (currentStatus === friendStatuses.INCOMING_REQUEST) {
@@ -257,7 +255,7 @@ export default {
 
 		let currentStatus;
 		if (receiverFriend.length > 0) {
-			currentStatus = receiver.friends[0].status;
+			currentStatus = receiverFriend[0].status;
 		}
 
 		if (currentStatus === friendStatuses.FRIENDS) {
@@ -320,7 +318,7 @@ export default {
 
 		let currentStatus;
 		if (receiverFriend.length > 0) {
-			currentStatus = receiver.friends[0].status;
+			currentStatus = receiverFriend[0].status;
 		}
 
 		if (currentStatus !== friendStatuses.OUTGOING_REQUEST) {
@@ -330,12 +328,12 @@ export default {
 		try {
 			await userModel.updateOne(
 				{ _id: receiverId },
-				{ $pull: { friends: senderId } }
+				{ $pull: { friends: { friend: senderId } } }
 			);
-
+			
 			await userModel.updateOne(
 				{ _id: senderId },
-				{ $pull: { friends: receiverId } }
+				{ $pull: { friends: { friend: receiverId } } }
 			);
 		} catch (err) {
 			console.log(err);
@@ -366,7 +364,7 @@ export default {
 
 		let currentStatus;
 		if (receiverFriend.length > 0) {
-			currentStatus = receiver.friends[0].status;
+			currentStatus = receiverFriend[0].status;
 		}
 
 		if (
@@ -379,19 +377,66 @@ export default {
 		try {
 			await userModel.updateOne(
 				{ _id: receiverId },
-				{ $pull: { friends: senderId } }
+				{ $pull: { friends: { friend: senderId } } }
 			);
-
+			
 			await userModel.updateOne(
 				{ _id: senderId },
-				{ $pull: { friends: receiverId } }
-			);
+				{ $pull: { friends: { friend: receiverId } } }
+			);			
 		} catch (err) {
 			console.log(err);
 			throw new Error("There has been an error!");
 		}
 
 		return "Canceled friend request successfully!";
+	},
+	async unfriend(req) {
+		const { senderId, receiverId } = req.body;
+
+		if (receiverId === senderId) {
+			throw new Error("Cannot cancel friend request!");
+		}
+
+		if (senderId != req.user?.id) {
+			throw new Error("Unauthorized");
+		}
+
+		const receiver = await userModel
+			.findById(receiverId)
+			.populate("friends.friend");
+
+		const receiverFriend = receiver.toObject().friends.filter((fObj) => {
+			const check = fObj.friend._id.toString() == senderId;
+			return check;
+		});
+
+		let currentStatus;
+		if (receiverFriend.length > 0) {
+			currentStatus = receiverFriend[0].status;
+		}
+
+		if (currentStatus && currentStatus !== friendStatuses.FRIENDS) {
+			throw new Error("Not friends with user!");
+		}
+
+		try {
+			await userModel.updateOne(
+				{ _id: receiverId },
+				{ $pull: { friends: { friend: senderId } } }
+			);
+			
+			await userModel.updateOne(
+				{ _id: senderId },
+				{ $pull: { friends: { friend: receiverId } } }
+			);
+			
+		} catch (err) {
+			console.log(err);
+			throw new Error("There has been an error!");
+		}
+
+		return "Removed friend successfully!";
 	},
 };
 

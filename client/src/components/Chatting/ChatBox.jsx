@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 
 import { host, client } from "../../common/appConstants.js";
@@ -9,12 +9,15 @@ import { useUser } from "../../contexts/UserContext.jsx";
 export default function ChatBox() {
 	const { socket } = useUser();
 	const { chatId } = useChat();
+
+	const chatBoxRef = useRef(null);
 	const [currentUsername, setCurrentUsername] = useState("");
 	const [chatHistory, setChatHistory] = useState([]);
+	const [isAtBottom, setIsAtBottom] = useState(true);
 
 	useEffect(() => {
 		fetchData();
-		
+
 		if (socket) {
 			socket.on("receive_message", handleMessage);
 
@@ -24,6 +27,17 @@ export default function ChatBox() {
 			};
 		}
 	}, [chatId, socket]);
+
+	useEffect(() => {
+		if (isAtBottom) {
+			scrollToBottom();
+		}
+	}, [chatHistory]); // Scroll to bottom when chat history updates
+
+	function scrollToBottom() {
+		const chatBox = chatBoxRef.current;
+		chatBox.scrollTop = chatBox.scrollHeight;
+	}
 
 	async function fetchData() {
 		if (!chatId) {
@@ -50,6 +64,16 @@ export default function ChatBox() {
 
 	const handleMessage = (data) => {
 		if (data.message.chat === chatId) {
+			const chatBox = chatBoxRef.current;
+
+			const atBottom =
+				chatBox.scrollHeight -
+					chatBox.scrollTop -
+					chatBox.clientHeight <=
+				20;
+
+			setIsAtBottom(atBottom);
+
 			setChatHistory((prev) => [...prev, data.message]);
 		}
 	};
@@ -82,7 +106,7 @@ export default function ChatBox() {
 			{/* Chat Box Header */}
 			<ChatBoxHeader chatId={chatId} />
 
-			<div className="messages" id="messages">
+			<div className="messages" id="messages" ref={chatBoxRef}>
 				{Array.isArray(chatHistory) &&
 					chatHistory.map((message) => {
 						return (

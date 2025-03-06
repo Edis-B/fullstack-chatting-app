@@ -1,20 +1,24 @@
 import { useEffect, useState } from "react";
 import { host } from "../../common/appConstants";
 import { useUser } from "../../contexts/UserContext";
+import { useProfile } from "../../contexts/ProfileContext";
 
 export default function Posts() {
-	const { userId } = useUser();
+	const { profileId } = useProfile();
 
-	const [posts, setPosts] = useState(null);
+	const [postsData, setPostsData] = useState({});
 
 	useEffect(() => {
+		if (!profileId) {
+			return;
+		}
 		fetchPosts();
-	}, [userId]);
+	}, [profileId]);
 
 	async function fetchPosts() {
 		try {
 			const response = await fetch(
-				`${host}/post/get-users-posts?userId=${userId}`,
+				`${host}/post/get-users-posts?userId=${profileId}`,
 				{
 					method: "GET",
 					credentials: "include",
@@ -22,30 +26,28 @@ export default function Posts() {
 			);
 
 			const data = await response.json();
-
-			setPosts(data);
+			setPostsData(data);
 		} catch (err) {
 			console.log(err);
 		}
 	}
 
 	return (
-		<>
-			{/* Posts Section */}
-			<div className="mt-3">
-				<div className="card mb-3">
-					{Array.isArray(posts) ? (
-						posts.map((post) => {
+		<div className="mt-3">
+			<div className="card mb-3">
+				{Array.isArray(postsData.posts) ? (
+					postsData.posts.map((post) => {
+						return (
 							<div className="card-body">
 								<div className="d-flex">
 									<img
-										src={post.image}
+										src={postsData.user.image}
 										className="rounded-circle me-2"
 										alt="Profile"
 									/>
 									<div>
 										<h6 className="mb-0">
-											{post.user.username}
+											{postsData.user.username}
 										</h6>
 										<p className="text-muted small">
 											{post.date}
@@ -61,7 +63,7 @@ export default function Posts() {
 										alt="Post Image"
 									/>;
 								})}
-                                
+
 								<div className="d-flex justify-content-between mt-3">
 									<button className="btn btn-outline-primary btn-sm">
 										Like
@@ -73,13 +75,13 @@ export default function Posts() {
 										Share
 									</button>
 								</div>
-							</div>;
-						})
-					) : (
-						<span>No posts.</span>
-					)}
-				</div>
+							</div>
+						);
+					})
+				) : (
+					<span>No posts.</span>
+				)}
 			</div>
-		</>
+		</div>
 	);
 }

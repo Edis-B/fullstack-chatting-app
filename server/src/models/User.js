@@ -32,10 +32,13 @@ const userSchema = new Schema({
 			match: /^https?\:\/\/.+/,
 		},
 	],
-	posts: {
-		type: Types.ObjectId,
-		ref: "Post",
-	},
+	posts: [
+		{
+			_id: false,
+			type: Types.ObjectId,
+			ref: "Post",
+		},
+	],
 	friends: [
 		{
 			_id: false,

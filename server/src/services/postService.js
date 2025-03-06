@@ -5,17 +5,14 @@ export default {
 	async getUserPosts(req) {
 		const identifier = req.query.userId;
 
-		const userObj = userModel
-			.findById(identifier)
-			.populate("posts")
-			.populate("user")
-			.lean();
+		const userObj = await userModel.findById(identifier).populate("posts").lean();
 
 		if (!userObj) {
 			throw new Error("User not found!");
 		}
 
-		return userObj.posts;
+		const { posts, ...user } = userObj;
+		return { user, posts };
 	},
 	async createPost(req) {
 		const { userId, content, images } = req.body;
@@ -32,7 +29,7 @@ export default {
 
 		const newPostId = await postModel.create(post);
 
-		userModel.findByIdAndUpdate(userId, {
+		await userModel.findByIdAndUpdate(userId, {
 			$push: { posts: newPostId },
 		});
 
