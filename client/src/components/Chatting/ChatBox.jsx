@@ -36,6 +36,7 @@ export default function ChatBox() {
 
 	function scrollToBottom() {
 		const chatBox = chatBoxRef.current;
+		if (!chatBox) return;
 		chatBox.scrollTop = chatBox.scrollHeight;
 	}
 
@@ -102,35 +103,72 @@ export default function ChatBox() {
 	}
 
 	return (
-		<>
+		<div className="chatbox-container flex flex-col h-screen">
 			{/* Chat Box Header */}
-			<ChatBoxHeader chatId={chatId} />
+			<ChatBoxHeader className="chatbox-header flex-none bg-gray-200 p-4 border-b border-gray-300" />
 
-			<div className="messages" id="messages" ref={chatBoxRef}>
+			{/* Messages */}
+			<div
+				className="messages flex-1 overflow-y-auto p-4 space-y-4 m-0"
+				ref={chatBoxRef}
+				 // Adjust based on header height
+			>
 				{Array.isArray(chatHistory) &&
 					chatHistory.map((message) => {
-						return (
+						const isCurrentUser =
+							message.user.username === currentUsername;
+
+						return isCurrentUser ? (
+							// Current User's Message (Right-Aligned)
 							<div
-								className={
-									message.user.username === currentUsername
-										? "message sent d-flex align-items-center justify-content-end h-auto mb-3"
-										: "message received d-flex align-items-center h-auto mb-3"
-								}
+								className="message flex items-start space-x-3 m-0 justify-end"
 								key={message._id}
 							>
+								{/* Message Content */}
+								<div className="flex flex-col space-y-1 items-end">
+									{/* Username */}
+									<div className="text-xs font-medium text-gray-600">
+										{message.user.username}
+									</div>
+									{/* Message */}
+									<div className="message-content max-w-[70%] p-3 rounded-lg bg-blue-500 text-white break-words">
+										<p className="m-0">{message.text}</p>
+									</div>
+								</div>
+								{/* Profile Picture */}
 								<img
 									src={message.user.image}
 									alt={message.user.username}
-									className="rounded-circle me-2"
+									className="rounded-full w-12 h-12 object-cover"
 								/>
-								<div>
-									<strong>{message.user.username}:</strong>
-									{message.text}
+							</div>
+						) : (
+							// Sender's Message (Left-Aligned)
+							<div
+								className="message flex items-start space-x-3 m-0 justify-start"
+								key={message._id}
+							>
+								{/* Profile Picture */}
+								<img
+									src={message.user.image}
+									alt={message.user.username}
+									className="rounded-full w-12 h-12 object-cover"
+								/>
+								{/* Message Content */}
+								<div className="flex flex-col space-y-1 items-start">
+									{/* Username */}
+									<div className="text-xs font-medium text-gray-600">
+										{message.user.username}
+									</div>
+									{/* Message */}
+									<div className="message-content max-w-[70%] p-3 rounded-lg bg-gray-100 break-words">
+										<p className="m-0">{message.text}</p>
+									</div>
 								</div>
 							</div>
 						);
 					})}
 			</div>
-		</>
+		</div>
 	);
 }

@@ -41,7 +41,7 @@ export default function MessageInput() {
 	}
 
 	return (
-		<div className="d-flex mt-auto">
+		<div className="d-flex m-3">
 			<input
 				type="text"
 				className="form-control"

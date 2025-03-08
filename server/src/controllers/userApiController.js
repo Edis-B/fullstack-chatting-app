@@ -5,6 +5,17 @@ import { getErrorMessage } from "../utils/errorUtils.js";
 
 const userApiController = Router();
 
+
+userApiController.post("/unfriend", async (req, res) => {
+	try {
+		const result = await userService.unfriend(req);
+		res.json(result);
+	} catch (err) {
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
+	}
+});
+
 userApiController.post("/send-friend-request", async (req, res) => {
 	try {
 		const result = await userService.sendFriendRequest(req);

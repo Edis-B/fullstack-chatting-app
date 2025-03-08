@@ -82,10 +82,10 @@ export default function CreatePost() {
 
 						<div className="mb-3">
 							<label className="form-label">Images</label>
-							{Array.isArray(images) &&
+							{images?.length > 0 ? (
 								images.map((image, index) => (
 									<div>
-										<li>{image}</li>
+										<img src={{ image }} />
 										<button
 											type="button"
 											onClick={() => removeImage(index)}
@@ -93,21 +93,33 @@ export default function CreatePost() {
 											Remove image
 										</button>
 									</div>
-								))}
+								))
+							) : (
+								<span className="d-block text-muted">No images yet.</span>
+							)}
 						</div>
 
 						<div className="mb-3">
 							<label className="form-label">Image URL</label>
-							<input
-								type="url"
-								className="form-control"
-								value={imageInput}
-								onChange={(e) => setImageInput(e.target.value)}
-								placeholder="Enter image URL"
-							/>
-							<button type="button" onClick={addImage}>
-								Add image
-							</button>
+
+							<div className="d-flex">
+								<input
+									type="url"
+									className="form-control m-1"
+									value={imageInput}
+									onChange={(e) =>
+										setImageInput(e.target.value)
+									}
+									placeholder="Enter image URL"
+								/>
+								<button
+									type="button"
+									className="btn btn-secondary m-1"
+									onClick={addImage}
+								>
+									Add image
+								</button>
+							</div>
 						</div>
 
 						<button type="submit" className="btn btn-primary">

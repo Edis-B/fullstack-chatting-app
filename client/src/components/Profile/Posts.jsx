@@ -35,7 +35,7 @@ export default function Posts() {
 	return (
 		<div className="mt-3">
 			<div className="card mb-3">
-				{Array.isArray(postsData.posts) ? (
+				{postsData.posts?.length > 0 ? (
 					postsData.posts.map((post) => {
 						return (
 							<div className="card-body">

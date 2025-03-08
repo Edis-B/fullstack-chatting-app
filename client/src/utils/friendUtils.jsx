@@ -3,6 +3,7 @@ import {
 	cancelFriendRequest,
 	declineFriendRequest,
 	sendFriendRequest,
+	unfriend
 } from "../services/userAPIs.js";
 
 const friendStatuses = {
@@ -48,7 +49,7 @@ export function friendStatusButton(status, senderId, receiverId) {
 				className="btn btn-outline-secondary"
 				onClick={(e) => unfriend(senderId, receiverId)}
 			>
-				Add friend
+				Remove friend
 			</button>
 		);
 	} else if (!status || status === friendStatuses.NOT_FRIENDS) {

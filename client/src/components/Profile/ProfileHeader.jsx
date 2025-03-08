@@ -12,10 +12,12 @@ export default function ProfileHeader() {
 	const navigate = useNavigate();
 
 	const { profileUserId } = useParams();
+	const { content } = useParams();
 
 	const { userId } = useUser();
 	const { profileId, setProfileId } = useProfile();
 
+	const [selectedNav, setSelectedNav] = useState({});
 	const [profileData, setProfileData] = useState({});
 
 	useEffect(() => {
@@ -25,6 +27,10 @@ export default function ProfileHeader() {
 			fetchProfileData();
 		}
 	}, [profileUserId, profileId]);
+
+	useEffect(() => {
+		setSelectedNav(content);
+	}, [content]);
 
 	async function fetchProfileData() {
 		try {
@@ -80,7 +86,11 @@ export default function ProfileHeader() {
 					!!userId && (
 						<div className="ms-auto">
 							<button className="btn btn-primary">Message</button>
-							{friendStatusButton(profileData.ourStatus, userId, profileId)}
+							{friendStatusButton(
+								profileData.ourStatus,
+								userId,
+								profileId
+							)}
 						</div>
 					)
 				)}
@@ -89,22 +99,50 @@ export default function ProfileHeader() {
 			{/* Navigation Tabs */}
 			<ul className="nav nav-tabs mt-3">
 				<li className="nav-item">
-					<Link className="nav-link active" to={`/profile/${profileId}/${contentTypes.POSTS}`}>
+					<Link
+						className={
+							!selectedNav || selectedNav === contentTypes.POSTS
+								? "nav-link active"
+								: "nav-link"
+						}
+						to={`/profile/${profileId}/${contentTypes.POSTS}`}
+					>
 						Posts
 					</Link>
 				</li>
 				<li className="nav-item">
-					<Link className="nav-link" to={`/profile/${profileId}/${contentTypes.FRIENDS}`}>
+					<Link
+						className={
+							selectedNav === contentTypes.FRIENDS
+								? "nav-link active"
+								: "nav-link"
+						}
+						to={`/profile/${profileId}/${contentTypes.FRIENDS}`}
+					>
 						Friends
 					</Link>
 				</li>
 				<li className="nav-item">
-					<Link className="nav-link" to={`/profile/${profileId}/${contentTypes.ABOUT}`}>
+					<Link
+						className={
+							selectedNav === contentTypes.ABOUT
+								? "nav-link active"
+								: "nav-link"
+						}
+						to={`/profile/${profileId}/${contentTypes.ABOUT}`}
+					>
 						About
 					</Link>
 				</li>
 				<li className="nav-item">
-					<Link className="nav-link" to={`/profile/${profileId}/${contentTypes.PHOTOS}`}>
+					<Link
+						className={
+							selectedNav === contentTypes.PHOTOS
+								? "nav-link active"
+								: "nav-link"
+						}
+						to={`/profile/${profileId}/${contentTypes.PHOTOS}`}
+					>
 						Photos
 					</Link>
 				</li>

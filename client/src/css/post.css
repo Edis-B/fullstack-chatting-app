@@ -1,0 +1,22 @@
+/* ImageContainer.css */
+.image-container {
+	position: relative;
+	overflow: hidden;
+	border-radius: 0.5rem; /* Equivalent to rounded-lg in Tailwind */
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+		0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Equivalent to shadow-md in Tailwind */
+	transition: box-shadow 0.3s ease; /* Equivalent to transition-shadow in Tailwind */
+}
+
+.image-container:hover {
+	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+		0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Equivalent to hover:shadow-lg in Tailwind */
+}
+
+.image-container img {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover; /* Ensures the image covers the container without distortion */
+}
