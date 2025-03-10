@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { host } from "../../common/appConstants.js";
 import { useProfile } from "../../contexts/ProfileContext.jsx";
 

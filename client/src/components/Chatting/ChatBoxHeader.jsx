@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { host } from "../../common/appConstants.js";
 import { useChat } from "../../contexts/ChatContext.jsx";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 export default function ChatBoxHeader() {
 	const { chatId } = useChat();
 	const [header, setHeader] = useState({});

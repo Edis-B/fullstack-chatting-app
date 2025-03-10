@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link } from "react-router";
 
 import Layout from "./components/Layout/Layout";
 
@@ -11,8 +11,8 @@ import Register from "./components/Register";
 import Profile from "./components/Profile/Profile";
 import CreatePost from "./components/Posts/CreatePost";
 
-import "./css/style.css";
 import "./css/site.css";
+import Post from "./components/Post";
 
 function App() {
 	return (
@@ -39,7 +39,8 @@ function App() {
 
 					<Route path="/test" element={<Test />}></Route>
 
-					<Route path="/create-post" element={<CreatePost />} />
+					<Route path="/post/create-post" element={<CreatePost />} />
+					<Route path="/post/:postId" element={<Post />} />
 
 					<Route path="*" element={<NotFound />} />
 				</Route>

@@ -75,13 +75,18 @@ export default {
 		}
 	},
 	async getChatHistory(req) {
-		const chatQuery = chatModel.findOne({ _id: req.query.chatId });
+		const { chatId, page } = req.query;
+		const chatQuery = chatModel.findOne({ _id: chatId });
 
 		const chat = await chatQuery
 			.populate({
 				path: "messages",
 				populate: {
 					path: "user",
+				},
+				options: {
+					limit: 20,
+					skip: (Number(page) - 1) * 20,
 				},
 			})
 			.lean();
@@ -178,10 +183,12 @@ export default {
 			throw new Error("Not Logged in!");
 		}
 
-		const id = (await chatModel.findById(req.query.chatId).lean()).participants.filter(
+		const id = (
+			await chatModel.findById(req.query.chatId).lean()
+		).participants.filter(
 			(p) => p.participant._id.toString() != req.user.id
 		)[0].participant;
-		
+
 		const result = await this.getChatInfo(req.query.chatId, req.user.id);
 
 		return { image: result.chatImage, name: result.chatName, _id: id };

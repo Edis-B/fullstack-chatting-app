@@ -1,22 +1,27 @@
-/* ImageContainer.css */
-.image-container {
-	position: relative;
-	overflow: hidden;
-	border-radius: 0.5rem; /* Equivalent to rounded-lg in Tailwind */
-	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-		0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Equivalent to shadow-md in Tailwind */
-	transition: box-shadow 0.3s ease; /* Equivalent to transition-shadow in Tailwind */
+.post-container {
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 20px;
 }
-
-.image-container:hover {
-	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-		0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Equivalent to hover:shadow-lg in Tailwind */
-}
-
-.image-container img {
-	position: absolute;
-	inset: 0;
+.post-image {
 	width: 100%;
-	height: 100%;
-	object-fit: cover; /* Ensures the image covers the container without distortion */
+	height: auto;
+	border-radius: 8px;
+}
+.comment-section {
+	margin-top: 20px;
+}
+.comment {
+	border-bottom: 1px solid #eee;
+	padding: 10px 0;
+}
+.comment:last-child {
+	border-bottom: none;
+}
+.post-card {
+	background-color: white;
+	border-radius: 10px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	margin-bottom: 20px;
+	padding: 20px;
 }

@@ -3,11 +3,3 @@
     background: url('https://via.placeholder.com/1200x300') center/cover no-repeat;
     position: relative;
 }
-.profile-picture {
-    width: 150px;
-    height: 150px;
-    border: 4px solid white;
-    position: absolute;
-    bottom: -50px;
-    left: 20px;
-}

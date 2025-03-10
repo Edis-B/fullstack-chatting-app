@@ -4,6 +4,7 @@ import ChatBox from "./ChatBox";
 import { ChatProvider } from "../../contexts/ChatContext";
 
 import "../../css/chat.css"
+
 export default function Chat() {
 	return (
 		<div className="container-fluid chat-container d-flex">

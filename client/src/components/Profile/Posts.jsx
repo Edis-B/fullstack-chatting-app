@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router";
 import { host } from "../../common/appConstants";
 import { useUser } from "../../contexts/UserContext";
 import { useProfile } from "../../contexts/ProfileContext";
@@ -65,6 +66,12 @@ export default function Posts() {
 								})}
 
 								<div className="d-flex justify-content-between mt-3">
+									<Link
+										to={`/post/${post._id}`}
+										className="btn btn-outline-primary btn-sm"
+									>
+										View Details
+									</Link>
 									<button className="btn btn-outline-primary btn-sm">
 										Like
 									</button>

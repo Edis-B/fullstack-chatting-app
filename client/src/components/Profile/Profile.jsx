@@ -1,5 +1,5 @@
 import { ProfileProvider, useProfile } from "../../contexts/ProfileContext.jsx";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import { contentTypes } from "../../common/appConstants.js";
 
 import ProfileHeader from "./ProfileHeader.jsx";

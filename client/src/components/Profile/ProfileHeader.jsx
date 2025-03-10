@@ -1,4 +1,4 @@
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router";
 import { useEffect, useState } from "react";
 
 import { host } from "../../common/appConstants.js";
@@ -65,7 +65,7 @@ export default function ProfileHeader() {
 				<img
 					src={profileData.image}
 					alt="Profile"
-					className="rounded-circle profile-picture"
+					className="rounded-circle profile-pic"
 				/>
 
 				<div className="ms-3">

@@ -1,20 +1,23 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation } from "react-router";
 import Header from "./Header";
 import Footer from "./Footer";
 import Errors from "./Errors";
 
 export default function Layout() {
-
 	const location = useLocation();
 	const hideFooterOn = ["/chat"];
-	const showFooter = hideFooterOn.includes(location.pathname);
+
+	const firstPart = "/" + location.pathname.split("/")[1]; // Extracts the first part
+	const showFooter = !hideFooterOn.includes(firstPart);
 
 	return (
-		<>
+		<div className="wrapper">
 			<Errors />
 			<Header />
-			<Outlet /> {/* This renders the current route */}
+			<main className="content">
+				<Outlet /> {/* This renders the current route */}
+			</main>
 			{showFooter && <Footer />}
-		</>
+		</div>
 	);
 }

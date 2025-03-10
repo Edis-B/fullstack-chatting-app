@@ -13,10 +13,20 @@ export default function ChatBox() {
 	const chatBoxRef = useRef(null);
 	const [currentUsername, setCurrentUsername] = useState("");
 	const [chatHistory, setChatHistory] = useState([]);
+
 	const [isAtBottom, setIsAtBottom] = useState(true);
+	const [isAtTop, setIsAtTop] = useState(false);
+	const [page, setPage] = useState(1);
 
 	useEffect(() => {
+		if (!chatId) return;
+		
 		fetchData();
+
+		setChatHistory([]);
+		setPage(1);
+	
+		fetchChatHistory(chatId, 1);
 
 		if (socket) {
 			socket.on("receive_message", handleMessage);
@@ -34,6 +44,40 @@ export default function ChatBox() {
 		}
 	}, [chatHistory]); // Scroll to bottom when chat history updates
 
+	useEffect(() => {
+		const div = chatBoxRef.current;
+
+		if (!div) return;
+
+		div.addEventListener("scroll", handleScroll);
+
+		return () => {
+			if (div) {
+				div.removeEventListener("scroll", handleScroll);
+			}
+		};
+	}, []);
+
+	useEffect(() => {
+		if (isAtTop) {
+			fetchChatHistory(chatId, page);
+		}
+	}, [isAtTop]);
+
+	const handleScroll = (e) => {
+		const chatBox = chatBoxRef.current;
+
+		if (!chatBox) return;
+
+		const isAtTop = chatBox.scrollTop <= 10;
+		const atBottom =
+			chatBox.scrollHeight - chatBox.scrollTop - chatBox.clientHeight <=
+			20;
+
+		setIsAtBottom(atBottom);
+		setIsAtTop(isAtTop);
+	};
+
 	function scrollToBottom() {
 		const chatBox = chatBoxRef.current;
 		if (!chatBox) return;
@@ -41,10 +85,6 @@ export default function ChatBox() {
 	}
 
 	async function fetchData() {
-		if (!chatId) {
-			return;
-		}
-
 		try {
 			const response = await fetch(`${host}/user/get-username`, {
 				method: "GET",
@@ -56,33 +96,18 @@ export default function ChatBox() {
 		} catch (err) {
 			console.log(err);
 		}
-
-		const messages = await fetchChatHistory(chatId);
-		if (messages) {
-			setChatHistory(messages);
-		}
 	}
 
 	const handleMessage = (data) => {
 		if (data.message.chat === chatId) {
-			const chatBox = chatBoxRef.current;
-
-			const atBottom =
-				chatBox.scrollHeight -
-					chatBox.scrollTop -
-					chatBox.clientHeight <=
-				20;
-
-			setIsAtBottom(atBottom);
-
 			setChatHistory((prev) => [...prev, data.message]);
 		}
 	};
 
-	async function fetchChatHistory(id) {
+	async function fetchChatHistory(id, page) {
 		try {
 			const response = await fetch(
-				`${host}/chat/get-chat-history?chatId=${id}`,
+				`${host}/chat/get-chat-history?chatId=${id}&page=${page}`,
 				{
 					method: "GET",
 					credentials: "include",
@@ -91,11 +116,22 @@ export default function ChatBox() {
 
 			const data = await response.json();
 
+			if (response.ok && data?.length > 0) {
+				setChatHistory((prev) => {
+					if (prev.some((m) => m._id == data[0]._id)) {
+						return prev;
+					}
+
+					const newArr = [...data, ...prev].flat();
+					return newArr;
+				});
+
+				setPage((prev) => prev + 1);
+			} 
+
 			if (!response.ok) {
 				alert(data);
 			}
-
-			return data;
 		} catch (err) {
 			console.log(err);
 			return false;
@@ -103,66 +139,76 @@ export default function ChatBox() {
 	}
 
 	return (
-		<div className="chatbox-container flex flex-col h-screen">
+		<div className="chatbox-container d-flex flex-column h-auto">
 			{/* Chat Box Header */}
-			<ChatBoxHeader className="chatbox-header flex-none bg-gray-200 p-4 border-b border-gray-300" />
+			<ChatBoxHeader className="chatbox-header flex-none bg-light p-3 border-bottom" />
 
 			{/* Messages */}
 			<div
-				className="messages flex-1 overflow-y-auto p-4 space-y-4 m-0"
+				className="messages flex-grow-1 overflow-auto p-3"
 				ref={chatBoxRef}
-				 // Adjust based on header height
+				style={{ maxHeight: "calc(100vh - 150px)" }} // Adjust based on header and input height
 			>
 				{Array.isArray(chatHistory) &&
 					chatHistory.map((message) => {
 						const isCurrentUser =
-							message.user.username === currentUsername;
+							message.user?.username === currentUsername;
 
 						return isCurrentUser ? (
 							// Current User's Message (Right-Aligned)
 							<div
-								className="message flex items-start space-x-3 m-0 justify-end"
+								className="message d-flex align-items-start mb-3 justify-content-end"
 								key={message._id}
 							>
 								{/* Message Content */}
-								<div className="flex flex-col space-y-1 items-end">
+								<div className="d-flex flex-column align-items-end">
 									{/* Username */}
-									<div className="text-xs font-medium text-gray-600">
+									<div className="text-muted small">
 										{message.user.username}
 									</div>
 									{/* Message */}
-									<div className="message-content max-w-[70%] p-3 rounded-lg bg-blue-500 text-white break-words">
-										<p className="m-0">{message.text}</p>
+									<div className="message-content bg-primary text-white p-2 rounded">
+										<p className="mb-0">{message.text}</p>
 									</div>
 								</div>
 								{/* Profile Picture */}
 								<img
 									src={message.user.image}
 									alt={message.user.username}
-									className="rounded-full w-12 h-12 object-cover"
+									className="rounded-circle ms-2"
+									style={{
+										width: "48px",
+										height: "48px",
+										objectFit: "cover",
+									}}
 								/>
 							</div>
 						) : (
 							// Sender's Message (Left-Aligned)
 							<div
-								className="message flex items-start space-x-3 m-0 justify-start"
+								className="message d-flex align-items-start mb-3"
 								key={message._id}
 							>
 								{/* Profile Picture */}
 								<img
 									src={message.user.image}
 									alt={message.user.username}
-									className="rounded-full w-12 h-12 object-cover"
+									className="rounded-circle me-2"
+									style={{
+										width: "48px",
+										height: "48px",
+										objectFit: "cover",
+									}}
 								/>
 								{/* Message Content */}
-								<div className="flex flex-col space-y-1 items-start">
+								<div className="d-flex flex-column align-items-start">
 									{/* Username */}
-									<div className="text-xs font-medium text-gray-600">
+									<div className="text-muted small">
 										{message.user.username}
 									</div>
 									{/* Message */}
-									<div className="message-content max-w-[70%] p-3 rounded-lg bg-gray-100 break-words">
-										<p className="m-0">{message.text}</p>
+									<div className="message-content bg-light p-2 rounded">
+										<p className="mb-0">{message.text}</p>
 									</div>
 								</div>
 							</div>

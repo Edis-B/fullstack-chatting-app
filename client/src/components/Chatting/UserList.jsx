@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router";
 import { host, client } from "../../common/appConstants.js";
 import { useChat } from "../../contexts/ChatContext.jsx";
 import { useUser } from "../../contexts/UserContext.jsx";
