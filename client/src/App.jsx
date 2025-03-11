@@ -12,7 +12,7 @@ import Profile from "./components/Profile/Profile";
 import CreatePost from "./components/Posts/CreatePost";
 
 import "./css/site.css";
-import Post from "./components/Post";
+import PostDetails from "./components/Posts/PostDetails";
 
 function App() {
 	return (
@@ -40,7 +40,7 @@ function App() {
 					<Route path="/test" element={<Test />}></Route>
 
 					<Route path="/post/create-post" element={<CreatePost />} />
-					<Route path="/post/:postId" element={<Post />} />
+					<Route path="/post/:postId" element={<PostDetails />} />
 
 					<Route path="*" element={<NotFound />} />
 				</Route>

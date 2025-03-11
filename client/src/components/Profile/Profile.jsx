@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import { contentTypes } from "../../common/appConstants.js";
 
 import ProfileHeader from "./ProfileHeader.jsx";
-import Posts from "./Posts.jsx";
+import UserPosts from "./UserPosts.jsx";
 import Friends from "./Friends.jsx";
 
 export default function Profile() {
@@ -11,7 +11,7 @@ export default function Profile() {
 
 	function generateContent(type) {
 		if (!type || type == contentTypes.POSTS) {
-			return <Posts />;
+			return <UserPosts />;
 		} else if (type == contentTypes.FRIENDS) {
 			return <Friends />;
 		} else if (type == contentTypes.FRIENDS) {

@@ -1,120 +1,137 @@
-async function PostDetails() {
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { host } from "../../common/appConstants.js";
+import { dateToString } from "../../utils/dateUtils.js";
+import { Link } from "react-router";
+export default function PostDetails() {
+	const { postId } = useParams();
+	const [post, setPost] = useState({});
+
+	useEffect(() => {
+		if (!postId) return;
+
+		fetchPostData();
+	}, [postId]);
+
+	async function fetchPostData() {
+		try {
+			const response = await fetch(
+				`${host}/post/get-post?postId=${postId}`,
+				{
+					method: "GET",
+					credentials: "include",
+				}
+			);
+
+			const data = await response.json();
+
+			setPost(data);
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	if (!post.user) {
+		return <span>Loading...</span>;
+	}
+
 	return (
-		<div className="post-container">
-			{/* Post Header */}
-			<div className="d-flex align-items-center mb-4">
-				<img
-					src="https://via.placeholder.com/50"
-					alt="User Avatar"
-					className="rounded-circle me-3"
-					style={{
-						width: "50px",
-						height: "50px",
-						objectFit: "cover",
-					}}
-				/>
-				<div>
-					<h5 className="mb-0">John Doe</h5>
-					<small className="text-muted">2 hours ago</small>
-				</div>
-			</div>
-
-			{/* Post Content */}
-			<div className="mb-4">
-				<p>
-					This is the post content. Lorem ipsum dolor sit amet,
-					consectetur adipiscing elit. Nulla vel purus at libero
-					tincidunt tincidunt. Donec euismod, nisl eget consectetur
-					tincidunt, nisl nunc consectetur nunc, eget consectetur nunc
-					nisl eget consectetur nunc.
-				</p>
-			</div>
-
-			{/* Post Images */}
-			<div className="row mb-4">
-				<div className="col-md-6">
-					<img
-						src="https://via.placeholder.com/400x300"
-						alt="Post Image 1"
-						className="post-image"
-					/>
-				</div>
-				<div className="col-md-6">
-					<img
-						src="https://via.placeholder.com/400x300"
-						alt="Post Image 2"
-						className="post-image"
-					/>
-				</div>
-			</div>
-
-			{/* Post Likes */}
-			<div className="d-flex align-items-center mb-4">
-				<button className="btn btn-outline-primary me-2">
-					<i className="fas fa-thumbs-up"></i> Like
-				</button>
-				<span className="text-muted">10 likes</span>
-			</div>
-
-			{/* Comments Section */}
-			<div className="comment-section">
-				<h5>Comments</h5>
-
-				{/* Comment 1 */}
-				<div className="comment">
-					<div className="d-flex align-items-center">
+		<div className="m-3 p-3 d-flex">
+			{/* Post Details (Left Side) */}
+			<div className="post-card flex-grow-1">
+				<div
+					className="card mb-3 p-3 shadow-sm"
+					style={{ minHeight: "calc(100vh - 40px)" }}
+				>
+					{/* Card Header */}
+					<div className="d-flex align-items-center border-bottom pb-2">
 						<img
-							src="https://via.placeholder.com/40"
-							alt="Commenter Avatar"
-							className="rounded-circle me-3"
-							style={{
-								width: "40px",
-								height: "40px",
-								objectFit: "cover",
-							}}
+							src={post.user.image}
+							className="rounded-circle me-2"
+							alt="Profile"
+							width="40"
+							height="40"
 						/>
 						<div>
-							<h6 className="mb-0">Jane Doe</h6>
-							<small className="text-muted">1 hour ago</small>
+							<h6 className="mb-0">{post.user.username}</h6>
+							<p className="text-muted small mb-0">
+								{dateToString(post.date)}
+							</p>
 						</div>
 					</div>
-					<p className="mt-2">This is a comment on the post.</p>
+
+					{/* Card Body (Content) */}
+					<div className="mt-2">
+						<p>{post.content}</p>
+						{post.images.length > 0 && (
+							<div className="d-flex flex-wrap">
+								{post.images.map((image, index) => (
+									<img
+										key={index}
+										src={image}
+										className="img-fluid rounded me-2 mb-2"
+										alt="Post"
+										style={{ maxWidth: "100px" }}
+									/>
+								))}
+							</div>
+						)}
+					</div>
+
+					{/* Card Footer (Interactions) */}
+					<div className="d-flex justify-content-between mt-3 border-top pt-2">
+						<Link
+							to={`/post/${post._id}`}
+							className="btn btn-outline-primary btn-sm"
+						>
+							View Details
+						</Link>
+						<button className="btn btn-outline-primary btn-sm">
+							Like
+						</button>
+						<button className="btn btn-outline-secondary btn-sm">
+							Comment
+						</button>
+						<button className="btn btn-outline-success btn-sm">
+							Share
+						</button>
+					</div>
+				</div>
+			</div>
+
+			{/* Comment Section (Right Side) */}
+			<div
+				className="comment-section ms-3"
+				style={{
+					flexBasis: "300px",
+					maxWidth: "300px",
+					height: "calc(100vh - 40px)",
+					overflowY: "auto",
+				}}
+			>
+				<h6>Comments</h6>
+				{/* Add Comment Box */}
+				<div className="input-group mb-3">
+					<input
+						type="text"
+						className="form-control"
+						placeholder="Add a comment..."
+					/>
+					<button className="btn btn-outline-primary">Post</button>
 				</div>
 
-				{/* Comment 2 */}
+				{/* Example Comments */}
 				<div className="comment">
-					<div className="d-flex align-items-center">
-						<img
-							src="https://via.placeholder.com/40"
-							alt="Commenter Avatar"
-							className="rounded-circle me-3"
-							style={{
-								width: "40px",
-								height: "40px",
-								objectFit: "cover",
-							}}
-						/>
-						<div>
-							<h6 className="mb-0">John Smith</h6>
-							<small className="text-muted">30 minutes ago</small>
-						</div>
-					</div>
-					<p className="mt-2">Another comment here.</p>
+					<p>
+						<strong>User1:</strong> This is an awesome post!
+					</p>
 				</div>
-
-				{/* Add Comment Form */}
-				<form className="mt-4">
-					<div className="mb-3">
-						<textarea
-							className="form-control"
-							rows="3"
-							placeholder="Add a comment..."
-						></textarea>
-					</div>
-					<button type="submit" className="btn btn-primary">
-						Submit
-					</button>
-				</form>
+				<div className="comment">
+					<p>
+						<strong>User2:</strong> I agree with this!
+					</p>
+				</div>
+				{/* Add more comment sections as needed */}
 			</div>
 		</div>
 	);

@@ -39,6 +39,13 @@ const userSchema = new Schema({
 			ref: "Post",
 		},
 	],
+	likedPosts: [
+		{
+			_id: false,
+			type: Types.ObjectId,
+			ref: "Post",
+		},
+	],
 	friends: [
 		{
 			_id: false,
@@ -50,6 +57,13 @@ const userSchema = new Schema({
 				type: Types.ObjectId,
 				ref: "User",
 			},
+		},
+	],
+	comments: [
+		{
+			_id: false,
+			type: Types.ObjectId,
+			ref: "Comment",
 		},
 	],
 	chats: [

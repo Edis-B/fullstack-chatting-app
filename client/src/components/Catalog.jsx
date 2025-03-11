@@ -1,11 +1,11 @@
-import Post from "./Post";
+import PostDetails from "./Posts/PostDetails";
 
 export default function Catalog() {
 	return (
 		<>
-			<Post />
-			<Post />
-			<Post />
+			<PostDetails />
+			<PostDetails />
+			<PostDetails />
 		</>
 	);
 }

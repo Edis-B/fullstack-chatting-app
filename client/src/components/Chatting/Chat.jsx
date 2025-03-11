@@ -7,12 +7,12 @@ import "../../css/chat.css"
 
 export default function Chat() {
 	return (
-		<div className="container-fluid chat-container d-flex">
+		<div className="container-fluid chat-container d-flex">	
 			<ChatProvider>
 				{/* User List */}
 				<UserList />
 
-				<div className="chat-box p-3" style={{ maxHeight: "calc(100vh - 80px)" }}>
+				<div className="chat-box p-3" style={{ maxHeight: "calc(100vh - 100px)" }}>
 					{/* Chat Box */}
 					<ChatBox />
 

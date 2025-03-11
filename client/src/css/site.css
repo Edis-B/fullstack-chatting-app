@@ -2,6 +2,7 @@
 
 body {
 	background-color: #f4f6f9;
+	overflow-y: auto; 
 }
 
 .container {
