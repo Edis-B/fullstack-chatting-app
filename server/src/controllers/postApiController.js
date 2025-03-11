@@ -16,7 +16,7 @@ postApiController.post("/remove-like-from-comment", async (req, res) => {
 
 postApiController.post("/like-comment", async (req, res) => {
 	try {
-		const result = await postService.commentOnPost(req);
+		const result = await postService.likeComment(req);
 		res.json(result);
 	} catch (err) {
 		const errMessage = getErrorMessage(err);
@@ -93,4 +93,5 @@ postApiController.get("/get-users-posts", async (req, res) => {
 		res.status(400).json(errMessage);
 	}
 });
+
 export default postApiController;

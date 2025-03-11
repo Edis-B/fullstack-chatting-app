@@ -3,9 +3,15 @@ import { useParams } from "react-router";
 import { host } from "../../common/appConstants.js";
 import { dateToString } from "../../utils/dateUtils.js";
 import { Link } from "react-router";
+import { commentOnPost, likeComment } from "../../services/postAPIs.js";
+import { useUser } from "../../contexts/UserContext.jsx";
+
 export default function PostDetails() {
+	const { userId, setError } = useUser();
 	const { postId } = useParams();
+
 	const [post, setPost] = useState({});
+	const [myComment, setMyComment] = useState(null);
 
 	useEffect(() => {
 		if (!postId) return;
@@ -89,9 +95,6 @@ export default function PostDetails() {
 						<button className="btn btn-outline-primary btn-sm">
 							Like
 						</button>
-						<button className="btn btn-outline-secondary btn-sm">
-							Comment
-						</button>
 						<button className="btn btn-outline-success btn-sm">
 							Share
 						</button>
@@ -115,23 +118,65 @@ export default function PostDetails() {
 					<input
 						type="text"
 						className="form-control"
+						onChange={(e) => setMyComment(e.target.value)}
 						placeholder="Add a comment..."
 					/>
-					<button className="btn btn-outline-primary">Post</button>
+					<button
+						className="btn btn-outline-primary"
+						onClick={() =>
+							commentOnPost(postId, userId, myComment, setError)
+						}
+					>
+						Post
+					</button>
 				</div>
 
-				{/* Example Comments */}
-				<div className="comment">
-					<p>
-						<strong>User1:</strong> This is an awesome post!
-					</p>
-				</div>
-				<div className="comment">
-					<p>
-						<strong>User2:</strong> I agree with this!
-					</p>
-				</div>
-				{/* Add more comment sections as needed */}
+				{/* Comments */}
+				{post.comments?.length > 0 ? (
+					<div className="comment">
+						{post.comments.map((comment) => (
+							<div
+								key={comment._id}
+								className="d-flex align-items-start gap-2 p-2 border rounded"
+							>
+								{/* Profile Picture */}
+								<img
+									src={comment.user.image}
+									alt={`${comment.user.username}'s profile`}
+									className="rounded-circle"
+									width="40"
+									height="40"
+								/>
+
+								{/* Comment Content */}
+								<div>
+									<strong>{comment.user.username}</strong>{" "}
+									<small className="text-muted">
+										{dateToString(comment.date)}
+									</small>
+									<p className="mb-0">{comment.content}</p>
+								</div>
+
+								{/* Like Button (Heart) */}
+								<button
+									className="btn p-0"
+									onClick={() => likeComment(postId, userId, comment._id, setError)}
+								>
+									<i
+										className={`bi ${
+											comment.liked
+												? "bi-heart-fill text-danger"
+												: "bi-heart"
+										}`}
+										style={{ fontSize: "1.2rem" }}
+									></i>
+								</button>
+							</div>
+						))}
+					</div>
+				) : (
+					<p>No comments yet!</p>
+				)}
 			</div>
 		</div>
 	);

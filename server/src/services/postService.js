@@ -62,6 +62,16 @@ export default {
 			throw new Error("Could not find post!");
 		}
 
+		const userId = req.user?.id;
+		if (userId) {
+			post.comments.map((comment) => {
+				const hasLiked = comment.likes.some(
+					(uId) => uId.toString() === userId
+				);
+
+				comment.liked = hasLiked;
+			});
+		}
 		return post;
 	},
 	async likePost(req) {
@@ -231,15 +241,15 @@ export default {
 		if (!user) throw new Error("Could not find user");
 
 		const comment = post.comments.find(
-			(p) => p.comment.toString() === commentId
+			(p) => p.toString() === commentId
 		);
 
 		if (!comment)
 			throw new Error("Such a comment does not exist on this post!");
 
 		try {
-			await userModel.findByIdAndUpdate(commentId, {
-				$pull: {
+			await commentModel.findByIdAndUpdate(commentId, {
+				$push: {
 					likes: userId,
 				},
 			});
@@ -262,14 +272,14 @@ export default {
 		if (!user) throw new Error("Could not find user");
 
 		const comment = post.comments.find(
-			(p) => p.comment.toString() === commentId
+			(p) => p.toString() === commentId
 		);
 
 		if (!comment)
 			throw new Error("Such a comment does not exist on this post!");
 
 		try {
-			await userModel.findByIdAndUpdate(commentId, {
+			await commentModel.findByIdAndUpdate(commentId, {
 				$pull: {
 					likes: userId,
 				},
