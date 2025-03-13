@@ -122,7 +122,7 @@ export default function ChatBox() {
 						return prev;
 					}
 
-					const newArr = [...data, ...prev].flat();
+					const newArr = [...data.reverse(), ...prev].flat();
 					return newArr;
 				});
 

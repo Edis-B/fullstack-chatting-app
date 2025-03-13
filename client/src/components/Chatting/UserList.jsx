@@ -153,6 +153,16 @@ export default function UserList() {
 		}
 	}
 
+	function getLastMessageDisplay(chat, userId) {
+		if (!chat.lastMessage) {
+			return "No messages yet";
+		}
+	
+		const sender = chat.lastMessage.owner === userId ? "You" : chat.chatName;
+		return `${sender}: ${chat.lastMessage.text}`;
+	}
+	
+
 	function toggleUserMenu(username) {
 		const set = selectedUser === username ? null : username;
 
@@ -246,11 +256,8 @@ export default function UserList() {
 								/>
 								<div>
 									<p className="m-0">{chat.chatName}</p>
-									<p className="m-0 text-muted">
-										{chat.lastMessage.owner === userId
-											? "You"
-											: chat.chatName}
-										: {chat.lastMessage.text}
+									<p className="m-0 text-muted"> 
+										{getLastMessageDisplay(chat, userId)}
 									</p>
 								</div>
 							</Link>

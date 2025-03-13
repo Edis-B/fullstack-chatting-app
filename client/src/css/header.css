@@ -1,4 +1,3 @@
-/* Make the header stick to the top */
 .header {
 	position: fixed;
 	top: 0;
@@ -14,7 +13,6 @@
 	z-index: 1000;
 }
 
-/* Container for navigation elements */
 .nav-container {
 	width: 90%;
 	max-width: 1200px;
@@ -23,7 +21,6 @@
 	align-items: center;
 }
 
-/* Logo */
 .logo {
 	font-size: 1.5rem;
 	font-weight: bold;
@@ -31,7 +28,6 @@
 	text-decoration: none;
 }
 
-/* Navigation links */
 .nav-links {
 	display: flex;
 	align-items: center;
@@ -49,7 +45,6 @@
 	color: #d0d0d0;
 }
 
-/* Profile image */
 .profile-img {
 	width: 40px;
 	height: 40px;
@@ -63,7 +58,6 @@
 	transform: scale(1.1);
 }
 
-/* Login button */
 .login-btn {
 	padding: 8px 16px;
 	background: white;
@@ -79,7 +73,26 @@
 	color: white;
 }
 
-/* Ensure body has padding to prevent content from hiding under fixed header */
 body {
 	padding-top: 70px;
+}
+
+.search-container {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.search-input {
+	padding: 5px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	outline: none;
+}
+
+.search-button {
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	font-size: 16px;
 }

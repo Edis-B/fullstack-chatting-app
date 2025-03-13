@@ -26,6 +26,7 @@ export default {
 		let newChatObj = {
 			type: type,
 			participants: participantsArr.map((x) => ({ participant: x })),
+			updatedAt: new Date(Date.now()),
 		};
 
 		let exists;
@@ -51,7 +52,6 @@ export default {
 
 		return newChat._id;
 	},
-	async getLatestChatId(req) {},
 	async checkIfChatExists(participantsArr) {
 		for (let part of participantsArr) {
 			const populatedParticipant = await part.populate({
@@ -75,7 +75,8 @@ export default {
 		}
 	},
 	async getChatHistory(req) {
-		const { chatId, page } = req.query;
+		let { chatId, page } = req.query;
+		page = Number(page);
 		const chatQuery = chatModel.findOne({ _id: chatId });
 
 		const chat = await chatQuery
@@ -86,8 +87,18 @@ export default {
 				},
 				options: {
 					limit: 20,
-					skip: (Number(page) - 1) * 20,
+					skip: (page - 1) * 20,
+					sort: {
+						date: -1,
+					},
 				},
+			})
+			.lean();
+
+		const chat2 = await chatModel
+			.findOne({ _id: chatId })
+			.populate({
+				path: "messages",
 			})
 			.lean();
 
@@ -209,11 +220,16 @@ export default {
 		let chatInfos = user.chats.map((chatObj) => {
 			return this.getChatInfo(chatObj.chat, req.user.id);
 		});
-		chatInfos = await Promise.all(chatInfos);
+
+		try {
+			chatInfos = await Promise.all(chatInfos);
+		} catch (err) {
+			console.log(err);
+		}
 		chatInfos = chatInfos.sort((a, b) => b.updatedAt - a.updatedAt);
 
 		return chatInfos;
-	}, //
+	},
 	async getChatInfo(chatId, userId) {
 		const chat = await chatModel
 			.findById(chatId)
@@ -247,10 +263,13 @@ export default {
 				chatImage,
 				chatId: chat._id,
 				updatedAt: chat.updatedAt,
-				lastMessage: {
-					owner: chat.messages[0].user,
-					text: chat.messages[0].text,
-				},
+				lastMessage:
+					chat.messages.length > 0
+						? {
+								owner: chat.messages[0].user,
+								text: chat.messages[0].text,
+						  }
+						: null, // Handle case where there are no messages
 			};
 		}
 	},

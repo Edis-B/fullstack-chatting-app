@@ -5,6 +5,26 @@ import { getErrorMessage } from "../utils/errorUtils.js";
 
 const userApiController = Router();
 
+userApiController.get("/get-user-photos", async (req, res) => {
+	try {
+		const result = await userService.getUserPhotos(req);
+		res.json(result);
+	} catch (err) {
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
+	}
+});
+
+userApiController.post("/remove-photo", async (req, res) => {
+	try {
+		const result = await userService.removePhoto(req);
+		res.json(result);
+	} catch (err) {
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
+	}
+});
+
 userApiController.post("/upload-photo", async (req, res) => {
 	try {
 		const result = await userService.uploadPhoto(req);

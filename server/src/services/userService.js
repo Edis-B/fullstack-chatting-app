@@ -466,6 +466,43 @@ export default {
 
 		return "Successfully saved image!";
 	},
+	async removePhoto(req) {
+		const { userId, photoId } = req.body;
+
+		if (userId != req.user?.id) {
+			throw new Error("Unauthorized");
+		}
+
+		if (!photoId) throw new Error("Photo id was not found!");
+
+		try {
+			await userModel.findByIdAndUpdate(userId, {
+				$pull: {
+					photos: photoId,
+				},
+			});
+		} catch (err) {
+			console.log(err);
+			throw new Error("Something went wrong removing photo!");
+		}
+
+		return "Successfully removed photo.";
+	},
+	async getUserPhotos(req) {
+		const { userId } = req.query;
+
+		if (!userId) {
+			throw new Error("User id missing!");
+		}
+
+		const user = await userModel.findById(userId).populate("photos").lean();
+
+		if (!user) {
+			throw new Error("User not found!");
+		}
+
+		return user.photos;
+	},
 };
 
 export function autherize(req, role) {

@@ -8,6 +8,7 @@ import "../../css/header.css"; // Import the new CSS file
 export default function Header() {
 	const { userId } = useUser();
 	const [image, setImage] = useState("");
+	const [searchQuery, setSearchQuery] = useState("");
 
 	useEffect(() => {
 		fetchUserImageUrl();
@@ -26,6 +27,8 @@ export default function Header() {
 		}
 	}
 
+	async function handleSearch(search) {}
+
 	return (
 		<header className="header">
 			<div className="nav-container">
@@ -33,6 +36,22 @@ export default function Header() {
 					Socialize
 				</Link>
 
+				<div className="search-container">
+					<input
+						type="text"
+						placeholder="Search..."
+						value={searchQuery}
+						onChange={(e) => setSearchQuery(e.target.value)}
+						className="search-input"
+					/>
+					<button
+						onClick={() => handleSearch(searchQuery)}
+						className="search-button"
+					>
+						🔍
+					</button>
+				</div>
+				
 				<nav className="nav-links">
 					<Link to="/catalog">Catalog</Link>
 					<Link to="/chat">Chats</Link>

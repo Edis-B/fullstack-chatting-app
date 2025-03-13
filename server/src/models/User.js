@@ -78,10 +78,8 @@ const userSchema = new Schema({
 	photos: [
 		{
 			_id: false,
-			photo: {
-				type: Types.ObjectId,
-				ref: "photo",
-			},
+			type: Types.ObjectId,
+			ref: "Photo",
 		},
 	],
 });
