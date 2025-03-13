@@ -5,6 +5,15 @@ import { getErrorMessage } from "../utils/errorUtils.js";
 
 const userApiController = Router();
 
+userApiController.post("/upload-photo", async (req, res) => {
+	try {
+		const result = await userService.uploadPhoto(req);
+		res.json(result);
+	} catch (err) {
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
+	}
+});
 
 userApiController.post("/unfriend", async (req, res) => {
 	try {

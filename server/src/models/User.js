@@ -75,6 +75,15 @@ const userSchema = new Schema({
 			},
 		},
 	],
+	photos: [
+		{
+			_id: false,
+			photo: {
+				type: Types.ObjectId,
+				ref: "photo",
+			},
+		},
+	],
 });
 
 userSchema.pre("save", async function (next) {

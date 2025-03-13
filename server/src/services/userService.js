@@ -2,6 +2,7 @@ import userModel from "../models/User.js";
 import bcrypt from "bcrypt";
 import friendStatuses from "../common/friendStatusConstants.js";
 import { attachAuthCookie } from "../utils/authUtils.js";
+import photoModel from "../models/Photo.js";
 
 export default {
 	async registerUser(res, body) {
@@ -330,7 +331,7 @@ export default {
 				{ _id: receiverId },
 				{ $pull: { friends: { friend: senderId } } }
 			);
-			
+
 			await userModel.updateOne(
 				{ _id: senderId },
 				{ $pull: { friends: { friend: receiverId } } }
@@ -379,11 +380,11 @@ export default {
 				{ _id: receiverId },
 				{ $pull: { friends: { friend: senderId } } }
 			);
-			
+
 			await userModel.updateOne(
 				{ _id: senderId },
 				{ $pull: { friends: { friend: receiverId } } }
-			);			
+			);
 		} catch (err) {
 			console.log(err);
 			throw new Error("There has been an error!");
@@ -425,18 +426,45 @@ export default {
 				{ _id: receiverId },
 				{ $pull: { friends: { friend: senderId } } }
 			);
-			
+
 			await userModel.updateOne(
 				{ _id: senderId },
 				{ $pull: { friends: { friend: receiverId } } }
 			);
-			
 		} catch (err) {
 			console.log(err);
 			throw new Error("There has been an error!");
 		}
 
 		return "Removed friend successfully!";
+	},
+	async uploadPhoto(req) {
+		const { userId, imageUrl } = req.body;
+
+		if (userId != req.user?.id) {
+			throw new Error("Unauthorized");
+		}
+
+		if (!imageUrl) throw new Error("Image url is required!");
+
+		try {
+			const photo = await photoModel.create({
+				url: imageUrl,
+				date: Date.now(),
+				user: userId,
+			});
+
+			await userModel.findByIdAndUpdate(userId, {
+				$push: {
+					photos: photo._id,
+				},
+			});
+		} catch (err) {
+			console.log(err);
+			throw new Error("Something went wrong saving photo!");
+		}
+
+		return "Successfully saved image!";
 	},
 };
 

@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
-import { host } from "../../common/appConstants.js";
+import { host, httpUrlRegex } from "../../common/appConstants.js";
 export default function CreatePost() {
-	const pattern = /^https?\:\/\//i;
 	const { userId, setError } = useUser();
 
 	const [content, setContent] = useState("");
@@ -15,7 +14,7 @@ export default function CreatePost() {
 	};
 
 	async function addImage() {
-		if (!pattern.test(imageInput)) {
+		if (!httpUrlRegex.test(imageInput)) {
 			setError("Image must start with http:// or https://");
 		}
 

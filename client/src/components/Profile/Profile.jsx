@@ -5,6 +5,7 @@ import { contentTypes } from "../../common/appConstants.js";
 import ProfileHeader from "./ProfileHeader.jsx";
 import UserPosts from "./UserPosts.jsx";
 import Friends from "./Friends.jsx";
+import Photos from "./Photos.jsx"
 
 export default function Profile() {
 	const { content } = useParams();
@@ -16,8 +17,8 @@ export default function Profile() {
 			return <Friends />;
 		} else if (type == contentTypes.FRIENDS) {
 			return <Friends />;
-		} else if (type == contentTypes.FRIENDS) {
-			return <Friends />;
+		} else if (type == contentTypes.PHOTOS) {
+			return <Photos />;
 		}
 	}
 	return (

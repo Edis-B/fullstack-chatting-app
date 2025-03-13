@@ -51,28 +51,27 @@ export default function PostDetails() {
 	}
 
 	return (
-		<div className="m-3 p-3 d-flex">
+		<div className="m-3 p-3 d-flex justify-content-around">
 			{/* Post Details (Left Side) */}
-			<div
-				className="post-box card p-3 shadow-sm"
-				style={{ minHeight: "fit-content" }}
-			>
+			<div className="post-box card p-3 shadow-sm">
 				{/* Card Header */}
-				<div className="d-flex align-items-center border-bottom pb-2">
-					<img
-						src={post.user.image}
-						className="rounded-circle me-2"
-						alt="Profile"
-						width="40"
-						height="40"
-					/>
-					<div>
-						<h6 className="mb-0">{post.user.username}</h6>
-						<p className="text-muted small mb-0">
-							{dateToString(post.date)}
-						</p>
+				<Link to={`/profile/${post.user._id}`}>
+					<div className="d-flex align-items-center border-bottom pb-2">
+						<img
+							src={post.user.image}
+							className="rounded-circle me-2"
+							alt="Profile"
+							width="40"
+							height="40"
+						/>
+						<div>
+							<h6 className="mb-0">{post.user.username}</h6>
+							<p className="text-muted small mb-0">
+								{dateToString(post.date)}
+							</p>
+						</div>
 					</div>
-				</div>
+				</Link>
 
 				{/* Card Body (Content) */}
 				<div className="mt-2">

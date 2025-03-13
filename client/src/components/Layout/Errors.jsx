@@ -16,13 +16,12 @@ export default function Errors() {
 		setTimeout(() => {
 			divRef.current.style.display = "none";
 		}, 3000);
-	}, error);
+	}, [error]);
 
 	return (
 		<div
 			ref={divRef}
 			className="error-container"
-			style={{ zIndex: 1000, width: 100, height: 50 }}
 		>
 			<p className="m-0">{error}</p>
 		</div>
