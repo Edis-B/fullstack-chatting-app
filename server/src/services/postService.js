@@ -71,6 +71,8 @@ export default {
 
 				comment.liked = hasLiked;
 			});
+
+			post.liked = post.likes.some((id) => id.toString() === userId);
 		}
 		return post;
 	},
@@ -190,6 +192,12 @@ export default {
 			throw new Error("There has been an error creating commment");
 		}
 
+		try {
+			await comment.populate("user");
+		} catch (err) {
+			console.log(err);
+		}
+
 		return comment.toObject();
 	},
 	async removeCommentFromPost(req) {
@@ -240,9 +248,7 @@ export default {
 
 		if (!user) throw new Error("Could not find user");
 
-		const comment = post.comments.find(
-			(p) => p.toString() === commentId
-		);
+		const comment = post.comments.find((p) => p.toString() === commentId);
 
 		if (!comment)
 			throw new Error("Such a comment does not exist on this post!");
@@ -271,9 +277,7 @@ export default {
 
 		if (!user) throw new Error("Could not find user");
 
-		const comment = post.comments.find(
-			(p) => p.toString() === commentId
-		);
+		const comment = post.comments.find((p) => p.toString() === commentId);
 
 		if (!comment)
 			throw new Error("Such a comment does not exist on this post!");

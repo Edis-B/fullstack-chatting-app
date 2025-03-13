@@ -2,7 +2,21 @@
 
 body {
 	background-color: #f4f6f9;
-	overflow-y: auto; 
+	overflow-y: hidden;
+}
+
+.error-container {
+	position: absolute; 
+	top: 0; 
+	right: 0;
+	margin: 5px;
+	z-index: 2000;
+	border: 1px solid #dee2e6; 
+	background-color: #f8f9fa;
+	display: none; 
+	justify-content: center;
+	align-items: center; 
+	border-radius: 0.25rem;
 }
 
 .container {

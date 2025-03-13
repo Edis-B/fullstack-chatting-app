@@ -157,11 +157,12 @@ export async function likeComment(postId, userId, commentId, setError) {
 			return;
 		}
 
-        alert(data);
+		alert(data);
 		return data;
 	} catch (err) {
 		console.log(err);
 		setError("There has been a problem liking comment");
+		return;
 	}
 }
 
@@ -194,10 +195,12 @@ export async function removeLikeFromComment(
 			setError(data);
 			return;
 		}
-
+        
+		alert(data);
 		return data;
 	} catch (err) {
 		console.log(err);
 		setError("There has been a problem unliking comment");
+		return;
 	}
 }

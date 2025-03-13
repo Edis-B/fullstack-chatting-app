@@ -46,9 +46,12 @@ export default function Post({ post, user }) {
 					View Details
 				</Link>
 				<button className="btn btn-outline-primary btn-sm">Like</button>
-				<button className="btn btn-outline-secondary btn-sm">
+				<Link
+					to={`/post/${post._id}`}
+					className="btn btn-outline-secondary btn-sm"
+				>
 					Comment
-				</button>
+				</Link>
 				<button className="btn btn-outline-success btn-sm">
 					Share
 				</button>
