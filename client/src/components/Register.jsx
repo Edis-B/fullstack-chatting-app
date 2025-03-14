@@ -1,7 +1,18 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
+import { useUser } from "../contexts/UserContext.jsx";
 import { host } from "../common/appConstants.js";
-
+import { useNavigate } from "react-router";
 export default function Register() {
+	const { userId } = useUser();
+	const navigate = useNavigate();
+
+	// Redirect to home if already logged in
+	useEffect(() => {
+		if (userId) {
+			navigate("/");
+		}
+	}, [userId, navigate]);
+
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
@@ -23,8 +34,8 @@ export default function Register() {
 			});
 
 			const data = await response.json();
-            console.log(data);
-            
+			console.log(data);
+
 			if (response.ok) {
 				alert("Registration successful!");
 				window.location.href = "/";

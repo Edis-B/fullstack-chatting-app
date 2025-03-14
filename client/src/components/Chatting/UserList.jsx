@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router";
 import { host, client } from "../../common/appConstants.js";
 import { useChat } from "../../contexts/ChatContext.jsx";
 import { useUser } from "../../contexts/UserContext.jsx";
+import { fetchUsers } from "../../services/userAPIs.js";
 
 import { sendFriendRequest } from "../../services/userAPIs.js";
 
@@ -79,27 +80,6 @@ export default function UserList() {
 			}
 
 			setChats(data);
-		} catch (err) {
-			console.log(err);
-		}
-	}
-
-	async function fetchUsers(substring) {
-		try {
-			if (!substring) {
-				return setUsers([]);
-			}
-
-			const response = await fetch(
-				`${host}/user/get-users-by-username?usernameSubstr=${substring}&exclude=true`,
-				{
-					method: "GET",
-					credentials: "include",
-				}
-			);
-
-			const data = await response.json();
-			return data;
 		} catch (err) {
 			console.log(err);
 		}

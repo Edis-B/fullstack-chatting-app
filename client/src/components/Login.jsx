@@ -1,7 +1,19 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { host } from "../common/appConstants.js";
+import { useUser } from "../contexts/UserContext.jsx";
+import { useNavigate } from "react-router";
 
 export default function Login() {
+	const { userId } = useUser();
+    const navigate = useNavigate();
+
+    // Redirect to home if already logged in
+    useEffect(() => {
+        if (userId) {
+            navigate("/");
+        }
+    }, [userId, navigate]);
+
 	const [identifier, setIdentifier] = useState("");
 	const [password, setPassword] = useState("");
 	const [rememberMe, setRememberMe] = useState("");
@@ -13,11 +25,11 @@ export default function Login() {
 			const response = await fetch(`${host}/user/login`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-                credentials: "include",
+				credentials: "include",
 				body: JSON.stringify({
 					identifier,
 					password,
-                    rememberMe
+					rememberMe,
 				}),
 			});
 
@@ -59,7 +71,7 @@ export default function Login() {
 							required
 						/>
 					</div>
-                    <div className="mb-3">
+					<div className="mb-3">
 						<input
 							type="checkBox"
 							className="form-control-input m-1"

@@ -101,7 +101,7 @@ userApiController.get("/get-user-profile-data", async (req, res) => {
 userApiController.get("/get-user-id", async (req, res) => {
 	try {
 		if (!req.user) {
-			throw new Error("User not logged in!");
+			throw new Error("Unauthorized!");
 		}
 		res.json(req.user.id);
 	} catch (err) {

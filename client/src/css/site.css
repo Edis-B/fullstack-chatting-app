@@ -61,3 +61,7 @@ a {
 .content {
 	flex-grow: 1;
 }
+
+footer {
+	z-index: 1000;
+}

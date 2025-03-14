@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router";
 
 import Layout from "./components/Layout/Layout";
 
-import Test from "./components/Test"
+import Test from "./components/Test";
 import Home from "./components/Home";
 import Chat from "./components/Chatting/Chat";
 import NotFound from "./components/NotFound";
@@ -10,9 +10,14 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Profile from "./components/Profile/Profile";
 import CreatePost from "./components/Posts/CreatePost";
+import PostDetails from "./components/Posts/PostDetails";
+
+import { SearchProvider } from "./contexts/SearchContext.jsx";
 
 import "./css/site.css";
-import PostDetails from "./components/Posts/PostDetails";
+
+import ProtectedRoute from "./services/protectedRoute.jsx";
+import Search from "./components/Search/Search.jsx";
 
 function App() {
 	return (
@@ -21,8 +26,40 @@ function App() {
 				<Route path="/" element={<Layout />}>
 					<Route index element={<Home />} />
 
-					<Route path="/chat" element={<Chat />} />
-					<Route path="/chat/:id" element={<Chat />} />
+					{/* Protected Chat Routes */}
+					<Route
+						path="/chat"
+						element={
+							<ProtectedRoute>
+								<Chat />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/chat/:id"
+						element={
+							<ProtectedRoute>
+								<Chat />
+							</ProtectedRoute>
+						}
+					/>
+
+					<Route
+						path="/search"
+						element={
+							<SearchProvider>
+								<Search />
+							</SearchProvider>
+						}
+					/>
+					<Route
+						path="/search/:content"
+						element={
+							<SearchProvider>
+								<Search />
+							</SearchProvider>
+						}
+					/>
 
 					<Route path="/login" element={<Login />} />
 					<Route path="/register" element={<Register />} />

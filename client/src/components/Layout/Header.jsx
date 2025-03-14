@@ -27,8 +27,6 @@ export default function Header() {
 		}
 	}
 
-	async function handleSearch(search) {}
-
 	return (
 		<header className="header">
 			<div className="nav-container">
@@ -44,12 +42,12 @@ export default function Header() {
 						onChange={(e) => setSearchQuery(e.target.value)}
 						className="search-input"
 					/>
-					<button
-						onClick={() => handleSearch(searchQuery)}
+					<Link
+						to={`/search?query=${searchQuery}`}
 						className="search-button"
 					>
 						🔍
-					</button>
+					</Link>
 				</div>
 				
 				<nav className="nav-links">

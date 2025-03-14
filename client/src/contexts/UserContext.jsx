@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { host } from "../common/appConstants.js";
+import { host, unauthorizedString } from "../common/appConstants.js";
 import { io } from "socket.io-client";
 
 const UserContext = createContext();
@@ -8,6 +8,7 @@ export function UserProvider({ children }) {
 	const [userId, setUserId] = useState(null);
 	const [socket, setSocket] = useState(null);
 	const [error, setError] = useState(null);
+	const [autherized, setAutherized] = useState(true);
 
 	useEffect(() => {
 		fetchUser();
@@ -39,6 +40,8 @@ export function UserProvider({ children }) {
 			const data = await response.json();
 			setUserId(data);
 
+			if (data === unauthorizedString) setAutherized(false);
+
 			return data;
 		} catch (err) {
 			console.log(err);
@@ -46,9 +49,9 @@ export function UserProvider({ children }) {
 	}
 
 	return (
-		<UserContext.Provider value={{ userId, setUserId, socket, setSocket, error, setError }}>
+		<UserContext.Provider value={{ userId, setUserId, socket, setSocket, error, setError, autherized }}>
 			{children}
-		</UserContext.Provider>
+		</UserContext.Provider>//
 	);
 }
 

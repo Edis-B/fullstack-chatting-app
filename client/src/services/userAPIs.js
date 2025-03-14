@@ -1,5 +1,26 @@
 import { host } from "../common/appConstants.js";
 
+export async function fetchUsers(substring) {
+	try {
+		if (!substring) {
+			return [];
+		}
+
+		const response = await fetch(
+			`${host}/user/get-users-by-username?usernameSubstr=${substring}&exclude=true`,
+			{
+				method: "GET",
+				credentials: "include",
+			}
+		);
+
+		const data = await response.json();
+		return data;
+	} catch (err) {
+		console.log(err);
+	}
+}
+
 export async function sendFriendRequest(senderId, receiverId) {
 	try {
 		const response = await fetch(`${host}/user/send-friend-request`, {

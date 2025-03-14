@@ -6,9 +6,12 @@ export const client = `http://localhost:${clientPort}`;
 
 export const httpUrlRegex = /^https?\:\/\//i;
 
+export const unauthorizedString = "Unauthorized!";
+
 export const contentTypes = {
 	POSTS: "posts",
 	FRIENDS: "friends",
 	ABOUT: "about",
 	PHOTOS: "photos",
+	PEOPLE: "people",
 };
