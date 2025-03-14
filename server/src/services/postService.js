@@ -3,6 +3,22 @@ import postModel from "../models/Post.js";
 import userModel from "../models/User.js";
 
 export default {
+	async getPostsFromQuery(req) {
+		const { query, page } = req.query;
+
+		const pageSize = 20;
+
+		const posts = await postModel
+			.find({
+				content: { $regex: query, $options: "i" },
+			})
+			.populate("user")
+			.skip((page - 1) * pageSize)
+			.limit(pageSize)
+			.lean();
+
+		return posts;
+	},
 	async getUserPosts(req) {
 		const identifier = req.query.userId;
 

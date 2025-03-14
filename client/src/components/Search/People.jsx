@@ -3,14 +3,14 @@ import { useSearch } from "../../contexts/SearchContext";
 import { fetchUsers } from "../../services/userAPIs";
 
 export default function People() {
-	const { query } = useSearch();
+	const { query } = useSearch().queryParameters;
 	const [people, setPeople] = useState([]);
 
 	useEffect(() => {
-		setUsers(query);
+		fetchPeopleByQuery(query);
 	}, [query]);
 
-	async function setUsers(query) {
+	async function fetchPeopleByQuery(query) {
 		const people = await fetchUsers(query);
 
 		setPeople(people);

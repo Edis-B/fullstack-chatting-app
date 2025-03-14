@@ -9,6 +9,7 @@ export default function UserPosts() {
 
 	useEffect(() => {
 		if (!profileId) return;
+		
 		fetchPosts();
 	}, [profileId]);
 

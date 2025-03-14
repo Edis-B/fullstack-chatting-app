@@ -5,21 +5,26 @@ import { contentTypes } from "../../common/appConstants";
 import { useSearch } from "../../contexts/SearchContext";
 
 import People from "./People";
+import SearchPosts from "./SearchPosts";
 import "../../css/search.css";
 
 export default function Search() {
-	const { setContent, setQuery } = useSearch();
+	const { setContent, setQueryParameters } = useSearch();
 
 	const { content } = useParams();
 	const [searchParams] = useSearchParams();
 	const query = searchParams.get("query");
 
 	useEffect(() => {
-		setContent(content);
+		setQueryParameters((prev) => ({
+			...prev, ["content"]: content
+		}));
 	}, [content]);
 
 	useEffect(() => {
-		setQuery(query);
+		setQueryParameters((prev) => ({
+			...prev, ["query"]: query
+		}));
 	}, [query]);
 
 	function getContent(content) {
