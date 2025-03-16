@@ -1,5 +1,7 @@
+
+
 .cover-photo {
-    height: 250px;
-    background: url('https://via.placeholder.com/1200x300') center/cover no-repeat;
-    position: relative;
+	width: 100%;
+	height: 250px;
+	object-fit: cover;
 }

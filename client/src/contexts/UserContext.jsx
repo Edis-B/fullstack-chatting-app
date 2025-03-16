@@ -7,8 +7,8 @@ const UserContext = createContext();
 export function UserProvider({ children }) {
 	const [userId, setUserId] = useState(null);
 	const [socket, setSocket] = useState(null);
-	const [error, setError] = useState(null);
-	const [autherized, setAutherized] = useState(true);
+	const [errors, setErrors] = useState([]);
+	const [autherized, setAutherized] = useState(null);
 
 	useEffect(() => {
 		fetchUser();
@@ -38,9 +38,8 @@ export function UserProvider({ children }) {
 			});
 
 			const data = await response.json();
-			setUserId(data);
-
-			if (data === unauthorizedString) setAutherized(false);
+			setUserId(data.id);
+			setAutherized(data.autherized);
 
 			return data;
 		} catch (err) {
@@ -49,7 +48,7 @@ export function UserProvider({ children }) {
 	}
 
 	return (
-		<UserContext.Provider value={{ userId, setUserId, socket, setSocket, error, setError, autherized }}>
+		<UserContext.Provider value={{ userId, setUserId, socket, setSocket, errors, setErrors, autherized }}>
 			{children}
 		</UserContext.Provider>//
 	);

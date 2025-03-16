@@ -18,6 +18,7 @@ import "./css/site.css";
 
 import ProtectedRoute from "./services/protectedRoute.jsx";
 import Search from "./components/Search/Search.jsx";
+import { ProfileProvider } from "./contexts/ProfileContext.jsx";
 
 function App() {
 	return (
@@ -67,11 +68,19 @@ function App() {
 					<Route path="/profile" element={<Profile />} />
 					<Route
 						path="/profile/:profileUserId"
-						element={<Profile />}
+						element={
+							<ProfileProvider>
+								<Profile />
+							</ProfileProvider>
+						}
 					/>
 					<Route
 						path="/profile/:profileUserId/:content"
-						element={<Profile />}
+						element={
+							<ProfileProvider>
+								<Profile />
+							</ProfileProvider>
+						}
 					/>
 
 					<Route path="/test" element={<Test />}></Route>

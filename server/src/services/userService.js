@@ -5,6 +5,25 @@ import { attachAuthCookie } from "../utils/authUtils.js";
 import photoModel from "../models/Photo.js";
 
 export default {
+	async updateProfile(req, res) {
+		const { profileData } = req.body;
+
+		const user = await userModel
+			.findByIdAndUpdate(
+				profileData._id,
+				{
+					image: profileData.image,
+					banner: profileData.banner,
+					username: profileData.username,
+				},
+				{ new: true }
+			)
+			.lean();
+
+		attachAuthCookie(res, user, false);
+
+		return "Successfully updated profile!";
+	},
 	async registerUser(res, body) {
 		if (body.password !== body.confirmPassword) {
 			throw new Error("Passwords do not match");
@@ -70,7 +89,8 @@ export default {
 
 		return { ...userObj, owner };
 	},
-	async loginUser(body, res) {
+	async loginUser(req, res) {
+		const body = req.body;
 		const isEmail = body.identifier.includes("@");
 
 		const user = await userModel

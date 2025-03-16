@@ -13,11 +13,14 @@ body {
 	z-index: 2000;
 	border: 1px solid #dee2e6; 
 	background-color: #f8f9fa;
-	display: none; 
 	justify-content: center;
 	align-items: center; 
 	border-radius: 0.25rem;
 }
+
+/* .error-box {
+	z-index: 2000;
+} */
 
 a {
     text-decoration: none;

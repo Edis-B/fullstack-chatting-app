@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 import { host, httpUrlRegex } from "../../common/appConstants.js";
 export default function CreatePost() {
-	const { userId, setError } = useUser();
+	const { userId, setError: setErrors } = useUser();
 
 	const [content, setContent] = useState("");
 	const [images, setImages] = useState([]);
@@ -15,11 +15,14 @@ export default function CreatePost() {
 
 	async function addImage() {
 		if (!httpUrlRegex.test(imageInput)) {
-			setError("Image must start with http:// or https://");
+			setErrors((prev) => [
+				...prev,
+				"Image must start with http:// or https://",
+			]);
 		}
 
 		if (images?.length >= 10) {
-			setError("Maximum 10 images per post");
+			setErrors((prev) => [...prev, "Maximum 10 images per post"]);
 			return;
 		}
 
@@ -55,10 +58,10 @@ export default function CreatePost() {
 			const data = await response.json();
 
 			if (!response.ok) {
-				setError(data);
+				setErrors((prev) => [...prev, data]);
 			}
 		} catch (err) {
-			setError(err);
+			setErrors((prev) => [...prev, err]);
 		}
 	}
 
@@ -94,7 +97,9 @@ export default function CreatePost() {
 									</div>
 								))
 							) : (
-								<span className="d-block text-muted">No images yet.</span>
+								<span className="d-block text-muted">
+									No images yet.
+								</span>
 							)}
 						</div>
 

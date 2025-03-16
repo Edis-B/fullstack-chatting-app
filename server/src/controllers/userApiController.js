@@ -5,6 +5,16 @@ import { getErrorMessage } from "../utils/errorUtils.js";
 
 const userApiController = Router();
 
+userApiController.put("/update-profile", async (req, res) => {
+	try {
+		const result = await userService.updateProfile(req, res);
+		res.json(result);
+	} catch (err) {
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
+	}
+});
+
 userApiController.get("/get-user-photos", async (req, res) => {
 	try {
 		const result = await userService.getUserPhotos(req);
@@ -100,10 +110,7 @@ userApiController.get("/get-user-profile-data", async (req, res) => {
 
 userApiController.get("/get-user-id", async (req, res) => {
 	try {
-		if (!req.user) {
-			throw new Error("Unauthorized!");
-		}
-		res.json(req.user.id);
+		res.json({ id: req.user.id, autherized: !!req.user?.id });
 	} catch (err) {
 		const errMessage = getErrorMessage(err);
 		res.status(400).json(errMessage);
@@ -162,7 +169,7 @@ userApiController.post("/register", async (req, res) => {
 
 userApiController.post("/login", async (req, res) => {
 	try {
-		const result = await userService.loginUser(req.body, res);
+		const result = await userService.loginUser(req, res);
 		res.json(result);
 	} catch (err) {
 		const errMessage = getErrorMessage(err);

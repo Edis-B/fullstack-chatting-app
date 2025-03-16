@@ -16,7 +16,7 @@ import { useUser } from "../../contexts/UserContext.jsx";
 import "../../css/post.css";
 
 export default function PostDetails() {
-	const { userId, setError, socket } = useUser();
+	const { userId, setErrors, socket } = useUser();
 	const { postId } = useParams();
 
 	const [post, setPost] = useState({});
@@ -107,7 +107,7 @@ export default function PostDetails() {
 									await removeLikeFromPost(
 										postId,
 										userId,
-										setError
+										setErrors
 									)
 								}
 								className="btn btn-outline-primary btn-sm"
@@ -117,7 +117,7 @@ export default function PostDetails() {
 						) : (
 							<button
 								onClick={async () =>
-									await likePost(postId, userId, setError)
+									await likePost(postId, userId, setErrors)
 								}
 								className="btn btn-outline-primary btn-sm"
 							>
@@ -149,7 +149,7 @@ export default function PostDetails() {
 								postId,
 								userId,
 								myComment,
-								setError
+								setErrors
 							);
 
 							if (newComment) {
@@ -200,7 +200,7 @@ export default function PostDetails() {
 													postId,
 													userId,
 													comment._id,
-													setError
+													setErrors
 												)
 											) {
 												setPost((prevPost) => ({
@@ -234,7 +234,7 @@ export default function PostDetails() {
 													postId,
 													userId,
 													comment._id,
-													setError
+													setErrors
 												)
 											) {
 												setPost((prevPost) => ({

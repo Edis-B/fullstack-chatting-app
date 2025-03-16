@@ -2,28 +2,41 @@ import { useEffect, useRef } from "react";
 import { useUser } from "../../contexts/UserContext";
 
 export default function Errors() {
-	const { error, setError } = useUser();
+	const { errors, setErrors } = useUser();
 
-	const divRef = useRef();
+	// Ensure each error has a unique ID
+	const errorsWithId = errors?.map((error, index) => ({
+		id: error.id || `error-${Date.now()}-${index}`, // Generate unique id if missing
+		message: error.message || error, // Support both strings and objects
+	}));
 
 	useEffect(() => {
-		if (!error) {
+		if (!errorsWithId || errorsWithId.length === 0) {
 			return;
 		}
 
-		divRef.current.style.display = "flex";
+		// Display errors for 3 seconds and then remove them
+		const timers = errorsWithId.map((_, index) => {
+			return setTimeout(() => {
+				setErrors((prevErrors) =>
+					prevErrors.filter((_, i) => i !== index)
+				);
+			}, 3000); // Remove error after 3 seconds
+		});
 
-		setTimeout(() => {
-			divRef.current.style.display = "none";
-		}, 3000);
-	}, [error]);
+		// Cleanup timers on unmount
+		return () => {
+			timers.forEach((timer) => clearTimeout(timer));
+		};
+	}, [errorsWithId, setErrors]);
 
 	return (
-		<div
-			ref={divRef}
-			className="error-container"
-		>
-			<p className="m-0">{error}</p>
+		<div className="error-container">
+			{errorsWithId?.map((error) => (
+				<div key={error.id} className="error-box">
+					<p className="m-0">{error.message}</p>
+				</div>
+			))}
 		</div>
 	);
 }

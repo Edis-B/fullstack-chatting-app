@@ -4,12 +4,12 @@ import { useUser } from "../contexts/UserContext.jsx";
 import { useNavigate } from "react-router";
 
 export default function Login() {
-	const { userId } = useUser();
+	const { userId, autherized } = useUser();
     const navigate = useNavigate();
 
     // Redirect to home if already logged in
     useEffect(() => {
-        if (userId) {
+        if (autherized === true) {
             navigate("/");
         }
     }, [userId, navigate]);

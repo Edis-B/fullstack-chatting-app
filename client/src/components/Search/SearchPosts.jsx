@@ -4,7 +4,7 @@ import { useUser } from "../../contexts/UserContext";
 import { host } from "../../common/appConstants";
 import Post from "../Posts/Post";
 export default function SearchPosts() {
-	const { setError } = useUser();
+	const { setErrors } = useUser();
 	const { query } = useSearch().queryParameters;
 	const [posts, setPosts] = useState([]);
 
@@ -25,7 +25,7 @@ export default function SearchPosts() {
 			const data = await response.json();
 
 			if (!response.ok) {
-				setError(data);
+				setErrors((prev) => [...prev, data]);
 				return;
 			}
 

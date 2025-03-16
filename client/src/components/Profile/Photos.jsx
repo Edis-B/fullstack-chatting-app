@@ -4,7 +4,7 @@ import { useProfile } from "../../contexts/ProfileContext.jsx";
 import { host, httpUrlRegex } from "../../common/appConstants.js";
 
 export default function Photos() {
-	const { userId, setError } = useUser();
+	const { userId, setErrors } = useUser();
 	const { profileId } = useProfile();
 
 	const [photos, setPhotos] = useState([]);
@@ -26,19 +26,19 @@ export default function Photos() {
 		setImageUrl(url);
 
 		if (!isValidImageUrl(url)) {
-			setError(
-				"Please enter a valid image URL ending in .jpg, .png, etc."
-			);
+			setErrors((prev) => [
+				...prev,
+				"Please enter a valid image URL ending in .jpg, .png, etc.",
+			]);
 			setPreview(null);
 		} else {
-			setError("");
 			setPreview(url); // Show the image preview
 		}
 	}
 
 	async function handleUpload() {
 		if (!imageUrl) {
-			setError("Please enter a valid image URL before uploading.");
+			setErrors((prev) => [...prev, "Please enter a valid image URL before uploading."]);
 			return;
 		}
 
@@ -62,14 +62,14 @@ export default function Photos() {
 			const data = await response.json();
 
 			if (!response.ok) {
-				setError(data);
+				setErrors((prev) => [...prev, data]);
 				return;
 			}
 
 			setPhotos(data);
 		} catch (err) {
 			console.log(err);
-			setError("Something went wrong getting images");
+			setErrors((prev) => [...prev, "Something went wrong getting images"]);
 			return;
 		}
 	}
@@ -91,12 +91,12 @@ export default function Photos() {
 			const data = await response.json();
 
 			if (!response.ok) {
-				setError(data);
+				setErrors((prev) => [...prev, data]);
 				return;
 			}
 		} catch (err) {
 			console.log(err);
-			setError("Something went wrong uploading image");
+			setErrors((prev) => [...prev, "Something went wrong uploading image"]);
 			return;
 		}
 	}

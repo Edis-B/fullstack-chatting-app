@@ -1,11 +1,30 @@
 import { Schema, Types, model } from "mongoose";
 import bcrypt from "bcrypt";
+
 import friendStatuses from "../common/friendStatusConstants.js";
+import {
+	usernameMinLength,
+	usernameMaxLength,
+	emailRegex,
+	urlRegex,
+	passwordSaltRounds,
+} from "../common/entityConstraints.js";
 
 const userSchema = new Schema({
 	username: {
 		type: String,
 		required: true,
+		unique: [true, "Username is already taken"],
+		trim: true,
+		minlength: [
+			usernameMinLength,
+			`Username must be at least ${usernameMinLength} characters long`,
+		],
+		maxlength: [
+			usernameMaxLength,
+			`Username must be less than ${usernameMaxLength} characters`,
+		],
+		index: true,
 	},
 	password: {
 		type: String,
@@ -14,22 +33,24 @@ const userSchema = new Schema({
 	email: {
 		type: String,
 		required: true,
+		unique: [true, "Email is already in use"],
+		match: [emailRegex, "Please use a valid email address"],
 	},
 	about: String,
 	banner: {
 		type: String,
-		match: /^https?\:\/\//,
+		match: urlRegex,
 	},
 	image: {
 		type: String,
 		required: true,
-		match: /^https?\:\/\/.+/,
+		match: urlRegex,
 	},
 	photos: [
 		{
 			_id: false,
 			type: String,
-			match: /^https?\:\/\/.+/,
+			match: urlRegex,
 		},
 	],
 	posts: [
@@ -86,11 +107,10 @@ const userSchema = new Schema({
 
 userSchema.pre("save", async function (next) {
 	if (!this.isModified("password")) {
-		return next(); // Skip hashing if password is unchanged
+		return next();
 	}
 
-	const saltRounds = 10;
-	this.password = await bcrypt.hash(this.password, saltRounds);
+	this.password = await bcrypt.hash(this.password, passwordSaltRounds);
 	next();
 });
 

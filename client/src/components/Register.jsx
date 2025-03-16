@@ -3,14 +3,14 @@ import { useUser } from "../contexts/UserContext.jsx";
 import { host } from "../common/appConstants.js";
 import { useNavigate } from "react-router";
 export default function Register() {
-	const { userId } = useUser();
+	const { userId, autherized } = useUser();
 	const navigate = useNavigate();
 
 	// Redirect to home if already logged in
 	useEffect(() => {
-		if (userId) {
-			navigate("/");
-		}
+        if (autherized === true) {
+            navigate("/");
+        }
 	}, [userId, navigate]);
 
 	const [email, setEmail] = useState("");

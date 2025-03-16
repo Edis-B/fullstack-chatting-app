@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-import { JWT_SECRET } from "../common/secretKeys.js"
+import { JWT_SECRET } from "../common/secretKeys.js";
 
 export function isValidToken(token) {
 	try {
@@ -14,7 +14,7 @@ export function isValidToken(token) {
 }
 
 export function attachAuthCookie(res, user, rememberMe) {
-	let { friends, password, ...userIdCookie } = user;
+	const userIdCookie = { _id: user._id, username: user.username , email: user.email};
 
 	const cookieExpirationDate = rememberMe
 		? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 Days

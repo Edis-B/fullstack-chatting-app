@@ -12,30 +12,20 @@ export default function ProfileHeader() {
 	const navigate = useNavigate();
 
 	const { profileUserId } = useParams();
-	const { content } = useParams();
 
 	const { userId } = useUser();
-	const { profileId, setProfileId } = useProfile();
+	const { profileId, setEditActive } = useProfile();
 
-	const [selectedNav, setSelectedNav] = useState({});
 	const [profileData, setProfileData] = useState({});
 
 	useEffect(() => {
-		setProfileId(profileUserId);
+		fetchProfileData(profileId);
+	}, [profileId]);
 
-		if (profileUserId == profileId) {
-			fetchProfileData();
-		}
-	}, [profileUserId, profileId]);
-
-	useEffect(() => {
-		setSelectedNav(content);
-	}, [content]);
-
-	async function fetchProfileData() {
+	async function fetchProfileData(id) {
 		try {
 			const response = await fetch(
-				`${host}/user/get-user-profile-data?userId=${profileId ?? ""}`,
+				`${host}/user/get-user-profile-data?userId=${id ?? ""}`,
 				{
 					method: "GET",
 					credentials: "include",
@@ -58,7 +48,13 @@ export default function ProfileHeader() {
 	return (
 		<>
 			{/* Cover Photo */}
-			<div className="cover-photo rounded" />
+			<div className="cover-photo">
+				<img
+					src={profileData.banner}
+					alt="Banner"
+					className="banner-photo"
+				/>
+			</div>
 
 			{/* Profile Info */}
 			<div className="d-flex align-items-end p-3">
@@ -77,7 +73,12 @@ export default function ProfileHeader() {
 
 				{profileData.owner ? (
 					<div className="ms-auto">
-						<Link className="btn btn-primary">Edit Profile</Link>
+						<button
+							onClick={() => setEditActive(true)}
+							className="btn btn-primary"
+						>
+							Edit Profile
+						</button>
 						<button className="btn btn-outline-secondary">
 							Settings
 						</button>
@@ -95,58 +96,6 @@ export default function ProfileHeader() {
 					)
 				)}
 			</div>
-
-			{/* Navigation Tabs */}
-			<ul className="nav nav-tabs mt-3">
-				<li className="nav-item">
-					<Link
-						className={
-							!selectedNav || selectedNav === contentTypes.POSTS
-								? "nav-link active"
-								: "nav-link"
-						}
-						to={`/profile/${profileId}/${contentTypes.POSTS}`}
-					>
-						Posts
-					</Link>
-				</li>
-				<li className="nav-item">
-					<Link
-						className={
-							selectedNav === contentTypes.FRIENDS
-								? "nav-link active"
-								: "nav-link"
-						}
-						to={`/profile/${profileId}/${contentTypes.FRIENDS}`}
-					>
-						Friends
-					</Link>
-				</li>
-				<li className="nav-item">
-					<Link
-						className={
-							selectedNav === contentTypes.ABOUT
-								? "nav-link active"
-								: "nav-link"
-						}
-						to={`/profile/${profileId}/${contentTypes.ABOUT}`}
-					>
-						About
-					</Link>
-				</li>
-				<li className="nav-item">
-					<Link
-						className={
-							selectedNav === contentTypes.PHOTOS
-								? "nav-link active"
-								: "nav-link"
-						}
-						to={`/profile/${profileId}/${contentTypes.PHOTOS}`}
-					>
-						Photos
-					</Link>
-				</li>
-			</ul>
 		</>
 	);
 }
