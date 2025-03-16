@@ -1,6 +1,7 @@
 import { Router } from "express";
 
-import userService, { autherize } from "../services/userService.js";
+import userService from "../services/userService.js";
+import { autherize } from "../utils/authUtils.js";
 import { getErrorMessage } from "../utils/errorUtils.js";
 
 const userApiController = Router();
@@ -177,15 +178,14 @@ userApiController.post("/login", async (req, res) => {
 	}
 });
 
-userApiController.get("/logout", (req, res) => {
-	let result = "Successfully logged out!";
+userApiController.post("/logout", (req, res) => {
 	try {
-		userService.logoutUser(res);
+		const result = userService.logoutUser(req, res);
+		res.json(result);
 	} catch (err) {
-		result = getErrorMessage(err);
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
 	}
-
-	res.json(result);
 });
 
 userApiController.post("/send-friend-request", async (req, res) => {

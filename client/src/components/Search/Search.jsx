@@ -1,4 +1,4 @@
-import { Link, useParams, useSearchParams } from "react-router";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 import { contentTypes } from "../../common/appConstants";
@@ -9,23 +9,38 @@ import SearchPosts from "./SearchPosts";
 import "../../css/search.css";
 
 export default function Search() {
-	const { setContent, setQueryParameters } = useSearch();
+	const navigate = useNavigate();
 
-	const { content } = useParams();
+	const { queryParameters, setQueryParameters } = useSearch();
+
 	const [searchParams] = useSearchParams();
 	const query = searchParams.get("query");
+	const content = searchParams.get("content");
 
 	useEffect(() => {
 		setQueryParameters((prev) => ({
-			...prev, ["content"]: content
+			...prev,
+			content,
 		}));
-	}, [content]);
+	}, [content, setQueryParameters]);
 
 	useEffect(() => {
 		setQueryParameters((prev) => ({
-			...prev, ["query"]: query
+			...prev,
+			query,
 		}));
-	}, [query]);
+	}, [query, setQueryParameters]);
+
+	function updateParameters(newParameters) {
+		const updatedParameters = {
+			...queryParameters,
+			...newParameters,
+		};
+
+		const queryString = new URLSearchParams(updatedParameters).toString();
+
+		navigate(`/search?${queryString}`);
+	}
 
 	function getContent(content) {
 		if (!content || content === contentTypes.PEOPLE) {
@@ -41,18 +56,26 @@ export default function Search() {
 				<div className="col-md-3 filter-menu">
 					<h5>Filters</h5>
 					<nav className="nav flex-column">
-						<Link
-							className="nav-link"
-							to={`/search/${contentTypes.POSTS}`}
+						<button
+							className="custom-button"
+							onClick={() =>
+								updateParameters({
+									content: contentTypes.POSTS,
+								})
+							}
 						>
 							Posts
-						</Link>
-						<Link
-							className="nav-link"
-							to={`/search/${contentTypes.PEOPLE}`}
+						</button>
+						<button
+							className="custom-button"
+							onClick={() =>
+								updateParameters({
+									content: contentTypes.PEOPLE,
+								})
+							}
 						>
 							People
-						</Link>
+						</button>
 					</nav>
 				</div>
 

@@ -14,7 +14,11 @@ export function isValidToken(token) {
 }
 
 export function attachAuthCookie(res, user, rememberMe) {
-	const userIdCookie = { _id: user._id, username: user.username , email: user.email};
+	const userIdCookie = {
+		_id: user._id,
+		username: user.username,
+		email: user.email,
+	};
 
 	const cookieExpirationDate = rememberMe
 		? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 Days
@@ -29,8 +33,19 @@ export function attachAuthCookie(res, user, rememberMe) {
 	});
 }
 
+export function autherize(req, role) {
+	if (role && !req.user.roles.role) {
+		throw new Error("Unauthorized!");
+	}
+	if (!req.user) {
+		throw new Error("Not logged in!");
+	}
+}
+
 const authUtils = {
 	isValidToken,
+	attachAuthCookie,
+	autherize,
 };
 
 export default authUtils;

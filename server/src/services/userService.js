@@ -123,9 +123,11 @@ export default {
 		}
 
 		res.clearCookie("userId");
+
+		return "Successfully logged out!";
 	},
 	// Returns false or the user entity
-	getUserFromReq(req) {
+	async getUserFromReq(req) {
 		if (!req.cookies || !req.cookies.userId) {
 			return false;
 		}
@@ -137,7 +139,7 @@ export default {
 			return false;
 		}
 
-		const user = userModel.findOne({ username: parsedCookie.username });
+		const user = await userModel.findById(parsedCookie._id);
 
 		return user;
 	},
@@ -189,6 +191,7 @@ export default {
 	},
 	async getPeopleByUserSubstring(req) {
 		const exclude = req.query.exclude === "true";
+
 		const filter = {
 			username: { $regex: req.query.usernameSubstr, $options: "i" },
 		};
@@ -197,7 +200,27 @@ export default {
 			filter.username.$ne = req.user.username;
 		}
 
-		return await userModel.find(filter).limit(10);
+		const users = await userModel.find(filter).limit(10).lean();
+
+		if (req.user) {
+			const myFriends = (await userModel.findById(req.user.id).lean())
+				.friends;
+
+			for (const user of users) {
+				const friendObj = myFriends.find((f) =>
+					f.friend._id.equals(user._id)
+				);
+
+				if (friendObj) {
+					user.friendshipStatus = friendObj.status;
+					continue;
+				}
+
+				user.friendshipStatus = friendStatuses.NOT_FRIENDS;
+			}
+		}
+
+		return users;
 	},
 	async sendFriendRequest(req) {
 		const { senderId, receiverId } = req.body;
@@ -524,12 +547,3 @@ export default {
 		return user.photos;
 	},
 };
-
-export function autherize(req, role) {
-	if (role && !req.user.roles.role) {
-		throw new Error("Unauthorized!");
-	}
-	if (!req.user) {
-		throw new Error("Not logged in!");
-	}
-}

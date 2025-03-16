@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 import { host, httpUrlRegex } from "../../common/appConstants.js";
+
+import "../../css/create-post.css"
 export default function CreatePost() {
 	const { userId, setError: setErrors } = useUser();
 
@@ -70,7 +72,7 @@ export default function CreatePost() {
 			<div className="card">
 				<div className="card-body">
 					<h5 className="card-title">Create a New Post</h5>
-					{/* {error && <div className="alert alert-danger">{error}</div>} */}
+
 					<form onSubmit={createPost}>
 						<div className="mb-3">
 							<label className="form-label">Content</label>
@@ -86,11 +88,12 @@ export default function CreatePost() {
 							<label className="form-label">Images</label>
 							{images?.length > 0 ? (
 								images.map((image, index) => (
-									<div>
-										<img src={{ image }} />
+									<div className="d-flex flex-column image-container">
+										<img className="preview-image" src={image} />
 										<button
 											type="button"
 											onClick={() => removeImage(index)}
+											className="m-2"
 										>
 											Remove image
 										</button>

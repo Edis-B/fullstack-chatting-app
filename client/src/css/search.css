@@ -27,3 +27,35 @@
 .row {
 	margin: 0;
 }
+
+.nav {
+	margin-top: 20px;
+}
+
+.custom-button {
+	background-color: #007bff;
+	color: white;
+	border: 1px solid #007bff;
+	border-radius: 5px;
+	padding: 10px 20px;
+	font-size: 16px;
+	text-align: center;
+	cursor: pointer;
+	margin-bottom: 10px;
+	transition: all 0.3s ease;
+}
+
+.custom-button:hover {
+	background-color: #0056b3;
+	border-color: #0056b3;
+}
+
+.custom-button:focus {
+	outline: none;
+	box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
+}
+
+.custom-button:active {
+	background-color: #004085;
+	border-color: #004085;
+}

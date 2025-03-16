@@ -5,14 +5,11 @@ import cookieParser from "cookie-parser";
 import http from "http";
 import { Server } from "socket.io";
 
-import sessionMiddleware from "./middlewares/sessionMiddleware.js";
+import { persistCookie } from "./middlewares/sessionMiddleware.js";
 import { setUpSocket } from "./socket.js";
 import { cookieProtectorKey } from "./common/secretKeys.js";
 import { frontEnd } from "./common/appConstants.js";
-import {
-	isLoggedInLocal,
-	attachUserToRequest,
-} from "./middlewares/authMiddleware.js";
+import { attachUserToRequest } from "./middlewares/authMiddleware.js";
 import routes from "./routes.js";
 
 const app = express();
@@ -46,9 +43,8 @@ const io = new Server(server, {
 });
 setUpSocket(io);
 
-app.use((req, res, next) => sessionMiddleware.persistCookie(req, res, next));
-app.use((req, res, next) => attachUserToRequest(req, res, next));
-app.use((req, res, next) => isLoggedInLocal(req, res, next));
+app.use((req, res, next) => persistCookie(req, res, next));
+app.use(async (req, res, next) => attachUserToRequest(req, res, next));
 
 // Routing
 app.use(routes);

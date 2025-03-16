@@ -6,7 +6,7 @@ import { useUser } from "../../contexts/UserContext.jsx";
 import "../../css/header.css"; // Import the new CSS file
 
 export default function Header() {
-	const { userId } = useUser();
+	const { userId, setErrors, logout } = useUser();
 	const [image, setImage] = useState("");
 	const [searchQuery, setSearchQuery] = useState("");
 
@@ -24,6 +24,30 @@ export default function Header() {
 			setImage(data);
 		} catch (err) {
 			console.log(err);
+		}
+	}
+
+	async function handleLogout() {
+		try {
+			const response = await fetch(`${host}/user/logout`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				credentials: "include",
+			});
+
+			const data = await response.json();
+
+			if (!response.ok) {
+				setErrors((prev) => [...prev, data]);
+				return;
+			}
+
+			logout();
+		} catch (err) {
+			setErrors((prev) => [
+				...prev,
+				"Something went wrong when trying to log out",
+			]);
 		}
 	}
 
@@ -49,23 +73,41 @@ export default function Header() {
 						🔍
 					</Link>
 				</div>
-				
+
 				<nav className="nav-links">
-					<Link to="/catalog">Catalog</Link>
 					<Link to="/chat">Chats</Link>
 
+					<Link to="/post/create-post">New Post</Link>
+
 					{!!image ? (
-						<Link to={`profile/${userId}`} className="profile-link">
-							<img
-								src={image}
-								alt="Profile"
-								className="profile-img"
-							/>
-						</Link>
+						<>
+							<Link
+								to={`profile/${userId}`}
+								className="profile-link"
+							>
+								<img
+									src={image}
+									alt="Profile"
+									className="profile-img"
+								/>
+							</Link>
+
+							<button
+								onClick={handleLogout}
+								className="logout-btn"
+							>
+								Logout
+							</button>
+						</>
 					) : (
-						<Link to="/login" className="login-btn">
-							Login
-						</Link>
+						<>
+							<Link to="/login" className="login-btn">
+								Login
+							</Link>
+							<Link to="/register" className="register-btn">
+								Register
+							</Link>
+						</>
 					)}
 				</nav>
 			</div>

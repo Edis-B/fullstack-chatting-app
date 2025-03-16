@@ -27,7 +27,7 @@ export default function UserPosts() {
 	}
 
 	return (
-		<div className="mt-3">
+		<div>
 			{postsData.posts?.length > 0 ? (
 				postsData.posts.map((post) => (
 					<Post

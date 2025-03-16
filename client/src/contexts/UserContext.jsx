@@ -12,7 +12,7 @@ export function UserProvider({ children }) {
 
 	useEffect(() => {
 		fetchUser();
-	}, []);
+	}, [userId]);
 
 	useEffect(() => {
 		if (userId && !socket) {
@@ -29,6 +29,19 @@ export function UserProvider({ children }) {
 			};
 		}
 	}, [userId]); // Run only when userId changes
+
+	function logout() {
+		setUserId(null);
+		setSocket(null);
+		setErrors([]);
+		setAutherized(null);
+
+		if (socket) {
+			socket.disconnect();
+		}
+
+		window.location.reload();
+	}
 
 	async function fetchUser() {
 		try {
@@ -48,9 +61,20 @@ export function UserProvider({ children }) {
 	}
 
 	return (
-		<UserContext.Provider value={{ userId, setUserId, socket, setSocket, errors, setErrors, autherized }}>
+		<UserContext.Provider
+			value={{
+				userId,
+				setUserId,
+				socket,
+				setSocket,
+				errors,
+				setErrors,
+				autherized,
+				logout,
+			}}
+		>
 			{children}
-		</UserContext.Provider>//
+		</UserContext.Provider> //
 	);
 }
 

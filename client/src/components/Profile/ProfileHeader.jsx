@@ -8,6 +8,8 @@ import { useUser } from "../../contexts/UserContext.jsx";
 import { useProfile } from "../../contexts/ProfileContext.jsx";
 import { contentTypes } from "../../common/appConstants.js";
 
+
+import "../../css/profile.css"
 export default function ProfileHeader() {
 	const navigate = useNavigate();
 
@@ -48,7 +50,7 @@ export default function ProfileHeader() {
 	return (
 		<>
 			{/* Cover Photo */}
-			<div className="cover-photo">
+			<div className="banner-div">
 				<img
 					src={profileData.banner}
 					alt="Banner"

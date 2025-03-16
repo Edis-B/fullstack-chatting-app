@@ -3,7 +3,7 @@ import { dateToString } from "../../utils/dateUtils.js";
 
 export default function Post({ post, user }) {
 	return (
-		<div className="card mb-3 p-3 shadow-sm">
+		<div className="card m-3 p-3 shadow-sm">
 			{/* Card Header */}
 			<div className="d-flex align-items-center border-bottom pb-2">
 				<img

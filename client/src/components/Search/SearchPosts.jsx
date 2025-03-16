@@ -35,11 +35,16 @@ export default function SearchPosts() {
 		}
 	}
 
-	return posts.length > 0 ? (
-		posts.map((post) => (
-			<Post key={post._id} post={post} user={post.user} />
-		))
-	) : (
-		<p>No posts found!</p>
+	return (
+		<>
+			<h3>Posts</h3>
+			{posts.length > 0 ? (
+				posts.map((post) => (
+					<Post key={post._id} post={post} user={post.user} />
+				))
+			) : (
+				<p>No posts found!</p>
+			)}
+		</>
 	);
 }

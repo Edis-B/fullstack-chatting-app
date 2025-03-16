@@ -53,14 +53,6 @@ function App() {
 							</SearchProvider>
 						}
 					/>
-					<Route
-						path="/search/:content"
-						element={
-							<SearchProvider>
-								<Search />
-							</SearchProvider>
-						}
-					/>
 
 					<Route path="/login" element={<Login />} />
 					<Route path="/register" element={<Register />} />

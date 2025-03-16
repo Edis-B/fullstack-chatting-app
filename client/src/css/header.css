@@ -58,23 +58,58 @@
 	transform: scale(1.1);
 }
 
+/* Login Button */
 .login-btn {
-	padding: 8px 16px;
-	background: white;
-	color: #007bff;
+	padding: 10px 20px;
+	background: #007bff;
+	color: white;
 	border-radius: 5px;
 	text-decoration: none;
 	font-weight: bold;
-	transition: background 0.3s ease, color 0.3s ease;
+	border: 2px solid #007bff;
+	transition: background 0.3s ease, color 0.3s ease, border 0.3s ease;
 }
 
 .login-btn:hover {
-	background: #0056b3;
-	color: white;
+	background: white;
+	color: #007bff;
+	border: 2px solid #0056b3;
 }
 
-body {
-	padding-top: 70px;
+/* Register Button */
+.register-btn {
+	padding: 10px 20px;
+	background: #28a745;
+	color: white;
+	border-radius: 5px;
+	text-decoration: none;
+	font-weight: bold;
+	border: 2px solid #28a745;
+	transition: background 0.3s ease, color 0.3s ease, border 0.3s ease;
+}
+
+.register-btn:hover {
+	background: white;
+	color: #28a745;
+	border: 2px solid #218838;
+}
+
+/* Logout Button */
+.logout-btn {
+	padding: 10px 20px;
+	background: #dc3545; /* Red color */
+	color: white;
+	border-radius: 5px;
+	text-decoration: none;
+	font-weight: bold;
+	border: 2px solid #dc3545;
+	transition: background 0.3s ease, color 0.3s ease, border 0.3s ease;
+}
+
+.logout-btn:hover {
+	background: white;
+	color: #dc3545; /* Red text on hover */
+	border: 2px solid #c82333; /* Darker red border on hover */
 }
 
 .search-container {

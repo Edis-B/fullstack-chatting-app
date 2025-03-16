@@ -6,6 +6,8 @@ import { useUser } from "../../contexts/UserContext.jsx";
 import { useProfile } from "../../contexts/ProfileContext.jsx";
 import { friendStatusButton } from "../../utils/friendUtils.jsx";
 
+import "../../css/profile.css";
+
 export default function ProfileHeaderEdit() {
 	const navigate = useNavigate();
 
@@ -80,7 +82,7 @@ export default function ProfileHeaderEdit() {
 		<>
 			<div>
 				{/* Cover Photo */}
-				<div className="cover-photo">
+				<div className="banner-div">
 					<img
 						src={profileData.banner ? profileData.banner : null}
 						alt="Banner"
@@ -105,58 +107,51 @@ export default function ProfileHeaderEdit() {
 				</div>
 			</div>
 
-			<div className="d-flex align-items-end p-3">
-				<div className="d-flex flex-row">
-					<div className="d-flex flex-column">
-						<label>Profile Image URL</label>
-						<input
-							type="text"
-							name="image"
-							value={profileData.image}
-							onChange={handleChange}
-							placeholder="e.g., https://example.com/profile.jpg"
-							className="form-control m-2"
-						/>
+			<div className="d-flex flex-column p-3">
+				<label>Profile Image URL</label>
+				<input
+					type="text"
+					name="image"
+					value={profileData.image}
+					onChange={handleChange}
+					placeholder="e.g., https://example.com/profile.jpg"
+					className="form-control m-2"
+				/>
 
-						<label>Banner Image URL</label>
-						<input
-							type="text"
-							name="banner"
-							value={profileData.banner}
-							onChange={handleChange}
-							placeholder="e.g., https://example.com/banner.jpg"
-							className="form-control m-2"
-						/>
+				<label>Banner Image URL</label>
+				<input
+					type="text"
+					name="banner"
+					value={profileData.banner}
+					onChange={handleChange}
+					placeholder="e.g., https://example.com/banner.jpg"
+					className="form-control m-2"
+				/>
 
-						<label>Username</label>
-						<input
-							type="text"
-							name="username"
-							value={profileData.username}
-							onChange={handleChange}
-							placeholder="e.g., johndoe123"
-							className="form-control m-2"
-						/>
-					</div>
-				</div>
+				<label>Username</label>
+				<input
+					type="text"
+					name="username"
+					value={profileData.username}
+					onChange={handleChange}
+					placeholder="e.g., johndoe123"
+					className="form-control m-2"
+				/>
+			</div>
 
-				<div className="ms-auto">
-					<button
-						onClick={handleSaveChanges}
-						className="btn btn-primary"
-					>
-						Save Changes
-					</button>
-					<button
-						onClick={() => {
-							console.log("Button clicked");
-							setEditActive(false);
-						}}
-						className="btn btn-outline-secondary"
-					>
-						Cancel
-					</button>
-				</div>
+			<div className="ms-auto d-flex justify-content-end">
+				<button onClick={handleSaveChanges} className="btn btn-primary">
+					Save Changes
+				</button>
+				<button
+					onClick={() => {
+						console.log("Button clicked");
+						setEditActive(false);
+					}}
+					className="btn btn-outline-secondary"
+				>
+					Cancel
+				</button>
 			</div>
 		</>
 	);

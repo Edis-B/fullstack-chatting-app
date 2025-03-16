@@ -1,7 +1,7 @@
 import { host } from "../common/appConstants.js";
 import { useUser } from "../contexts/UserContext.jsx";
 
-export async function likePost(postId, userId, setError) {
+export async function likePost(postId, userId, setErrors) {
 	try {
 		if (!postId) return;
 		if (!userId) return;
@@ -21,18 +21,18 @@ export async function likePost(postId, userId, setError) {
 		const data = await response.json();
 
 		if (!response.ok) {
-			setError(data);
+			setErrors((prev) => [...prev, data]);
 			return;
 		}
 
 		return data;
 	} catch (err) {
 		console.log(err);
-		setError("There has been a problem liking post");
+		setErrors((prev) => [...prev, "There has been a problem liking post"]);
 	}
 }
 
-export async function removeLikeFromPost(postId, userId, setError) {
+export async function removeLikeFromPost(postId, userId, setErrors) {
 	try {
 		if (!postId) return;
 		if (!userId) return;
@@ -52,18 +52,21 @@ export async function removeLikeFromPost(postId, userId, setError) {
 		const data = await response.json();
 
 		if (!response.ok) {
-			setError(data);
+			setErrors((prev) => [...prev, data]);
 			return;
 		}
 
 		return data;
 	} catch (err) {
 		console.log(err);
-		setError("There has been a problem unliking post");
+		setErrors((prev) => [
+			...prev,
+			"There has been a problem unliking post",
+		]);
 	}
 }
 
-export async function commentOnPost(postId, userId, content, setError) {
+export async function commentOnPost(postId, userId, content, setErrors) {
 	try {
 		if (!postId) return;
 		if (!userId) return;
@@ -84,14 +87,17 @@ export async function commentOnPost(postId, userId, content, setError) {
 		const data = await response.json();
 
 		if (!response.ok) {
-			setError(data);
+			setErrors((prev) => [...prev, data]);
 			return;
 		}
 
 		return data;
 	} catch (err) {
 		console.log(err);
-		setError("There has been a problem commenting on post");
+		setErrors((prev) => [
+			...prev,
+			"There has been a problem commenting on post",
+		]);
 	}
 }
 
@@ -99,7 +105,7 @@ export async function removeCommentFromPost(
 	postId,
 	userId,
 	commentId,
-	setError
+	setErrors
 ) {
 	try {
 		if (!postId) return;
@@ -121,18 +127,21 @@ export async function removeCommentFromPost(
 		const data = await response.json();
 
 		if (!response.ok) {
-			setError(data);
+			setErrors((prev) => [...prev, data]);
 			return;
 		}
 
 		return data;
 	} catch (err) {
 		console.log(err);
-		setError("There has been a problem removing the comment from the post");
+		setErrors((prev) => [
+			...prev,
+			"There has been a problem removing the comment from the post",
+		]);
 	}
 }
 
-export async function likeComment(postId, userId, commentId, setError) {
+export async function likeComment(postId, userId, commentId, setErrors) {
 	try {
 		if (!postId) return;
 		if (!userId) return;
@@ -153,7 +162,7 @@ export async function likeComment(postId, userId, commentId, setError) {
 		const data = await response.json();
 
 		if (!response.ok) {
-			setError(data);
+			setErrors((prev) => [...prev, data]);
 			return;
 		}
 
@@ -161,7 +170,10 @@ export async function likeComment(postId, userId, commentId, setError) {
 		return data;
 	} catch (err) {
 		console.log(err);
-		setError("There has been a problem liking comment");
+		setErrors((prev) => [
+			...prev,
+			"There has been a problem liking comment",
+		]);
 		return;
 	}
 }
@@ -170,7 +182,7 @@ export async function removeLikeFromComment(
 	postId,
 	userId,
 	commentId,
-	setError
+	setErrors
 ) {
 	try {
 		if (!postId) return;
@@ -192,15 +204,18 @@ export async function removeLikeFromComment(
 		const data = await response.json();
 
 		if (!response.ok) {
-			setError(data);
+			setErrors((prev) => [...prev, data]);
 			return;
 		}
-        
+
 		alert(data);
 		return data;
 	} catch (err) {
 		console.log(err);
-		setError("There has been a problem unliking comment");
+		setErrors((prev) => [
+			...prev,
+			"There has been a problem unliking comment",
+		]);
 		return;
 	}
 }
