@@ -1,8 +1,13 @@
-import { useDebugValue, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+
 import { useSearch } from "../../contexts/SearchContext";
 import { useUser } from "../../contexts/UserContext";
+
 import { host } from "../../common/appConstants";
+import request from "../../utils/request.js";
+
 import Post from "../Posts/Post";
+
 export default function SearchPosts() {
 	const { setErrors } = useUser();
 	const { query } = useSearch().queryParameters;
@@ -14,15 +19,10 @@ export default function SearchPosts() {
 
 	async function fetchPosts(query) {
 		try {
-			const response = await fetch(
-				`${host}/post/get-posts-by-query?query=${query}`,
-				{
-					method: "GET",
-					credentials: "include",
-				}
+			const { response, data } = await request.get(
+				`${host}/post/get-posts-by-query`,
+				{ query }
 			);
-
-			const data = await response.json();
 
 			if (!response.ok) {
 				setErrors((prev) => [...prev, data]);

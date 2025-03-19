@@ -22,7 +22,7 @@ export default function Profile() {
 
 	useEffect(() => {
 		setProfileId(profileUserId);
-	}, [profileId]);
+	}, [profileUserId]);
 
 	function generateContent(type) {
 		if (!type || type == contentTypes.POSTS) {

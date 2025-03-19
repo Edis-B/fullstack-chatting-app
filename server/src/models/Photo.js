@@ -13,6 +13,10 @@ const photoSchema = new Schema({
 		ref: "User",
 		type: Types.ObjectId,
 	},
+	gallery: {
+		ref: "Gallery",
+		type: Types.ObjectId,
+	}
 });
 
 const photoModel = model("Photo", photoSchema);

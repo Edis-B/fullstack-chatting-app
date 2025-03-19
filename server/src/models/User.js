@@ -103,6 +103,13 @@ const userSchema = new Schema({
 			ref: "Photo",
 		},
 	],
+	galleries: [
+		{
+			_id: false,
+			type: Types.ObjectId,
+			ref: "Gallery",
+		},
+	],
 });
 
 userSchema.pre("save", async function (next) {

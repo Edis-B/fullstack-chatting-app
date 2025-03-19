@@ -4,7 +4,7 @@ import friendStatuses from "../common/friendStatusConstants.js";
 import { attachAuthCookie } from "../utils/authUtils.js";
 import photoModel from "../models/Photo.js";
 
-export default {
+const userService = {
 	async updateProfile(req, res) {
 		const { profileData } = req.body;
 
@@ -547,3 +547,5 @@ export default {
 		return user.photos;
 	},
 };
+
+export default userService;

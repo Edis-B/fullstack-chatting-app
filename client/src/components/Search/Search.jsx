@@ -11,25 +11,7 @@ import "../../css/search.css";
 export default function Search() {
 	const navigate = useNavigate();
 
-	const { queryParameters, setQueryParameters } = useSearch();
-
-	const [searchParams] = useSearchParams();
-	const query = searchParams.get("query");
-	const content = searchParams.get("content");
-
-	useEffect(() => {
-		setQueryParameters((prev) => ({
-			...prev,
-			content,
-		}));
-	}, [content, setQueryParameters]);
-
-	useEffect(() => {
-		setQueryParameters((prev) => ({
-			...prev,
-			query,
-		}));
-	}, [query, setQueryParameters]);
+	const { queryParameters, content } = useSearch();
 
 	function updateParameters(newParameters) {
 		const updatedParameters = {

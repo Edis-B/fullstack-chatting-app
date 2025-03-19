@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 import { useProfile } from "../../contexts/ProfileContext.jsx";
 import { host, httpUrlRegex } from "../../common/appConstants.js";
+import request from "../../utils/request.js";
 
 export default function Photos() {
 	const { userId, setErrors } = useUser();
 	const { profileId } = useProfile();
 
 	const [photos, setPhotos] = useState([]);
+	const [galleries, setGalleries] = useState([]);
+
 	const [imageUrl, setImageUrl] = useState("");
 	const [preview, setPreview] = useState(null);
 
@@ -15,6 +18,7 @@ export default function Photos() {
 		if (!userId) return;
 
 		fetchUserPhotos(userId);
+		fetchUserGalleries(userId);
 	}, [userId]);
 
 	function isValidImageUrl(url) {
@@ -38,7 +42,10 @@ export default function Photos() {
 
 	async function handleUpload() {
 		if (!imageUrl) {
-			setErrors((prev) => [...prev, "Please enter a valid image URL before uploading."]);
+			setErrors((prev) => [
+				...prev,
+				"Please enter a valid image URL before uploading.",
+			]);
 			return;
 		}
 
@@ -69,8 +76,30 @@ export default function Photos() {
 			setPhotos(data);
 		} catch (err) {
 			console.log(err);
-			setErrors((prev) => [...prev, "Something went wrong getting images"]);
+			setErrors((prev) => [
+				...prev,
+				"Something went wrong getting images",
+			]);
 			return;
+		}
+	}
+
+	async function fetchUserGalleries(userId) {
+		try {
+			const { response, data } = await request.get(
+				`${host}/gallery/get-user-galleries`,
+				{ userId }
+			);
+
+			if (!response.ok) {
+				setErrors((prev) => [...prev, data]);
+				return;
+			}
+
+			setGalleries(data);
+		} catch (err) {
+			console.log(err);
+			setErrors((prev) => [...prev, err]);
 		}
 	}
 
@@ -96,7 +125,10 @@ export default function Photos() {
 			}
 		} catch (err) {
 			console.log(err);
-			setErrors((prev) => [...prev, "Something went wrong uploading image"]);
+			setErrors((prev) => [
+				...prev,
+				"Something went wrong uploading image",
+			]);
 			return;
 		}
 	}
@@ -165,6 +197,50 @@ export default function Photos() {
 					) : (
 						<p>No photos uploaded yet.</p>
 					)}
+				</div>
+			</div>
+
+			{/* Galleries */}
+			<div className="mt-4 w-100">
+				<h5>Photo Galleries</h5>
+				<div className="d-flex flex-wrap justify-content-center gap-3">
+					<div
+						className="p-3 border rounded bg-light shadow-sm text-center d-flex flex-column align-items-center justify-content-center"
+						style={{
+							width: "100px",
+							height: "100px",
+							cursor: "pointer",
+						}}
+					>
+						<h2 className="text-primary mb-2">+</h2>
+						<p className="mb-0">Create Gallery</p>
+					</div>
+					{galleries.map((gallery) => (
+						<div
+							key={gallery._id}
+							className="p-3 border rounded bg-light shadow-sm text-center"
+						>
+							<div
+								className="d-flex flex-wrap"
+								style={{ width: "100px", height: "100px" }}
+							>
+								{gallery.previews.map((img) => (
+									<img
+										key={img._id}
+										src={img.url}
+										alt="Preview"
+										className="m-1"
+										style={{
+											width: "45px",
+											height: "45px",
+											objectFit: "cover",
+										}}
+									/>
+								))}
+							</div>
+							<h6 className="mt-2">{gallery.name}</h6>
+						</div>
+					))}
 				</div>
 			</div>
 		</div>

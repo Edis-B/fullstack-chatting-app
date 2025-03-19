@@ -2,7 +2,7 @@ import commentModel from "../models/Comment.js";
 import postModel from "../models/Post.js";
 import userModel from "../models/User.js";
 
-export default {
+const postService = {
 	async getPostsFromQuery(req) {
 		const { query, page } = req.query;
 
@@ -79,17 +79,20 @@ export default {
 		}
 
 		const userId = req.user?.id;
-		if (userId) {
-			post.comments.map((comment) => {
+
+		post.comments.map((comment) => {
+			if (userId) {
 				const hasLiked = comment.likes.some(
 					(uId) => uId.toString() === userId
 				);
-
 				comment.liked = hasLiked;
-			});
+			}
 
-			post.liked = post.likes.some((id) => id.toString() === userId);
-		}
+			comment.likesCount = comment.likes.length;
+		});
+
+		post.liked = post.likes.some((id) => id.toString() === userId);
+
 		return post;
 	},
 	async likePost(req) {
@@ -227,9 +230,7 @@ export default {
 
 		if (!user) throw new Error("Could not find user");
 
-		const exists = post.comments.some(
-			(p) => p.comment.toString() == commentId
-		);
+		const exists = post.comments.some((c) => c.toString() == commentId);
 
 		if (!exists)
 			throw new Error("Such a comment does not exist on this post!");
@@ -312,3 +313,5 @@ export default {
 		return "Successfully unliked comment";
 	},
 };
+
+export default postService;

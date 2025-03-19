@@ -6,7 +6,7 @@ import chatTypes from "../common/chatTypeConstants.js";
 import userModel from "../models/User.js";
 import userService from "./userService.js";
 
-export default {
+const chatService = {
 	// Creates new chat with given participants and chat type
 	async createNewChat(req) {
 		let participantsArr = [];
@@ -274,3 +274,5 @@ export default {
 		}
 	},
 };
+
+export default chatService;

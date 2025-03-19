@@ -37,7 +37,6 @@ export async function sendFriendRequest(senderId, receiverId) {
 
 		const data = await response.json();
 		console.log(data);
-		
 	} catch (err) {
 		console.log(err);
 	}
@@ -59,11 +58,9 @@ export async function unfriend(senderId, receiverId) {
 
 		const data = await response.json();
 		console.log(data);
-
 	} catch (err) {
 		console.log(err);
 	}
-
 }
 
 export async function acceptFriendRequest(senderId, receiverId) {
@@ -82,7 +79,6 @@ export async function acceptFriendRequest(senderId, receiverId) {
 
 		const data = await response.json();
 		console.log(data);
-
 	} catch (err) {
 		console.log(err);
 	}
@@ -104,7 +100,6 @@ export async function declineFriendRequest(senderId, receiverId) {
 
 		const data = await response.json();
 		console.log(data);
-
 	} catch (err) {
 		console.log(err);
 	}
@@ -126,7 +121,6 @@ export async function cancelFriendRequest(senderId, receiverId) {
 
 		const data = await response.json();
 		console.log(data);
-
 	} catch (err) {
 		console.log(err);
 	}

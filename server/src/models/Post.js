@@ -36,6 +36,14 @@ const postSchema = new Schema({
 	],
 });
 
+// Pre-save hook to validate first-time creation
+postSchema.pre("save", function (next) {
+	if (this.isNew && !this.content && (!this.images || this.images.length === 0)) {
+		return next(new Error("Either content or at least one image is required."));
+	}
+	next();
+});
+
 const postModel = model("Post", postSchema);
 
 export default postModel;

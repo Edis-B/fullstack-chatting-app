@@ -25,7 +25,7 @@ export async function likePost(postId, userId, setErrors) {
 			return;
 		}
 
-		return data;
+		return { message: data, success: true };
 	} catch (err) {
 		console.log(err);
 		setErrors((prev) => [...prev, "There has been a problem liking post"]);
@@ -56,7 +56,7 @@ export async function removeLikeFromPost(postId, userId, setErrors) {
 			return;
 		}
 
-		return data;
+		return { message: data, success: true };
 	} catch (err) {
 		console.log(err);
 		setErrors((prev) => [

@@ -2,7 +2,7 @@
 
 body {
 	background-color: #f4f6f9;
-	overflow-y: hidden;
+	overflow-y: auto;
 	padding-top: 80px;
 }
 
