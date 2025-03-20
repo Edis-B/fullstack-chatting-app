@@ -9,6 +9,9 @@ const gallerySchema = new Schema({
 		type: String,
 		required: [true, "Gallery name is required!"],
 	},
+	desctiption: {
+		type: String,
+	},
 	gallery: {
 		type: String,
 	},

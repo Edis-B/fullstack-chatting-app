@@ -11,15 +11,15 @@ import Register from "./components/Register";
 import Profile from "./components/Profile/Profile";
 import CreatePost from "./components/Posts/CreatePost";
 import PostDetails from "./components/Posts/PostDetails";
-
-import { SearchProvider } from "./contexts/SearchContext.jsx";
-
-import "./css/site.css";
-
 import ProtectedRoute from "./services/ProtectedRoute.jsx";
 import Search from "./components/Search/Search.jsx";
-import { ProfileProvider } from "./contexts/ProfileContext.jsx";
 import CreateGallery from "./components/Gallery/CreateGallery.jsx";
+import GalleryDetails from "./components/Gallery/GalleryDetails.jsx";
+
+import { SearchProvider } from "./contexts/SearchContext.jsx";
+import { ProfileProvider } from "./contexts/ProfileContext.jsx";
+
+import "./css/site.css";
 
 function App() {
 	return (
@@ -96,6 +96,14 @@ function App() {
 						element={
 							<ProtectedRoute>
 								<CreateGallery />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/gallery/:galleryId"
+						element={
+							<ProtectedRoute>
+								<GalleryDetails />
 							</ProtectedRoute>
 						}
 					/>

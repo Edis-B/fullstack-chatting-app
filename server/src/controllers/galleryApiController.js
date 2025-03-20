@@ -14,6 +14,16 @@ galleryApiController.get("/get-user-galleries", async (req, res) => {
 	}
 });
 
+galleryApiController.get("/get-gallery", async (req, res) => {
+	try {
+		const result = await galleryService.getGallery(req);
+		res.json(result);
+	} catch (err) {
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
+	}
+});
+
 galleryApiController.post("/create-gallery", async (req, res) => {
 	try {
 		const result = await galleryService.createGallery(req);

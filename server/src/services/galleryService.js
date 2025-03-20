@@ -25,8 +25,22 @@ const galleryService = {
 
 		return galleries;
 	},
+	async getGallery(req) {
+		const { userId, galleryId } = req.query;
+
+		const gallery = await galleryModel
+			.findById(galleryId)
+			.populate("user photos")
+			.lean();
+
+		if (!gallery) {
+			throw new Error("Gallery not found");
+		}
+
+		return gallery;
+	},
 	async createGallery(req) {
-		const { userId, galleryName } = req.body;
+		const { userId, name, description, photos } = req.body;
 
 		if (req.user?.id != userId) {
 			throw new Error("Unauthorized!");
@@ -34,19 +48,23 @@ const galleryService = {
 
 		try {
 			const newGallery = await galleryModel.create({
-				dateCreated: Date.now(),
-				name: galleryName,
+				name,
+				description,
 				user: userId,
+				photos: photos,
+				dateCreated: Date.now(),
 			});
 
 			await userModel.findByIdAndUpdate(userId, {
 				$push: { galleries: newGallery._id },
 			});
+
+			return newGallery._id;
 		} catch (err) {
 			console.log(err);
 			throw new Error("Something went wrong creating gallery!");
 		}
-		return newGallery._id;
+		
 	},
 	async deleteGallery(req) {
 		const { userId, galleryId } = req.body;

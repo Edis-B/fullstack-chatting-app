@@ -1,53 +1,115 @@
-import { useEffect, useState } from "react";
-import { useUser } from "../../contexts/UserContext";
+import { useState } from "react";
 import { useFetchUserPhotos } from "../../hooks/images";
+import { useNavigate } from "react-router";
+
+import request from "../../utils/request";
+import { host } from "../../common/appConstants";
+
+import "../../css/create-gallery.css";
+import { useUser } from "../../contexts/UserContext";
 
 export default function CreateGallery() {
+	const navigate = useNavigate();
+
+	const { userId, enqueueError } = useUser();
 	const [galleryName, setGalleryName] = useState("");
 	const [description, setDescription] = useState("");
+	const [selectedImages, setSelectedImages] = useState([]);
 
-	const [images] = useFetchUserPhotos();
+	const [images, setImages] = useFetchUserPhotos();
 
-	const handleCreateGallery = () => {
-		console.log("Gallery Created:", galleryName, description, images);
+	async function handleCreateGallery() {
+		const { response, data } = await request.post(
+			`${host}/gallery/create-gallery`,
+			{
+				photos: selectedImages.map(img => img._id),
+				name: galleryName,
+				description,
+				userId
+			}
+		);
+
+		if (!response.ok) {
+			enqueueError(data);
+			return;
+		}
+
+		navigate(`/gallery/${data}`);
+		return;
+	}
+
+	const handleClickSelect = (image) => {
+		setImages((prev) => prev.filter((img) => img._id !== image._id));
+		setSelectedImages((prev) => [...prev, image]);
+	};
+
+	const handleClickRemove = (image) => {
+		setSelectedImages((prev) =>
+			prev.filter((img) => img._id !== image._id)
+		);
+		setImages((prev) => [...prev, image]);
 	};
 
 	return (
-		<div className="flex h-screen">
+		<div className="gallery-main">
 			{/* Settings Section */}
-			<div className="w-1/2 p-4 border-r flex flex-col gap-4">
-				<h2 className="text-xl font-semibold">Create New Gallery</h2>
+			<div className="gallery-settings">
+				<h2>Create New Gallery</h2>
 				<input
 					type="text"
+					className="gallery-input"
 					placeholder="Gallery Name"
-					className="p-2 border rounded"
 					value={galleryName}
 					onChange={(e) => setGalleryName(e.target.value)}
 				/>
+
 				<textarea
+					className="gallery-textarea"
 					placeholder="Gallery Description"
-					className="p-2 border rounded h-32"
 					value={description}
 					onChange={(e) => setDescription(e.target.value)}
 				/>
+
 				<button
-					className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+					className="gallery-button"
 					onClick={handleCreateGallery}
 				>
 					Create Gallery
 				</button>
 			</div>
 
-			{/* Images Section */}
-			<div className="w-1/2 p-4 grid grid-cols-3 gap-2 overflow-y-auto">
-				{images.map((img, index) => (
-					<img
-						key={img._id}
-						src={img.url}
-						alt={`Preview ${index + 1}`}
-						className="w-full h-32 object-cover rounded shadow"
-					/>
-				))}
+			<div className="d-flex flex-row">
+				{/* Selected Images Section */}
+				<div className="gallery-section">
+					<h3>Selected Images</h3>
+					<div className="image-grid">
+						{selectedImages.map((img) => (
+							<img
+								className="single-image"
+								key={img._id}
+								src={img.url}
+								alt="Selected Preview"
+								onDoubleClick={() => handleClickRemove(img)}
+							/>
+						))}
+					</div>
+				</div>
+
+				{/* Images Section */}
+				<div className="gallery-section">
+					<h3>Available Images - Double click to select images</h3>
+					<div className="image-grid">
+						{images.map((img) => (
+							<img
+								className="single-image"
+								key={img._id}
+								src={img.url}
+								alt="Available Preview"
+								onDoubleClick={() => handleClickSelect(img)}
+							/>
+						))}
+					</div>
+				</div>
 			</div>
 		</div>
 	);
