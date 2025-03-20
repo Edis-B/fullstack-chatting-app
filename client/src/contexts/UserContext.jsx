@@ -60,6 +60,10 @@ export function UserProvider({ children }) {
 		}
 	}
 
+	const enqueueError = async (error) => {
+		setErrors((prev) => [...prev, error]);
+	};
+
 	return (
 		<UserContext.Provider
 			value={{
@@ -71,6 +75,7 @@ export function UserProvider({ children }) {
 				setErrors,
 				autherized,
 				logout,
+				enqueueError,
 			}}
 		>
 			{children}

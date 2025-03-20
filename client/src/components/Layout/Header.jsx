@@ -77,7 +77,7 @@ export default function Header() {
 				<nav className="nav-links">
 					<Link to="/chat">Chats</Link>
 					
-					<Link to="/post/create-post">New Post</Link>
+					<Link to="/post/create">New Post</Link>
 
 					{!!image ? (
 						<>

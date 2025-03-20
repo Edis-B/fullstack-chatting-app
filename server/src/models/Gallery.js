@@ -9,6 +9,9 @@ const gallerySchema = new Schema({
 		type: String,
 		required: [true, "Gallery name is required!"],
 	},
+	gallery: {
+		type: String,
+	},
 	user: {
 		ref: "User",
 		type: Types.ObjectId,

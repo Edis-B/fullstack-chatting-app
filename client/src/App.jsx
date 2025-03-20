@@ -16,9 +16,10 @@ import { SearchProvider } from "./contexts/SearchContext.jsx";
 
 import "./css/site.css";
 
-import ProtectedRoute from "./services/protectedRoute.jsx";
+import ProtectedRoute from "./services/ProtectedRoute.jsx";
 import Search from "./components/Search/Search.jsx";
 import { ProfileProvider } from "./contexts/ProfileContext.jsx";
+import CreateGallery from "./components/Gallery/CreateGallery.jsx";
 
 function App() {
 	return (
@@ -45,6 +46,7 @@ function App() {
 						}
 					/>
 
+					{/* Search */}
 					<Route
 						path="/search"
 						element={
@@ -54,9 +56,11 @@ function App() {
 						}
 					/>
 
+					{/* Authorization */}
 					<Route path="/login" element={<Login />} />
 					<Route path="/register" element={<Register />} />
 
+					{/* Profile */}
 					<Route path="/profile" element={<Profile />} />
 					<Route
 						path="/profile/:profileUserId"
@@ -75,10 +79,9 @@ function App() {
 						}
 					/>
 
-					<Route path="/test" element={<Test />}></Route>
-
+					{/* Posts */}
 					<Route
-						path="/post/create-post"
+						path="/post/create"
 						element={
 							<ProtectedRoute>
 								<CreatePost />
@@ -87,7 +90,20 @@ function App() {
 					/>
 					<Route path="/post/:postId" element={<PostDetails />} />
 
+					{/* Galleries */}
+					<Route
+						path="/gallery/create"
+						element={
+							<ProtectedRoute>
+								<CreateGallery />
+							</ProtectedRoute>
+						}
+					/>
+
+					{/* 404 Endpoint */}
 					<Route path="*" element={<NotFound />} />
+
+					<Route path="/test" element={<Test />}></Route>
 				</Route>
 			</Routes>
 		</BrowserRouter>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router";
 import { useUser } from "../../contexts/UserContext";
 import { useProfile } from "../../contexts/ProfileContext.jsx";
 import { host, httpUrlRegex } from "../../common/appConstants.js";
@@ -59,7 +60,7 @@ export default function Photos() {
 	async function fetchUserPhotos(userId) {
 		try {
 			const response = await fetch(
-				`${host}/user/get-user-photos?userId=${userId}`,
+				`${host}/photo/get-user-photos?userId=${userId}`,
 				{
 					method: "GET",
 					credentials: "include",
@@ -105,7 +106,7 @@ export default function Photos() {
 
 	async function uploadPhoto(userId, imageUrl) {
 		try {
-			const response = await fetch(`${host}/user/upload-photo`, {
+			const response = await fetch(`${host}/photo/upload-photo`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -213,34 +214,44 @@ export default function Photos() {
 						}}
 					>
 						<h2 className="text-primary mb-2">+</h2>
-						<p className="mb-0">Create Gallery</p>
+						<Link className="mb-0" to="/gallery/create">
+							Create Gallery
+						</Link>
 					</div>
-					{galleries.map((gallery) => (
-						<div
-							key={gallery._id}
-							className="p-3 border rounded bg-light shadow-sm text-center"
-						>
+					{galleries.length > 0 ? (
+						galleries.map((gallery) => (
 							<div
-								className="d-flex flex-wrap"
-								style={{ width: "100px", height: "100px" }}
+								key={gallery._id}
+								className="p-3 border rounded bg-light shadow-sm text-center"
 							>
-								{gallery.previews.map((img) => (
-									<img
-										key={img._id}
-										src={img.url}
-										alt="Preview"
-										className="m-1"
-										style={{
-											width: "45px",
-											height: "45px",
-											objectFit: "cover",
-										}}
-									/>
-								))}
+								<div
+									className="d-flex flex-wrap"
+									style={{ width: "100px", height: "100px" }}
+								>
+									{gallery.previews?.length > 0 ? (
+										gallery.previews.map((img) => (
+											<img
+												key={img._id}
+												src={img.url}
+												alt="Preview"
+												className="m-1"
+												style={{
+													width: "45px",
+													height: "45px",
+													objectFit: "cover",
+												}}
+											/>
+										))
+									) : (
+										<></>
+									)}
+								</div>
+								<h6 className="mt-2">{gallery.name}</h6>
 							</div>
-							<h6 className="mt-2">{gallery.name}</h6>
-						</div>
-					))}
+						))
+					) : (
+						<p>No galleries.</p>
+					)}
 				</div>
 			</div>
 		</div>

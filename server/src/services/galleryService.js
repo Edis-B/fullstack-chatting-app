@@ -17,9 +17,11 @@ const galleryService = {
 			throw new Error("User with such id not found!");
 		}
 
-		const galleries = user.galleries;
+		const galleries = user.galleries ?? [];
 
-		galleries.map((g) => (g.previews = g.images.limit(4)));
+		if (galleries && galleries.length > 0) {
+			galleries.map((g) => (g.previews = g.images.limit(4)));
+		}
 
 		return galleries;
 	},
