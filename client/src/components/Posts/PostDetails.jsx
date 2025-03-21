@@ -1,20 +1,23 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams,Link } from "react-router";
+
 import { host } from "../../common/appConstants.js";
 import { dateToString } from "../../utils/dateUtils.js";
-import { Link } from "react-router";
 import {
 	commentOnPost,
 	likePost,
 	removeLikeFromPost,
 } from "../../services/postAPIs.js";
+
 import { useUser } from "../../contexts/UserContext.jsx";
 
-import "../../css/post.css";
 import CommentSection from "./CommentSection.jsx";
+import LikePost from "../Buttons/LikePost.jsx";
+
+import "../../css/post.css";
 
 export default function PostDetails() {
-	const { userId, setErrors, socket } = useUser();
+	const { userId, enqueueError } = useUser();
 	const { postId } = useParams();
 
 	const [post, setPost] = useState({});
@@ -42,6 +45,13 @@ export default function PostDetails() {
 		} catch (err) {
 			console.log(err);
 		}
+	}
+
+	function likeStateChange() {
+		setPost((prevPost) => {
+			prevPost.liked = !prevPost.liked;
+			return prevPost;
+		});
 	}
 
 	if (!post.user) {
@@ -93,46 +103,7 @@ export default function PostDetails() {
 
 				{/* Card Footer (Interactions) */}
 				<div className="d-flex justify-content-between mt-3 border-top pt-2">
-					<div>
-						<span className="m-1">{post.likes.length}</span>
-						{post.liked ? (
-							<button
-								onClick={async () => {
-									const result = await removeLikeFromPost(
-										postId,
-										userId,
-										setErrors
-									);
-
-									if (!result.success) return;
-
-									setPost((prevPost) => {
-										prevPost.liked = false;
-										return prevPost;
-									});
-								}}
-								className="btn btn-outline-primary btn-sm"
-							>
-								Unlike
-							</button>
-						) : (
-							<button
-								onClick={async () => {
-									await likePost(postId, userId, setErrors);
-
-									if (!result.success) return;
-
-									setPost((prevPost) => {
-										prevPost.liked = true;
-										return prevPost;
-									});
-								}}
-								className="btn btn-outline-primary btn-sm"
-							>
-								Like
-							</button>
-						)}
-					</div>
+					<LikePost value={{post, likeStateChange}}/>
 					
 					<button className="btn btn-outline-success btn-sm">
 						Share
@@ -159,13 +130,13 @@ export default function PostDetails() {
 								postId,
 								userId,
 								myComment,
-								setErrors
+								enqueueError
 							);
 
 							if (newComment) {
 								setPost((prev) => ({
 									...prev,
-									comments: [newComment, ...prev.comments], // ✅ Immutably update state
+									comments: [newComment, ...prev.comments],
 								}));
 							}
 						}}

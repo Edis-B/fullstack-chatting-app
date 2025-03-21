@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { dateToString } from "../../utils/dateUtils.js";
+import { likePost } from "../../services/postAPIs.js";
 
 export default function Post({ post, user }) {
 	return (
@@ -45,7 +46,7 @@ export default function Post({ post, user }) {
 				>
 					View Details
 				</Link>
-				<button className="btn btn-outline-primary btn-sm">Like</button>
+				<button onClick={() => likePost(postId, user._id, setErrors)} className="btn btn-outline-primary btn-sm">Like</button>
 				<Link
 					to={`/post/${post._id}`}
 					className="btn btn-outline-secondary btn-sm"

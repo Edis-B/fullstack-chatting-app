@@ -220,34 +220,39 @@ export default function Photos() {
 					</div>
 					{galleries.length > 0 ? (
 						galleries.map((gallery) => (
-							<div
-								key={gallery._id}
-								className="p-3 border rounded bg-light shadow-sm text-center"
-							>
+							<Link to={`/gallery/${gallery._id}`}>
 								<div
-									className="d-flex flex-wrap"
-									style={{ width: "100px", height: "100px" }}
+									key={gallery._id}
+									className="p-3 border rounded bg-light shadow-sm text-center"
 								>
-									{gallery.previews?.length > 0 ? (
-										gallery.previews.map((img) => (
-											<img
-												key={img._id}
-												src={img.url}
-												alt="Preview"
-												className="m-1"
-												style={{
-													width: "45px",
-													height: "45px",
-													objectFit: "cover",
-												}}
-											/>
-										))
-									) : (
-										<></>
-									)}
+									<div
+										className="d-flex flex-wrap"
+										style={{
+											width: "100px",
+											height: "100px",
+										}}
+									>
+										{gallery.previews?.length > 0 ? (
+											gallery.previews.map((img) => (
+												<img
+													key={img._id}
+													src={img.url}
+													alt="Preview"
+													className="m-1"
+													style={{
+														width: "45px",
+														height: "45px",
+														objectFit: "cover",
+													}}
+												/>
+											))
+										) : (
+											<></>
+										)}
+									</div>
+									<h6 className="mt-2">{gallery.name}</h6>
 								</div>
-								<h6 className="mt-2">{gallery.name}</h6>
-							</div>
+							</Link>
 						))
 					) : (
 						<p>No galleries.</p>

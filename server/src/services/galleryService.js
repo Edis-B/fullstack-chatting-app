@@ -9,7 +9,7 @@ const galleryService = {
 			.findById(userId)
 			.populate({
 				path: "galleries",
-				populate: "images",
+				populate: "photos",
 			})
 			.lean();
 
@@ -17,10 +17,15 @@ const galleryService = {
 			throw new Error("User with such id not found!");
 		}
 
-		const galleries = user.galleries ?? [];
+		let galleries = user.galleries ?? [];
 
 		if (galleries && galleries.length > 0) {
-			galleries.map((g) => (g.previews = g.images.limit(4)));
+			galleries = galleries.map((g) => {
+				return {
+					...g,
+					previews: !!g.photos ? g.photos.slice(0, 4) : [],
+				};
+			});
 		}
 
 		return galleries;
@@ -64,7 +69,6 @@ const galleryService = {
 			console.log(err);
 			throw new Error("Something went wrong creating gallery!");
 		}
-		
 	},
 	async deleteGallery(req) {
 		const { userId, galleryId } = req.body;
