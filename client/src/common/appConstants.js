@@ -15,3 +15,9 @@ export const contentTypes = {
 	PHOTOS: "photos",
 	PEOPLE: "people",
 };
+
+export const visibilityTypes = {
+	PUBLIC: "public",
+	FRIENDS: "friends",
+	ONLY_ME: "only me",
+};

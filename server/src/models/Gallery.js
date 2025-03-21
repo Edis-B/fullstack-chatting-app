@@ -16,7 +16,7 @@ const gallerySchema = new Schema({
 		default: visibilityTypes.PUBLIC,
 		required: [true, "Post visibility is required!"],
 	},
-	desctiption: {
+	description: {
 		type: String,
 	},
 	gallery: {

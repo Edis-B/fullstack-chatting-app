@@ -3,6 +3,26 @@ import photoModel from "../models/Photo.js";
 import userModel from "../models/User.js";
 
 const galleryService = {
+	async editGallery(req) {
+		const { userId, galleryId, galleryData } = req.body;
+
+		let gallery = await galleryModel.findById(galleryId);
+
+		if (gallery.user != userId) {
+			throw new Error("Unauthorized");
+		}
+
+		try {
+			gallery = Object.assign(gallery, galleryData); // Merge gallery data
+			
+			await gallery.save();
+		} catch (err) {
+			console.log(err);
+			throw new Error("Something went wrong editting Gallery settings");
+		}
+
+
+	},
 	async getUserGalleries(req) {
 		const { profileId } = req.query;
 
@@ -74,12 +94,12 @@ const galleryService = {
 	async deleteGallery(req) {
 		const { userId, galleryId } = req.body;
 
-		const gallery = await galleryModel.findById(galleryId).populate("user");
-		
-		if (gallery.user._id != userId) {
+		const gallery = await galleryModel.findById(galleryId);
+
+		if (gallery.user != userId) {
 			throw new Error("Unauthorized");
 		}
-		
+
 		try {
 			await galleryModel.findByIdAndDelete(galleryId);
 
