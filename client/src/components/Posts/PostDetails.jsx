@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams,Link } from "react-router";
+import { useParams, Link, useNavigate } from "react-router";
 
 import { host } from "../../common/appConstants.js";
 import { dateToString } from "../../utils/dateUtils.js";
@@ -15,8 +15,11 @@ import CommentSection from "./CommentSection.jsx";
 import LikePost from "../Buttons/LikePost.jsx";
 
 import "../../css/post.css";
+import DeletePost from "../Buttons/DeletePost.jsx";
 
 export default function PostDetails() {
+	const navigate = useNavigate();
+
 	const { userId, enqueueError } = useUser();
 	const { postId } = useParams();
 
@@ -103,8 +106,10 @@ export default function PostDetails() {
 
 				{/* Card Footer (Interactions) */}
 				<div className="d-flex justify-content-between mt-3 border-top pt-2">
-					<LikePost value={{post, likeStateChange}}/>
-					
+					<DeletePost value={{ postId, action: () => navigate('/profile') }} />
+
+					<LikePost value={{ post, likeStateChange }} />
+
 					<button className="btn btn-outline-success btn-sm">
 						Share
 					</button>

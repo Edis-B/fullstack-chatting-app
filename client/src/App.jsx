@@ -61,7 +61,14 @@ function App() {
 					<Route path="/register" element={<Register />} />
 
 					{/* Profile */}
-					<Route path="/profile" element={<Profile />} />
+					<Route
+						path="/profile"
+						element={
+							<ProfileProvider>
+								<Profile />
+							</ProfileProvider>
+						}
+					/>
 					<Route
 						path="/profile/:profileUserId"
 						element={

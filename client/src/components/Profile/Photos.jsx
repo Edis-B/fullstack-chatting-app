@@ -19,8 +19,13 @@ export default function Photos() {
 		if (!userId) return;
 
 		fetchUserPhotos(userId);
-		fetchUserGalleries(userId);
 	}, [userId]);
+
+	useEffect(() => {
+		if (!profileId) return;
+
+		fetchUserGalleries(profileId);
+	}, [profileId]);
 
 	function isValidImageUrl(url) {
 		return url.match(httpUrlRegex);
@@ -85,11 +90,11 @@ export default function Photos() {
 		}
 	}
 
-	async function fetchUserGalleries(userId) {
+	async function fetchUserGalleries(profileId) {
 		try {
 			const { response, data } = await request.get(
 				`${host}/gallery/get-user-galleries`,
-				{ userId }
+				{ profileId }
 			);
 
 			if (!response.ok) {
@@ -114,7 +119,7 @@ export default function Photos() {
 				credentials: "include",
 				body: JSON.stringify({
 					userId,
-					imageUrl,
+					imageUrls: imageUrl,
 				}),
 			});
 
@@ -218,13 +223,14 @@ export default function Photos() {
 							Create Gallery
 						</Link>
 					</div>
+
 					{galleries.length > 0 ? (
 						galleries.map((gallery) => (
-							<Link to={`/gallery/${gallery._id}`}>
-								<div
-									key={gallery._id}
-									className="p-3 border rounded bg-light shadow-sm text-center"
-								>
+							<Link
+								key={gallery._id}
+								to={`/gallery/${gallery._id}`}
+							>
+								<div className="p-3 border rounded bg-light shadow-sm text-center">
 									<div
 										className="d-flex flex-wrap"
 										style={{

@@ -312,6 +312,28 @@ const postService = {
 
 		return "Successfully unliked comment";
 	},
+	async deletePost(req) {
+		const { userId, postId } = req.body;
+
+		if (userId != req.user._id) {
+			throw new Error("Unauthorized");
+		}
+
+		try {
+			await postModel.findByIdAndDelete(postId);
+			await userModel.findByIdAndUpdate(userId, {
+				$pull: {
+					posts: postId,
+					likedPosts: postId,
+				},
+			});
+		} catch (err) {
+			console.log(err);
+			throw new Error("Something went wrong deleting post");
+		}
+
+		return "Successfully deleted post";
+	},
 };
 
 export default postService;

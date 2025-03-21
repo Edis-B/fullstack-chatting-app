@@ -1,8 +1,8 @@
-import { useParams, Link } from "react-router";
+import { useParams, Link, useNavigate } from "react-router";
 import { useState, useEffect } from "react";
 
 import { useProfile } from "../../contexts/ProfileContext.jsx";
-import { contentTypes } from "../../common/appConstants.js";
+import { contentTypes, host } from "../../common/appConstants.js";
 
 import ProfileHeader from "./ProfileHeader.jsx";
 import ProfileHeaderEdit from "./ProfileHeaderEdit.jsx";
@@ -11,8 +11,10 @@ import Friends from "./Friends.jsx";
 import Photos from "./Photos.jsx";
 
 export default function Profile() {
+	const navigate = useNavigate();
+
 	const { content, profileUserId } = useParams();
-	const { profileId, setProfileId, editActive } = useProfile();
+	const { profileId, setProfileId, editActive } = useProfile() || {};
 
 	const [selectedNav, setSelectedNav] = useState({});
 

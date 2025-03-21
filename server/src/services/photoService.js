@@ -2,27 +2,29 @@ import photoModel from "../models/Photo.js";
 import userModel from "../models/User.js";
 
 const photoService = {
-	async uploadPhoto(req) {
-		const { userId, imageUrl } = req.body;
+	async uploadPhotos(req) {
+		const { userId, imageUrls } = req.body;
 
 		if (userId != req.user?.id) {
 			throw new Error("Unauthorized");
 		}
 
-		if (!imageUrl) throw new Error("Image url is required!");
+		if (!imageUrls) throw new Error("Image url is required!");
 
 		try {
-			const photo = await photoModel.create({
-				url: imageUrl,
-				date: Date.now(),
-				user: userId,
-			});
+			for (const imageUrl of imageUrls) {
+				const photo = await photoModel.create({
+					url: imageUrl,
+					date: Date.now(),
+					user: userId,
+				});
 
-			await userModel.findByIdAndUpdate(userId, {
-				$push: {
-					photos: photo._id,
-				},
-			});
+				await userModel.findByIdAndUpdate(userId, {
+					$push: {
+						photos: photo._id,
+					},
+				});
+			}
 		} catch (err) {
 			console.log(err);
 			throw new Error("Something went wrong saving photo!");

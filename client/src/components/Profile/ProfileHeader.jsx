@@ -8,15 +8,15 @@ import { useUser } from "../../contexts/UserContext.jsx";
 import { useProfile } from "../../contexts/ProfileContext.jsx";
 import { contentTypes } from "../../common/appConstants.js";
 
-
 import "../../css/profile.css"
+
 export default function ProfileHeader() {
 	const navigate = useNavigate();
 
 	const { profileUserId } = useParams();
 
 	const { userId } = useUser();
-	const { profileId, setEditActive } = useProfile();
+	const { profileId, setEditActive } = useProfile() || {};
 
 	const [profileData, setProfileData] = useState({});
 

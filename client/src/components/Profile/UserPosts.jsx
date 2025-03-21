@@ -4,7 +4,7 @@ import { useProfile } from "../../contexts/ProfileContext";
 import Post from "../Posts/Post";
 
 export default function UserPosts() {
-	const { profileId } = useProfile();
+	const { profileId } = useProfile() || {};
 	const [postsData, setPostsData] = useState({ posts: [], user: {} });
 
 	useEffect(() => {

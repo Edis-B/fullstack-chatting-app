@@ -1,4 +1,5 @@
 import { Schema, Types, model } from "mongoose";
+import { visibilityTypes } from "../common/entityConstraints.js";
 
 const postSchema = new Schema({
 	date: {
@@ -7,11 +8,17 @@ const postSchema = new Schema({
 	},
 	content: {
 		type: String,
-		required: true,
 	},
 	user: {
 		type: Types.ObjectId,
 		ref: "User",
+		required: true,
+	},
+	visibility: {
+		type: String,
+		enum: Object.values(visibilityTypes),
+		default: visibilityTypes.PUBLIC,
+		required: [true, "Post visibility is required!"],
 	},
 	images: [
 		{
@@ -36,10 +43,16 @@ const postSchema = new Schema({
 	],
 });
 
-// Pre-save hook to validate first-time creation
+// Validate first-time creation
 postSchema.pre("save", function (next) {
-	if (this.isNew && !this.content && (!this.images || this.images.length === 0)) {
-		return next(new Error("Either content or at least one image is required."));
+	if (
+		this.isNew &&
+		!this.content &&
+		(!this.images || this.images.length === 0)
+	) {
+		return next(
+			new Error("Either content or at least one image is required.")
+		);
 	}
 	next();
 });

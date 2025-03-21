@@ -1,12 +1,13 @@
 import galleryModel from "../models/Gallery.js";
+import photoModel from "../models/Photo.js";
 import userModel from "../models/User.js";
 
 const galleryService = {
 	async getUserGalleries(req) {
-		const { userId } = req.query;
+		const { profileId } = req.query;
 
 		const user = await userModel
-			.findById(userId)
+			.findById(profileId)
 			.populate({
 				path: "galleries",
 				populate: "photos",
@@ -31,7 +32,7 @@ const galleryService = {
 		return galleries;
 	},
 	async getGallery(req) {
-		const { userId, galleryId } = req.query;
+		const { galleryId } = req.query;
 
 		const gallery = await galleryModel
 			.findById(galleryId)
@@ -73,6 +74,12 @@ const galleryService = {
 	async deleteGallery(req) {
 		const { userId, galleryId } = req.body;
 
+		const gallery = await galleryModel.findById(galleryId).populate("user");
+		
+		if (gallery.user._id != userId) {
+			throw new Error("Unauthorized");
+		}
+		
 		try {
 			await galleryModel.findByIdAndDelete(galleryId);
 
@@ -84,6 +91,45 @@ const galleryService = {
 			throw new Error("Something went wrong deleting gallery!");
 		}
 		return "Successfully deleted gallery";
+	},
+	async addExistingPhotosToGallery(req) {
+		const { photoIds, galleryId } = req.body;
+
+		try {
+			await galleryModel.findByIdAndUpdate(galleryId, {
+				$push: {
+					photos: photoIds,
+				},
+			});
+		} catch (err) {
+			throw new Error("Something went wrong saving photos.");
+		}
+	},
+	async createImagesAndAddToGallery(req) {
+		const { imageUrls, galleryId, userId } = req.body;
+
+		const photoIds = await Promise.all(
+			imageUrls.map(async (img) => {
+				const photo = await photoModel.create({
+					user: userId,
+					gallery: galleryId,
+					date: Date.now(),
+					url: img,
+				});
+
+				return photo._id;
+			})
+		);
+
+		try {
+			await galleryModel.findByIdAndUpdate(galleryId, {
+				$push: {
+					photos: photoIds,
+				},
+			});
+		} catch (err) {
+			throw new Error("Something went wrong saving photos.");
+		}
 	},
 };
 

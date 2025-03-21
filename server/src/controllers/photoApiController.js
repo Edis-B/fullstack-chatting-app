@@ -26,7 +26,7 @@ photoApiController.post("/remove-photo", async (req, res) => {
 
 photoApiController.post("/upload-photo", async (req, res) => {
 	try {
-		const result = await photoService.uploadPhoto(req);
+		const result = await photoService.uploadPhotos(req);
 		res.json(result);
 	} catch (err) {
 		const errMessage = getErrorMessage(err);

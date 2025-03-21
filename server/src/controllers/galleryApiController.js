@@ -4,6 +4,26 @@ import { getErrorMessage } from "../utils/errorUtils.js";
 
 const galleryApiController = Router();
 
+galleryApiController.post("/add-photos-to-gallery", async (req, res) => {
+	try {
+		const result = await galleryService.addExistingPhotosToGallery(req);
+		res.json(result);
+	} catch (err) {
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
+	}
+});
+
+galleryApiController.post("/create-image-urls-to-gallery", async (req, res) => {
+	try {
+		const result = await galleryService.createImagesAndAddToGallery(req);
+		res.json(result);
+	} catch (err) {
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
+	}
+});
+
 galleryApiController.get("/get-user-galleries", async (req, res) => {
 	try {
 		const result = await galleryService.getUserGalleries(req);

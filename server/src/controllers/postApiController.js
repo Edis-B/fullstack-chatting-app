@@ -1,10 +1,21 @@
 import { Router } from "express";
+
 import postService from "../services/postService.js";
 import { getErrorMessage } from "../utils/errorUtils.js";
 
 const postApiController = Router();
 
-postApiController.get('/get-posts-by-query', async (req, res) => {
+postApiController.delete("/delete-post", async (req, res) => {
+	try {
+		const result = await postService.deletePost(req);
+		res.json(result);
+	} catch (err) {
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
+	}
+});
+
+postApiController.get("/get-posts-by-query", async (req, res) => {
 	try {
 		const result = await postService.getPostsFromQuery(req);
 		res.json(result);
@@ -12,7 +23,7 @@ postApiController.get('/get-posts-by-query', async (req, res) => {
 		const errMessage = getErrorMessage(err);
 		res.status(400).json(errMessage);
 	}
-})
+});
 
 postApiController.post("/remove-like-from-comment", async (req, res) => {
 	try {

@@ -11,10 +11,9 @@ import "../../css/profile.css";
 export default function ProfileHeaderEdit() {
 	const navigate = useNavigate();
 
-	const { profileUserId } = useParams();
-	const { userId, setErrors } = useUser();
+	const { setErrors } = useUser();
 
-	const { profileId, setEditActive } = useProfile();
+	const { setEditActive } = useProfile();
 
 	const [profileData, setProfileData] = useState({
 		username: "",
@@ -22,32 +21,6 @@ export default function ProfileHeaderEdit() {
 		banner: "",
 		about: "",
 	});
-
-	useEffect(() => {
-		fetchProfileData(profileId);
-	}, [profileId]);
-
-	async function fetchProfileData(id) {
-		try {
-			const response = await fetch(
-				`${host}/user/get-user-profile-data?userId=${id ?? ""}`,
-				{
-					method: "GET",
-					credentials: "include",
-				}
-			);
-
-			const data = await response.json();
-			if (!profileUserId) {
-				navigate(`/profile/${data}`);
-				return;
-			}
-
-			setProfileData(data);
-		} catch (err) {
-			console.log(err);
-		}
-	}
 
 	function handleChange(e) {
 		setProfileData({ ...profileData, [e.target.name]: e.target.value });

@@ -1,9 +1,30 @@
+import { host } from "../../common/appConstants";
 import { useUser } from "../../contexts/UserContext";
 import { removeCommentFromPost } from "../../services/postAPIs";
+import request from "../../utils/request.js";
 
-export default function DeleteComment({ value }) {
+export default function DeletePost({ value }) {
 	const { userId, enqueueError } = useUser();
-	const { postId, commentId, stateChange } = value;
+
+    // Required values
+	const { postId, action } = value;
+
+	async function deletePost() {
+		try {
+			const { response, data } = await request.delete(
+				`${host}/post/delete-post`,
+				{ userId, postId }
+			);
+
+			if (!response.ok) {
+				enqueueError(data);
+				return;
+			}
+		} catch (err) {
+			console.log(err);
+			enqueueError(err);
+		}
+	}
 
 	return (
 		<div>
@@ -16,21 +37,16 @@ export default function DeleteComment({ value }) {
 
 					if (!allow) return;
 
-					await removeCommentFromPost(
-						postId,
-						userId,
-						commentId,
-						enqueueError
-					);
+					await deletePost();
 
-					stateChange(commentId);
+					action(postId);
 				}}
 			>
 				<i
 					className="bi bi-trash align-items-center d-flex m-1"
 					style={{ fontSize: "1.2rem" }}
 				/>
-				<p className="m-0">Delete comment</p>
+				<p className="m-0">Delete post</p>
 			</button>
 		</div>
 	);

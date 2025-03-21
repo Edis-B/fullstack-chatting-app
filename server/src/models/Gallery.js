@@ -1,4 +1,5 @@
 import { Types, model, Schema } from "mongoose";
+import { visibilityTypes } from "../common/entityConstraints.js";
 
 const gallerySchema = new Schema({
 	dateCreated: {
@@ -8,6 +9,12 @@ const gallerySchema = new Schema({
 	name: {
 		type: String,
 		required: [true, "Gallery name is required!"],
+	},
+	visibility: {
+		type: String,
+		enum: Object.values(visibilityTypes),
+		default: visibilityTypes.PUBLIC,
+		required: [true, "Post visibility is required!"],
 	},
 	desctiption: {
 		type: String,
