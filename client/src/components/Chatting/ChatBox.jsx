@@ -5,6 +5,7 @@ import { host, client } from "../../common/appConstants.js";
 import ChatBoxHeader from "./ChatBoxHeader";
 import { useChat } from "../../contexts/ChatContext.jsx";
 import { useUser } from "../../contexts/UserContext.jsx";
+import { dateTimeFormat } from "../../utils/dateUtils.js";
 
 export default function ChatBox() {
 	const { socket } = useUser();
@@ -19,13 +20,27 @@ export default function ChatBox() {
 	const [page, setPage] = useState(1);
 
 	useEffect(() => {
+		const div = chatBoxRef.current;
+
+		if (!div) return;
+
+		div.addEventListener("scroll", handleScroll);
+
+		return () => {
+			if (div) {
+				div.removeEventListener("scroll", handleScroll);
+			}
+		};
+	}, []);
+
+	useEffect(() => {
 		if (!chatId) return;
-		
+
 		fetchData();
 
 		setChatHistory([]);
 		setPage(1);
-	
+
 		fetchChatHistory(chatId, 1);
 
 		if (socket) {
@@ -43,20 +58,6 @@ export default function ChatBox() {
 			scrollToBottom();
 		}
 	}, [chatHistory]); // Scroll to bottom when chat history updates
-
-	useEffect(() => {
-		const div = chatBoxRef.current;
-
-		if (!div) return;
-
-		div.addEventListener("scroll", handleScroll);
-
-		return () => {
-			if (div) {
-				div.removeEventListener("scroll", handleScroll);
-			}
-		};
-	}, []);
 
 	useEffect(() => {
 		if (isAtTop) {
@@ -127,7 +128,7 @@ export default function ChatBox() {
 				});
 
 				setPage((prev) => prev + 1);
-			} 
+			}
 
 			if (!response.ok) {
 				alert(data);
@@ -138,6 +139,7 @@ export default function ChatBox() {
 		}
 	}
 
+	let previousDate;
 	return (
 		<div className="chatbox-container d-flex flex-column h-auto">
 			{/* Chat Box Header */}
@@ -149,71 +151,99 @@ export default function ChatBox() {
 				ref={chatBoxRef}
 				style={{ maxHeight: "calc(100vh - 150px)" }} // Adjust based on header and input height
 			>
-				{Array.isArray(chatHistory) &&
-					chatHistory.map((message) => {
+				{chatHistory.length > 0 ? (
+					chatHistory.map((message, index) => {
 						const isCurrentUser =
 							message.user?.username === currentUsername;
 
-						return isCurrentUser ? (
-							// Current User's Message (Right-Aligned)
-							<div
-								className="message d-flex align-items-start mb-3 justify-content-end"
-								key={message._id}
-							>
-								{/* Message Content */}
-								<div className="d-flex flex-column align-items-end">
-									{/* Username */}
-									<div className="text-muted small">
-										{message.user.username}
+						previousDate = chatHistory[index - 1]?.date;
+						const within5Minutes =
+							new Date(message.date) - new Date(previousDate) >
+							1000 * 60 * 5;
+
+						return (
+							<div key={message._id}>
+								{(previousDate === undefined ||
+									within5Minutes) && (
+									<div
+										className="text-muted d-flex justify-content-center"
+										key={message.date}
+									>
+										{dateTimeFormat.format(
+											new Date(message.date)
+										)}
 									</div>
-									{/* Message */}
-									<div className="message-content bg-primary text-white p-2 rounded">
-										<p className="mb-0">{message.text}</p>
+								)}
+
+								{isCurrentUser ? (
+									// Current User's Message (Right-Aligned)
+									<div
+										className="message d-flex align-items-start mb-3 justify-content-end"
+										key={message._id}
+									>
+										{/* Message Content */}
+										<div className="d-flex flex-column align-items-end">
+											{/* Username */}
+											<div className="text-muted small">
+												{message.user.username}
+											</div>
+											{/* Message */}
+											<div className="message-content bg-primary text-white p-2 rounded">
+												<p className="mb-0">
+													{message.text}
+												</p>
+											</div>
+										</div>
+										{/* Profile Picture */}
+										<img
+											src={message.user.image}
+											alt={message.user.username}
+											className="rounded-circle ms-2"
+											style={{
+												width: "48px",
+												height: "48px",
+												objectFit: "cover",
+											}}
+										/>
 									</div>
-								</div>
-								{/* Profile Picture */}
-								<img
-									src={message.user.image}
-									alt={message.user.username}
-									className="rounded-circle ms-2"
-									style={{
-										width: "48px",
-										height: "48px",
-										objectFit: "cover",
-									}}
-								/>
-							</div>
-						) : (
-							// Sender's Message (Left-Aligned)
-							<div
-								className="message d-flex align-items-start mb-3"
-								key={message._id}
-							>
-								{/* Profile Picture */}
-								<img
-									src={message.user.image}
-									alt={message.user.username}
-									className="rounded-circle me-2"
-									style={{
-										width: "48px",
-										height: "48px",
-										objectFit: "cover",
-									}}
-								/>
-								{/* Message Content */}
-								<div className="d-flex flex-column align-items-start">
-									{/* Username */}
-									<div className="text-muted small">
-										{message.user.username}
+								) : (
+									// Sender's Message (Left-Aligned)
+									<div
+										className="message d-flex align-items-start mb-3"
+										key={message._id}
+									>
+										{/* Profile Picture */}
+										<img
+											src={message.user.image}
+											alt={message.user.username}
+											className="rounded-circle me-2"
+											style={{
+												width: "48px",
+												height: "48px",
+												objectFit: "cover",
+											}}
+										/>
+										{/* Message Content */}
+										<div className="d-flex flex-column align-items-start">
+											{/* Username */}
+											<div className="text-muted small">
+												{message.user.username}
+											</div>
+											{/* Message */}
+											<div className="message-content bg-light p-2 rounded">
+												<p className="mb-0">
+													{message.text}
+												</p>
+											</div>
+										</div>
 									</div>
-									{/* Message */}
-									<div className="message-content bg-light p-2 rounded">
-										<p className="mb-0">{message.text}</p>
-									</div>
-								</div>
+								)}
 							</div>
 						);
-					})}
+					})
+				) : (
+					<p>No messages yet.</p>
+				)}
 			</div>
 		</div>
 	);

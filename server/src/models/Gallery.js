@@ -19,9 +19,6 @@ const gallerySchema = new Schema({
 	description: {
 		type: String,
 	},
-	gallery: {
-		type: String,
-	},
 	user: {
 		ref: "User",
 		type: Types.ObjectId,

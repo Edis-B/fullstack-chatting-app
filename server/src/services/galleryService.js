@@ -4,8 +4,10 @@ import userModel from "../models/User.js";
 
 const galleryService = {
 	async editGallery(req) {
-		const { userId, galleryId, galleryData } = req.body;
+		const { userId, galleryData } = req.body;
 
+		const galleryId = galleryData._id;
+		
 		let gallery = await galleryModel.findById(galleryId);
 
 		if (gallery.user != userId) {
@@ -14,14 +16,12 @@ const galleryService = {
 
 		try {
 			gallery = Object.assign(gallery, galleryData); // Merge gallery data
-			
+
 			await gallery.save();
 		} catch (err) {
 			console.log(err);
 			throw new Error("Something went wrong editting Gallery settings");
 		}
-
-
 	},
 	async getUserGalleries(req) {
 		const { profileId } = req.query;

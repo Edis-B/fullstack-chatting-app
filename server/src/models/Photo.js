@@ -9,6 +9,9 @@ const photoSchema = new Schema({
 		type: Date,
 		required: true,
 	},
+	caption: {
+		type: String,
+	},
 	user: {
 		ref: "User",
 		type: Types.ObjectId,

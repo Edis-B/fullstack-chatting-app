@@ -55,8 +55,9 @@ const photoService = {
 		return "Successfully removed photo.";
 	},
 	async getUserPhotos(req) {
-		const { userId } = req.query;
-
+		let { userId, excluded } = req.query;
+		excluded = Array.isArray(excluded) ? excluded : [excluded];
+		
 		if (!userId) {
 			throw new Error("User id missing!");
 		}
@@ -65,6 +66,12 @@ const photoService = {
 
 		if (!user) {
 			throw new Error("User not found!");
+		}
+
+		if (excluded.length > 0) {
+			user.photos = user.photos.filter((p) =>
+				excluded.some((e) => e != p._id)
+			);
 		}
 
 		return user.photos;

@@ -1,13 +1,18 @@
 async function request(method, url, params) {
 	const options = { method, credentials: "include" };
+	let { signal, ...restOfParams } = params;
 
 	if (method === "GET") {
-		url = `${url}?${new URLSearchParams(params)}`;
+		url = `${url}?${new URLSearchParams(restOfParams)}`;
 	} else {
 		options.headers = {
 			"Content-Type": "application/json",
 		};
-		options.body = JSON.stringify(params);
+		options.body = JSON.stringify(restOfParams);
+	}
+
+	if (signal) {
+		options.signal = signal;
 	}
 
 	try {

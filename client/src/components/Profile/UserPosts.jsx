@@ -2,24 +2,39 @@ import { useEffect, useState } from "react";
 import { host } from "../../common/appConstants";
 import { useProfile } from "../../contexts/ProfileContext";
 import Post from "../Posts/Post";
+import request from "../../utils/request";
+import { useUser } from "../../contexts/UserContext";
 
 export default function UserPosts() {
+	const { enqueueError}  = useUser();
 	const { profileId } = useProfile() || {};
 	const [postsData, setPostsData] = useState({ posts: [], user: {} });
 
 	useEffect(() => {
 		if (!profileId) return;
-		
-		fetchPosts();
+
+		const controller = new AbortController();
+
+		fetchPosts(controller.signal);
+
+		return () => controller.abort();
 	}, [profileId]);
 
-	async function fetchPosts() {
+	async function fetchPosts(signal) {
 		try {
-			const response = await fetch(
-				`${host}/post/get-users-posts?userId=${profileId}`,
-				{ method: "GET", credentials: "include" }
+			const { response, data } = await request.get(
+				`${host}/post/get-users-posts`,
+				{
+					userId: profileId,
+					signal,
+				}
 			);
-			const data = await response.json();
+
+			if (!response.ok) {
+				enqueueError(data);
+				return;
+			}
+			
 			setPostsData(data);
 		} catch (err) {
 			console.error(err);
@@ -30,11 +45,7 @@ export default function UserPosts() {
 		<div>
 			{postsData.posts?.length > 0 ? (
 				postsData.posts.map((post) => (
-					<Post
-						key={post._id}
-						post={post}
-						user={postsData.user}
-					/>
+					<Post key={post._id} post={post} user={postsData.user} />
 				))
 			) : (
 				<span>No posts.</span>
