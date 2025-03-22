@@ -74,4 +74,14 @@ galleryApiController.delete("/delete-gallery", async (req, res) => {
 	}
 });
 
+galleryApiController.delete("/remove-photo-from-gallery", async (req, res) => {
+	try {
+		const result = await galleryService.removePhotoFromGallery(req);
+		res.json(result);
+	} catch (err) {
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
+	}
+});
+
 export default galleryApiController;

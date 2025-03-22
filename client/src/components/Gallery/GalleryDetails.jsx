@@ -12,7 +12,6 @@ import request from "../../utils/request.js";
 import "../../css/gallery-details.css";
 
 export default function GalleryDetails() {
-
 	const { galleryId } = useParams();
 	const { userId, enqueueError } = useUser();
 
@@ -41,6 +40,34 @@ export default function GalleryDetails() {
 		}
 
 		setGallery(data);
+	}
+
+	function pushNewPhotos(photos) {
+		setGallery((prev) => ({
+			...prev,
+			photos: [...prev.photos, ...photos],
+		}));
+	}
+
+	async function removePhotoFromGallery(galleryId, userId, photoId) {
+		const { response, data } = await request.delete(
+			`${host}/gallery/remove-photo-from-gallery`,
+			{
+				galleryId,
+				photoId,
+				userId,
+			}
+		);
+
+		if (!response.ok) {
+			enqueueError(data);
+			return;
+		}
+
+		setGallery((prev) => ({
+			...prev,
+			photos: prev.photos.filter((p) => p._id != photoId),
+		}));
 	}
 
 	return (
@@ -76,7 +103,7 @@ export default function GalleryDetails() {
 				{gallery.description || "No description yet."}
 			</p>
 
-			<EditGalleryMenu gallery={gallery} />
+			<EditGalleryMenu gallery={gallery} photosState={pushNewPhotos} />
 
 			{/* Gallery Photos */}
 			<div className="row g-3 mt-3 mb-3">
@@ -90,6 +117,30 @@ export default function GalleryDetails() {
 								className="img-fluid rounded shadow-sm gallery-img"
 								onClick={() => setSelectedImage(img.url)}
 							/>
+
+							<div className="d-flex justify-content-end m-1">
+								<Button
+									variant="danger"
+									onClick={() => {
+										if (
+											confirm(
+												"Are you sure you want to remove this photo from the gallery?"
+											)
+										) {
+											removePhotoFromGallery(
+												galleryId,
+												userId,
+												img._id
+											);
+										}
+									}}
+								>
+									<i
+										className="bi bi-trash align-items-center d-flex flex-row m-1"
+										style={{ fontSize: "1.2rem" }}
+									/>
+								</Button>
+							</div>
 						</div>
 					))
 				) : (

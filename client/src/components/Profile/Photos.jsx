@@ -143,7 +143,7 @@ export default function Photos() {
 		<div className="d-flex flex-column align-items-center p-3 border rounded">
 			{profileId === userId && (
 				<>
-					<h5>Upload Profile Photo (via URL)</h5>
+					<h5>Upload Photo (via URL)</h5>
 
 					{/* Image Preview */}
 					{preview && (

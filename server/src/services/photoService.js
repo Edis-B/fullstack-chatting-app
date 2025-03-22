@@ -3,7 +3,9 @@ import userModel from "../models/User.js";
 
 const photoService = {
 	async uploadPhotos(req) {
-		const { userId, imageUrls } = req.body;
+		const { userId } = req.body;
+		let { imageUrls } = req.body;
+		imageUrls = Array.isArray(imageUrls) ? imageUrls : [imageUrls];
 
 		if (userId != req.user?.id) {
 			throw new Error("Unauthorized");
@@ -55,9 +57,9 @@ const photoService = {
 		return "Successfully removed photo.";
 	},
 	async getUserPhotos(req) {
-		let { userId, excluded } = req.query;
-		excluded = Array.isArray(excluded) ? excluded : [excluded];
-		
+		const { userId } = req.query;
+		let { excluded } = req.query;
+
 		if (!userId) {
 			throw new Error("User id missing!");
 		}
@@ -68,10 +70,12 @@ const photoService = {
 			throw new Error("User not found!");
 		}
 
-		if (excluded.length > 0) {
-			user.photos = user.photos.filter((p) =>
-				excluded.some((e) => e != p._id)
-			);
+		if (excluded?.length > 0) {
+			excluded = excluded.split(",");
+			user.photos = user.photos.filter((p) => {
+				const test = excluded.some((e) => e == p._id.toString());
+				return !test;
+			});
 		}
 
 		return user.photos;

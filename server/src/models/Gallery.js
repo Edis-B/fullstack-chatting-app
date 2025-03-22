@@ -32,6 +32,14 @@ const gallerySchema = new Schema({
 	],
 });
 
+function distinctImages(next) {
+	this.photos = [...new Set(this.photos)];
+	next();
+}
+
+gallerySchema.pre("save", distinctImages);
+gallerySchema.post("findByIdAndUpdate", distinctImages);
+
 const galleryModel = model("Gallery", gallerySchema);
 
 export default galleryModel;

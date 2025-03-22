@@ -7,7 +7,7 @@ const galleryService = {
 		const { userId, galleryData } = req.body;
 
 		const galleryId = galleryData._id;
-		
+
 		let gallery = await galleryModel.findById(galleryId);
 
 		if (gallery.user != userId) {
@@ -115,12 +115,20 @@ const galleryService = {
 	async addExistingPhotosToGallery(req) {
 		const { photoIds, galleryId } = req.body;
 
+		const photos = await photoModel.find({
+			_id: { $in: photoIds },
+		});
+
 		try {
-			await galleryModel.findByIdAndUpdate(galleryId, {
-				$push: {
-					photos: photoIds,
-				},
-			});
+			const gallery = await galleryModel
+				.findByIdAndUpdate(galleryId, {
+					$push: {
+						photos: photoIds,
+					},
+				})
+				.lean();
+
+			return photos;
 		} catch (err) {
 			throw new Error("Something went wrong saving photos.");
 		}
@@ -128,7 +136,13 @@ const galleryService = {
 	async createImagesAndAddToGallery(req) {
 		const { imageUrls, galleryId, userId } = req.body;
 
-		const photoIds = await Promise.all(
+		const user = await userModel.findById(userId);
+
+		if (!user) {
+			throw new Error("Unauthorized");
+		}
+
+		const photos = await Promise.all(
 			imageUrls.map(async (img) => {
 				const photo = await photoModel.create({
 					user: userId,
@@ -137,19 +151,44 @@ const galleryService = {
 					url: img,
 				});
 
-				return photo._id;
+				user.photos.push(photo._id);
+				await user.save();
+
+				return photo;
 			})
 		);
 
 		try {
-			await galleryModel.findByIdAndUpdate(galleryId, {
-				$push: {
-					photos: photoIds,
-				},
-			});
+			const gallery = await galleryModel
+				.findByIdAndUpdate(galleryId, {
+					$push: {
+						photos: photos.map((p) => p._id),
+					},
+				})
+				.lean();
+
+			return photos;
 		} catch (err) {
 			throw new Error("Something went wrong saving photos.");
 		}
+	},
+	async removePhotoFromGallery(req) {
+		const { galleryId, userId, photoId } = req.body;
+
+		if (userId != req.user?.id) {
+			throw new Error("Unauthorized");
+		}
+
+		try {
+			await galleryModel.findByIdAndUpdate(galleryId, {
+				$pull: { photos: photoId },
+			});
+		} catch (err) {
+			console.log(err);
+			throw new Error("Something went wrong removing photo!");
+		}
+		
+		return "Successfully removed photo from gallery";
 	},
 };
 

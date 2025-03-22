@@ -6,7 +6,7 @@ import { useUser } from "../../contexts/UserContext";
 import { host, visibilityTypes } from "../../common/appConstants.js";
 import request from "../../utils/request.js";
 
-export default function EditGalleryMenu({ gallery }) {
+export default function EditGalleryMenu({ gallery, photosState }) {
 	const { userId, enqueueError } = useUser();
 	const galleryId = gallery?._id;
 
@@ -19,6 +19,7 @@ export default function EditGalleryMenu({ gallery }) {
 	const [isFetchingPhotos, setIsFetchingPhotos] = useState(false);
 
 	const [imageUrl, setImageUrl] = useState("");
+	const [isUrlUploadActive, setIsUrlUploadActive] = useState(true);
 
 	const handleImageUrlChange = (e) => {
 		setImageUrl(e.target.value);
@@ -28,9 +29,10 @@ export default function EditGalleryMenu({ gallery }) {
 	const fetchUploadedImages = async () => {
 		setIsFetchingPhotos(true);
 		try {
+			const currentPhotos = gallery.photos.map((p) => p._id);
 			const { response, data } = await request.get(
 				`${host}/photo/get-user-photos`,
-				{ userId, excluded: gallery.photos.map((p) => p._id) }
+				{ userId, excluded: currentPhotos }
 			);
 
 			if (!response.ok) {
@@ -59,13 +61,14 @@ export default function EditGalleryMenu({ gallery }) {
 				}
 			);
 
-			if (response.ok) {
+			if (!response.ok) {
 				enqueueError(data);
 				return;
 			}
 
 			// Reset the input after adding
 			setImageUrl("");
+			photosState(data);
 		} catch (error) {
 			console.error("Failed to add image by URL", error);
 		}
@@ -107,13 +110,22 @@ export default function EditGalleryMenu({ gallery }) {
 
 	const handleAddSelectedImages = async () => {
 		try {
-			await request.post(`${host}/gallery/add-photos-to-gallery`, {
-				galleryId,
-				photoIds: selectedPhotos.map((p) => p._id),
-			});
+			const { response, data } = await request.post(
+				`${host}/gallery/add-photos-to-gallery`,
+				{
+					galleryId,
+					photoIds: selectedPhotos.map((p) => p._id),
+				}
+			);
+
+			if (!response.ok) {
+				enqueueError(data);
+				return;
+			}
 
 			// Reset after adding images
 			setSelectedPhotos([]);
+			photosState(data);
 		} catch (error) {
 			console.error("Failed to add selected images", error);
 		}
@@ -121,11 +133,11 @@ export default function EditGalleryMenu({ gallery }) {
 
 	const toggleImageSelection = (photo) => {
 		setSelectedPhotos((prev) => {
-			const contains = prev.some((p) => p.equals(photo));
+			const contains = prev.some((p) => p === photo);
 
-			contains
-				? prevSelected.filter((url) => url !== imageUrl)
-				: [...prevSelected, imageUrl];
+			return contains
+				? prev.filter((url) => url !== photo)
+				: [...prev, photo];
 		});
 	};
 
@@ -189,44 +201,60 @@ export default function EditGalleryMenu({ gallery }) {
 						<h4>Add More Images</h4>
 						<hr />
 
-						{/* Option 1: Add by URL */}
-						<div className="mb-3 d-flex flex-row">
-							<label htmlFor="image-url" className="form-label">
-								Enter Image URL
-							</label>
-							<input
-								type="text"
-								id="image-url"
-								className="form-control"
-								placeholder="Enter image URL"
-								value={imageUrl}
-								onChange={handleImageUrlChange}
-							/>
+						{/* Toggle Buttons */}
+						<div className="d-flex justify-content-around mb-3">
 							<Button
-								variant="primary"
-								className="mt-2"
-								onClick={handleAddImageByUrl}
+								variant={
+									isUrlUploadActive ? "primary" : "secondary"
+								}
+								onClick={() => setIsUrlUploadActive(true)}
 							>
-								Upload Image
+								Add by URL
+							</Button>
+							<Button
+								variant={
+									!isUrlUploadActive ? "primary" : "secondary"
+								}
+								onClick={() => {
+									setIsUrlUploadActive(false);
+									fetchUploadedImages();
+								}}
+							>
+								View Uploaded Images
 							</Button>
 						</div>
 
-						{/* Option 2: Fetch and select already uploaded images */}
-						<div className="mb-3">
-							<Button
-								variant="info"
-								onClick={fetchUploadedImages}
-								disabled={isFetchingPhotos}
-							>
-								{isFetchingPhotos
-									? "Loading..."
-									: "View Uploaded Images"}
-							</Button>
+						{/* Option 1: Add by URL */}
+						{isUrlUploadActive && (
+							<div className="mb-3">
+								<label
+									htmlFor="image-url"
+									className="form-label"
+								>
+									Enter Image URL
+								</label>
+								<input
+									type="text"
+									id="image-url"
+									className="form-control"
+									placeholder="Enter image URL"
+									value={imageUrl}
+									onChange={handleImageUrlChange}
+								/>
+								<Button
+									variant="primary"
+									className="mt-2"
+									onClick={handleAddImageByUrl}
+								>
+									Upload Image
+								</Button>
+							</div>
+						)}
 
-							{/* Display uploaded images */}
-							{uploadedPhotos.length > 0 ? (
-								<div className="mt-3">
-									<h5>Select images to add to the gallery</h5>
+						{/* Option 2: Select uploaded images */}
+						{!isUrlUploadActive && (
+							<div className="mb-3">
+								{uploadedPhotos.length > 0 ? (
 									<div className="row">
 										{uploadedPhotos.map((image) => (
 											<div
@@ -244,9 +272,10 @@ export default function EditGalleryMenu({ gallery }) {
 													}
 													style={{
 														cursor: "pointer",
-														border: selectedPhotos.some(
+														border: selectedPhotos?.some(
 															(i) =>
-																i.equals(image)
+																i._id ===
+																image._id
 														)
 															? "3px solid green"
 															: "none",
@@ -255,18 +284,20 @@ export default function EditGalleryMenu({ gallery }) {
 											</div>
 										))}
 									</div>
-								</div>
-							) : (<p>No other images uploaded.</p>)}
-						</div>
+								) : (
+									<p>No uploaded images found.</p>
+								)}
+							</div>
+						)}
 
-						{/* Button to add selected images */}
-						{selectedPhotos.length > 0 && (
+						{/* Add Selected Images */}
+						{selectedPhotos?.length > 0 && (
 							<Button
 								variant="success"
-								className="mt-3"
+								className="m-2"
 								onClick={handleAddSelectedImages}
 							>
-								Add Selected Images to Gallery
+								Add Selected Images
 							</Button>
 						)}
 
@@ -278,8 +309,6 @@ export default function EditGalleryMenu({ gallery }) {
 						>
 							Close
 						</Button>
-
-						<hr />
 					</div>
 				</div>
 			)}
@@ -288,6 +317,7 @@ export default function EditGalleryMenu({ gallery }) {
 				<div className="menu-overlay mt-4">
 					<div className="menu-content">
 						<h4>Edit Gallery</h4>
+                        <hr />
 
 						{/* Edit Gallery Form */}
 						<form onSubmit={saveEditGallery}>
