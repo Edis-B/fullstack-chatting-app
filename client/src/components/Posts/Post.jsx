@@ -46,7 +46,7 @@ export default function Post({ post, user }) {
 				>
 					View Details
 				</Link>
-				<button onClick={() => likePost(postId, user._id, setErrors)} className="btn btn-outline-primary btn-sm">Like</button>
+				<button onClick={() => likePost(postId, user._id, enqueueError)} className="btn btn-outline-primary btn-sm">Like</button>
 				<Link
 					to={`/post/${post._id}`}
 					className="btn btn-outline-secondary btn-sm"

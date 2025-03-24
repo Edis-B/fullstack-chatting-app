@@ -7,7 +7,7 @@ const UserContext = createContext();
 export function UserProvider({ children }) {
 	const [userId, setUserId] = useState(null);
 	const [socket, setSocket] = useState(null);
-	const [errors, setErrors] = useState([]);
+	const [messages, setMessages] = useState([]);
 	const [autherized, setAutherized] = useState(null);
 
 	useEffect(() => {
@@ -33,7 +33,7 @@ export function UserProvider({ children }) {
 	function logout() {
 		setUserId(null);
 		setSocket(null);
-		setErrors([]);
+		setMessages([]);
 		setAutherized(null);
 
 		if (socket) {
@@ -60,8 +60,12 @@ export function UserProvider({ children }) {
 		}
 	}
 
-	const enqueueError = async (error) => {
-		setErrors((prev) => [...prev, error]);
+	const enqueueInfo = async (message) => {
+		setMessages((prev) => [...prev, { type: "info", message }]);
+	};
+
+	const enqueueError = async (message) => {
+		setMessages((prev) => [...prev, { type: "error", message }]);
 	};
 
 	return (
@@ -71,15 +75,16 @@ export function UserProvider({ children }) {
 				setUserId,
 				socket,
 				setSocket,
-				errors,
-				setErrors,
+				messages,
+				setMessages,
 				autherized,
 				logout,
+				enqueueInfo,
 				enqueueError,
 			}}
 		>
 			{children}
-		</UserContext.Provider> //
+		</UserContext.Provider>
 	);
 }
 

@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 import { host, httpUrlRegex } from "../../common/appConstants.js";
 
-import "../../css/create-post.css"
+import "../../css/create-post.css";
 export default function CreatePost() {
-	const { userId, setError: setErrors } = useUser();
+	const { userId, enqueueError } = useUser();
 
 	const [content, setContent] = useState("");
 	const [images, setImages] = useState([]);
@@ -17,14 +17,11 @@ export default function CreatePost() {
 
 	async function addImage() {
 		if (!httpUrlRegex.test(imageInput)) {
-			setErrors((prev) => [
-				...prev,
-				"Image must start with http:// or https://",
-			]);
+			enqueueError("Image must start with http:// or https://");
 		}
 
 		if (images?.length >= 10) {
-			setErrors((prev) => [...prev, "Maximum 10 images per post"]);
+			enqueueError("Maximum 10 images per post");
 			return;
 		}
 
@@ -60,10 +57,10 @@ export default function CreatePost() {
 			const data = await response.json();
 
 			if (!response.ok) {
-				setErrors((prev) => [...prev, data]);
+				enqueueError(data);
 			}
 		} catch (err) {
-			setErrors((prev) => [...prev, err]);
+			enqueueError(err);
 		}
 	}
 
@@ -89,7 +86,10 @@ export default function CreatePost() {
 							{images?.length > 0 ? (
 								images.map((image, index) => (
 									<div className="d-flex flex-column image-container">
-										<img className="preview-image" src={image} />
+										<img
+											className="preview-image"
+											src={image}
+										/>
 										<button
 											type="button"
 											onClick={() => removeImage(index)}

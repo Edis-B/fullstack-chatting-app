@@ -6,7 +6,7 @@ import { useUser } from "../../contexts/UserContext.jsx";
 import "../../css/header.css"; // Import the new CSS file
 
 export default function Header() {
-	const { userId, setErrors, logout } = useUser();
+	const { userId, enqueueError, logout } = useUser();
 	const [image, setImage] = useState("");
 	const [searchQuery, setSearchQuery] = useState("");
 
@@ -38,16 +38,13 @@ export default function Header() {
 			const data = await response.json();
 
 			if (!response.ok) {
-				setErrors((prev) => [...prev, data]);
+				enqueueError(data);
 				return;
 			}
 
 			logout();
 		} catch (err) {
-			setErrors((prev) => [
-				...prev,
-				"Something went wrong when trying to log out",
-			]);
+			enqueueError("Something went wrong when trying to log out");
 		}
 	}
 
@@ -76,7 +73,7 @@ export default function Header() {
 
 				<nav className="nav-links">
 					<Link to="/chat">Chats</Link>
-					
+
 					<Link to="/post/create">New Post</Link>
 
 					{!!image ? (

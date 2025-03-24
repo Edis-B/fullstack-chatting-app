@@ -6,7 +6,7 @@ import { host, httpUrlRegex } from "../../common/appConstants.js";
 import request from "../../utils/request.js";
 
 export default function Photos() {
-	const { userId, setErrors } = useUser();
+	const { userId, enqueueError } = useUser();
 	const { profileId } = useProfile();
 
 	const [photos, setPhotos] = useState([]);
@@ -36,10 +36,9 @@ export default function Photos() {
 		setImageUrl(url);
 
 		if (!isValidImageUrl(url)) {
-			setErrors((prev) => [
-				...prev,
-				"Please enter a valid image URL ending in .jpg, .png, etc.",
-			]);
+			enqueueError(
+				"Please enter a valid image URL ending in .jpg, .png, etc."
+			);
 			setPreview(null);
 		} else {
 			setPreview(url); // Show the image preview
@@ -48,10 +47,7 @@ export default function Photos() {
 
 	async function handleUpload() {
 		if (!imageUrl) {
-			setErrors((prev) => [
-				...prev,
-				"Please enter a valid image URL before uploading.",
-			]);
+			enqueueError("Please enter a valid image URL before uploading.");
 			return;
 		}
 
@@ -75,17 +71,14 @@ export default function Photos() {
 			const data = await response.json();
 
 			if (!response.ok) {
-				setErrors((prev) => [...prev, data]);
+				enqueueError(data);
 				return;
 			}
 
 			setPhotos(data);
 		} catch (err) {
 			console.log(err);
-			setErrors((prev) => [
-				...prev,
-				"Something went wrong getting images",
-			]);
+			enqueueError("Something went wrong getting images");
 			return;
 		}
 	}
@@ -98,14 +91,14 @@ export default function Photos() {
 			);
 
 			if (!response.ok) {
-				setErrors((prev) => [...prev, data]);
+				enqueueError(data);
 				return;
 			}
 
 			setGalleries(data);
 		} catch (err) {
 			console.log(err);
-			setErrors((prev) => [...prev, err]);
+			enqueueError(err);
 		}
 	}
 
@@ -126,15 +119,12 @@ export default function Photos() {
 			const data = await response.json();
 
 			if (!response.ok) {
-				setErrors((prev) => [...prev, data]);
+				enqueueError(data);
 				return;
 			}
 		} catch (err) {
 			console.log(err);
-			setErrors((prev) => [
-				...prev,
-				"Something went wrong uploading image",
-			]);
+			enqueueError("Something went wrong uploading image");
 			return;
 		}
 	}

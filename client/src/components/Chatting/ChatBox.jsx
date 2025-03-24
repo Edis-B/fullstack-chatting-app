@@ -8,7 +8,7 @@ import { useUser } from "../../contexts/UserContext.jsx";
 import { dateTimeFormat } from "../../utils/dateUtils.js";
 
 export default function ChatBox() {
-	const { socket } = useUser();
+	const { socket, enqueueError } = useUser();
 	const { chatId } = useChat();
 
 	const chatBoxRef = useRef(null);
@@ -131,7 +131,7 @@ export default function ChatBox() {
 			}
 
 			if (!response.ok) {
-				alert(data);
+				enqueueError(data);
 			}
 		} catch (err) {
 			console.log(err);

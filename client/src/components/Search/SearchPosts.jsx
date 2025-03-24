@@ -9,7 +9,7 @@ import request from "../../utils/request.js";
 import Post from "../Posts/Post";
 
 export default function SearchPosts() {
-	const { setErrors } = useUser();
+	const { enqueueError } = useUser();
 	const { query } = useSearch().queryParameters;
 	const [posts, setPosts] = useState([]);
 
@@ -25,7 +25,7 @@ export default function SearchPosts() {
 			);
 
 			if (!response.ok) {
-				setErrors((prev) => [...prev, data]);
+				enqueueError(data);
 				return;
 			}
 

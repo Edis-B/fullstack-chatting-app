@@ -7,6 +7,7 @@ import { friendStatusButton } from "../../utils/friendUtils.jsx";
 import { useSearch } from "../../contexts/SearchContext";
 import { useUser } from "../../contexts/UserContext";
 import request from "../../utils/request.js";  
+import { redirectToChat } from "../../services/chatAPIs.js";
 
 export default function People() {
     const navigate = useNavigate();
@@ -28,35 +29,6 @@ export default function People() {
             setPeople(data);
         } catch (err) {
             console.error("Error fetching people:", err);
-        }
-    }
-
-    async function redirectToChat(username) {
-        try {
-            // Check if the chat already exists
-            const { data } = await request.get(`${host}/chat/does-chat-exist-with-cookie`, {
-                receiverUsername: username,
-            });
-
-			// Redirect
-            if (data.exists) {
-                return navigate(`/chat/${data.chatId}`);
-            }
-
-            const { data: currentUser } = await request.get(`${host}/user/get-username`);
-            const { data: chatTypes } = await request.get(`${host}/chat/chat-types`);
-
-            // Create a new chat
-            const { data: newChatData } = await request.post(`${host}/chat/create-new-chat`, {
-                participants: [username, currentUser],
-                type: chatTypes.DIRECT_MESSAGES,
-            });
-
-            if (newChatData) {
-                return navigate(`/chat/${newChatData.chatId}`);
-            }
-        } catch (err) {
-            console.error("Error checking or creating chat:", err);
         }
     }
 
@@ -97,7 +69,7 @@ export default function People() {
                                     <button
                                         className="btn btn-primary"
                                         onClick={() =>
-                                            redirectToChat(person.username)
+                                            redirectToChat(person.username, navigate)
                                         }
                                     >
                                         Chat

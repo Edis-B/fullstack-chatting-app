@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router";
+
 import { host, client } from "../../common/appConstants.js";
 import { useChat } from "../../contexts/ChatContext.jsx";
 import { useUser } from "../../contexts/UserContext.jsx";
-import { fetchUsers } from "../../services/userAPIs.js";
-
-import { sendFriendRequest } from "../../services/userAPIs.js";
 
 export default function UserList() {
 	const { id } = useParams();
 
-	const { userId, socket } = useUser();
+	const { userId, socket, enqueueError } = useUser();
 	const { setChatId } = useChat();
 
 	const navigate = useNavigate();
@@ -67,8 +65,9 @@ export default function UserList() {
 			});
 
 			const data = await response.json();
+
 			if (!response.ok) {
-				alert(data);
+				enqueueError(data);
 			}
 
 			if (!id) {

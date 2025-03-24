@@ -215,8 +215,6 @@ const userService = {
 					user.friendshipStatus = friendObj.status;
 					continue;
 				}
-
-				user.friendshipStatus = friendStatuses.NOT_FRIENDS;
 			}
 		}
 

@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router";
+
 import { host } from "../../common/appConstants.js";
 import { useChat } from "../../contexts/ChatContext.jsx";
-import { Link } from "react-router";
+import { useUser } from "../../contexts/UserContext.jsx";
+
 export default function ChatBoxHeader() {
+	const { enqueueError } = useUser();
 	const { chatId } = useChat();
 	const [header, setHeader] = useState({});
 
@@ -32,7 +36,7 @@ export default function ChatBoxHeader() {
 
 			const data = await response.json();
 			if (!response.ok) {
-				alert(data);
+				enqueueError(data);
 			}
 			return data;
 		} catch (err) {
@@ -43,9 +47,7 @@ export default function ChatBoxHeader() {
 	if (!header) return <div>Loading...</div>; // Show a loading state
 
 	return (
-		<Link
-			to={`/profile/${header._id}`}
-		>
+		<Link to={`/profile/${header._id}`}>
 			<div className="chat-header d-flex align-items-center p-3 border-bottom">
 				<img
 					src={header.image || "https://via.placeholder.com/40"}

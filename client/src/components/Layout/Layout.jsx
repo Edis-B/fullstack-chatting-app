@@ -1,7 +1,7 @@
 import { Outlet, useLocation } from "react-router";
 import Header from "./Header";
 import Footer from "./Footer";
-import Errors from "./Errors";
+import Messages from "./Messages";
 
 export default function Layout() {
 	const location = useLocation();
@@ -12,7 +12,7 @@ export default function Layout() {
 
 	return (
 		<div className="wrapper">
-			<Errors />
+			<Messages />
 			<Header />
 			<main className="content">
 				<Outlet /> {/* This renders the current route */}

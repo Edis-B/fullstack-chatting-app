@@ -1,26 +1,13 @@
-import { useNavigate, useParams } from "react-router";
-import { useEffect, useState } from "react";
-
 import { host } from "../../common/appConstants.js";
 import { useUser } from "../../contexts/UserContext.jsx";
 import { useProfile } from "../../contexts/ProfileContext.jsx";
-import { friendStatusButton } from "../../utils/friendUtils.jsx";
 
 import "../../css/profile.css";
 
 export default function ProfileHeaderEdit() {
-	const navigate = useNavigate();
+	const { enqueueError } = useUser();
 
-	const { setErrors } = useUser();
-
-	const { setEditActive } = useProfile();
-
-	const [profileData, setProfileData] = useState({
-		username: "",
-		image: "",
-		banner: "",
-		about: "",
-	});
+	const { profileData } = useProfile();
 
 	function handleChange(e) {
 		setProfileData({ ...profileData, [e.target.name]: e.target.value });
@@ -40,7 +27,7 @@ export default function ProfileHeaderEdit() {
 			const data = await response.json();
 
 			if (!response.ok) {
-				setErrors((prev) => [...prev, data]);
+				enqueueError(data);
 				return;
 			}
 
@@ -110,6 +97,16 @@ export default function ProfileHeaderEdit() {
 					placeholder="e.g., johndoe123"
 					className="form-control m-2"
 				/>
+
+				<label>About</label>
+				<input
+					type="text"
+					name="about"
+					value={profileData.about}
+					onChange={handleChange}
+					placeholder="e.g., I like playing football..."
+					className="form-control m-2"
+				/>
 			</div>
 
 			<div className="ms-auto d-flex justify-content-end">
@@ -118,7 +115,6 @@ export default function ProfileHeaderEdit() {
 				</button>
 				<button
 					onClick={() => {
-						console.log("Button clicked");
 						setEditActive(false);
 					}}
 					className="btn btn-outline-secondary"

@@ -3,14 +3,14 @@ import { useUser } from "../contexts/UserContext.jsx";
 import { host } from "../common/appConstants.js";
 import { useNavigate } from "react-router";
 export default function Register() {
-	const { userId, autherized } = useUser();
+	const { userId, autherized, enqueueError, enqueueMessage } = useUser();
 	const navigate = useNavigate();
 
 	// Redirect to home if already logged in
 	useEffect(() => {
-        if (autherized === true) {
-            navigate("/");
-        }
+		if (autherized === true) {
+			navigate("/");
+		}
 	}, [userId, navigate]);
 
 	const [email, setEmail] = useState("");
@@ -36,12 +36,13 @@ export default function Register() {
 			const data = await response.json();
 			console.log(data);
 
-			if (response.ok) {
-				alert("Registration successful!");
-				window.location.href = "/";
-			} else {
-				alert(data);
+			if (!response.ok) {
+				enqueueError(data);
+				return;
 			}
+
+			enqueueMessage("Registration successful!");
+			window.location.href = "/";
 		} catch (err) {
 			console.log(err);
 		}

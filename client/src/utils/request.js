@@ -21,7 +21,8 @@ async function request(method, url, params) {
 
 		return { response, data };
 	} catch (err) {
-		console.log(err);
+		if (err.name !== "AbortError") console.log(err);
+
 		throw err;
 	}
 }

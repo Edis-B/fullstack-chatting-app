@@ -3,7 +3,7 @@ import {
 	cancelFriendRequest,
 	declineFriendRequest,
 	sendFriendRequest,
-	unfriend
+	unfriend,
 } from "../services/userAPIs.js";
 
 const friendStatuses = {
@@ -15,12 +15,15 @@ const friendStatuses = {
 	BLOCKED_BY: "blocked by",
 };
 
-export function friendStatusButton(status, senderId, receiverId) {
+export function friendStatusButton(status, senderId, receiverId, currentState) {
 	if (status === friendStatuses.OUTGOING_REQUEST) {
 		return (
 			<button
 				className="btn btn-outline-secondary"
-				onClick={(e) => cancelFriendRequest(senderId, receiverId)}
+				onClick={(e) => {
+					cancelFriendRequest(senderId, receiverId);
+					currentState((prev) => ({ ...prev, outStatus: null }));
+				}}
 			>
 				Cancel request
 			</button>
@@ -30,14 +33,23 @@ export function friendStatusButton(status, senderId, receiverId) {
 			<>
 				<button
 					className="btn btn-outline-secondary"
-					onClick={(e) => declineFriendRequest(senderId, receiverId)}
+					onClick={(e) => {
+						declineFriendRequest(senderId, receiverId);
+						currentState((prev) => ({ ...prev, outStatus: null }));
+					}}
 				>
 					Decline request
 				</button>
 
 				<button
 					className="btn btn-outline-secondary"
-					onClick={(e) => acceptFriendRequest(senderId, receiverId)}
+					onClick={(e) => {
+						acceptFriendRequest(senderId, receiverId);
+						currentState((prev) => ({
+							...prev,
+							outStatus: friendStatuses.FRIENDS,
+						}));
+					}}
 				>
 					Accept request
 				</button>
@@ -47,7 +59,10 @@ export function friendStatusButton(status, senderId, receiverId) {
 		return (
 			<button
 				className="btn btn-outline-secondary"
-				onClick={(e) => unfriend(senderId, receiverId)}
+				onClick={(e) => {
+					unfriend(senderId, receiverId);
+					({ ...prev, outStatus: null });
+				}}
 			>
 				Remove friend
 			</button>
@@ -56,10 +71,18 @@ export function friendStatusButton(status, senderId, receiverId) {
 		return (
 			<button
 				className="btn btn-outline-secondary"
-				onClick={(e) => sendFriendRequest(senderId, receiverId)}
+				onClick={(e) => {
+					currentState((prev) => ({
+						...prev,
+						outStatus: friendStatuses.OUTGOING_REQUEST,
+					}));
+					sendFriendRequest(senderId, receiverId);
+				}}
 			>
 				Add friend
 			</button>
 		);
 	}
 }
+
+

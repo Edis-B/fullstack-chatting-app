@@ -4,15 +4,15 @@ import { useUser } from "../contexts/UserContext.jsx";
 import { useNavigate } from "react-router";
 
 export default function Login() {
-	const { userId, autherized } = useUser();
-    const navigate = useNavigate();
+	const { userId, autherized, enqueueMessage, enqueueError } = useUser();
+	const navigate = useNavigate();
 
-    // Redirect to home if already logged in
-    useEffect(() => {
-        if (autherized === true) {
-            navigate("/");
-        }
-    }, [userId, navigate]);
+	// Redirect to home if already logged in
+	useEffect(() => {
+		if (autherized === true) {
+			navigate("/");
+		}
+	}, [userId, navigate]);
 
 	const [identifier, setIdentifier] = useState("");
 	const [password, setPassword] = useState("");
@@ -35,13 +35,16 @@ export default function Login() {
 
 			const data = await response.json();
 
-			if (response.ok) {
-				alert("Login successful!");
-				window.location.href = "/";
-			} else {
-				alert(data);
+			if (!response.ok) {
+				enqueueError(data);
+				return;
 			}
-		} catch (error) {
+
+			enqueueMessage("Login successful!");
+			window.location.href = "/";
+
+		} catch (err) {
+			enqueueError(err)
 			console.log(err);
 		}
 	};

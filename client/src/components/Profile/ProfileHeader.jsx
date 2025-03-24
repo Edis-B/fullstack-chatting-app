@@ -1,51 +1,17 @@
-import { useNavigate, useParams, Link } from "react-router";
-import { useEffect, useState } from "react";
+import {useNavigate} from "react-router"
 
-import { host } from "../../common/appConstants.js";
-
+import { useProfile } from "../../contexts/ProfileContext.jsx";
 import { friendStatusButton } from "../../utils/friendUtils.jsx";
 import { useUser } from "../../contexts/UserContext.jsx";
-import { useProfile } from "../../contexts/ProfileContext.jsx";
-import { contentTypes } from "../../common/appConstants.js";
+import { redirectToChat } from "../../services/chatAPIs.js";
 
-import "../../css/profile.css"
+import "../../css/profile.css";
 
 export default function ProfileHeader() {
 	const navigate = useNavigate();
-
-	const { profileUserId } = useParams();
-
 	const { userId } = useUser();
-	const { profileId, setEditActive } = useProfile() || {};
-
-	const [profileData, setProfileData] = useState({});
-
-	useEffect(() => {
-		fetchProfileData(profileId);
-	}, [profileId]);
-
-	async function fetchProfileData(id) {
-		try {
-			const response = await fetch(
-				`${host}/user/get-user-profile-data?userId=${id ?? ""}`,
-				{
-					method: "GET",
-					credentials: "include",
-				}
-			);
-
-			const data = await response.json();
-
-			if (!profileUserId) {
-				navigate(`/profile/${data}`);
-				return;
-			}
-
-			setProfileData(data);
-		} catch (err) {
-			console.log(err);
-		}
-	}
+	const { profileId, setEditActive, profileData, setProfileData } =
+		useProfile();
 
 	return (
 		<>
@@ -88,11 +54,19 @@ export default function ProfileHeader() {
 				) : (
 					!!userId && (
 						<div className="ms-auto">
-							<button className="btn btn-primary">Message</button>
+							<button
+								className="btn btn-primary"
+								onClick={() =>
+									redirectToChat(profileData.username, navigate)
+								}
+							>
+								Message
+							</button>
 							{friendStatusButton(
 								profileData.ourStatus,
 								userId,
-								profileId
+								profileId,
+								setProfileData
 							)}
 						</div>
 					)

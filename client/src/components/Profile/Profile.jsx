@@ -14,7 +14,8 @@ export default function Profile() {
 	const navigate = useNavigate();
 
 	const { content, profileUserId } = useParams();
-	const { profileId, setProfileId, editActive } = useProfile() || {};
+	const { profileId, setProfileId, editActive, profileData, setProfileData } =
+		useProfile() || {};
 
 	const [selectedNav, setSelectedNav] = useState({});
 
@@ -31,10 +32,37 @@ export default function Profile() {
 			return <UserPosts />;
 		} else if (type == contentTypes.FRIENDS) {
 			return <Friends />;
-		} else if (type == contentTypes.FRIENDS) {
-			return <Friends />;
+		} else if (type == contentTypes.ABOUT) {
+			return <p>{profileData.about || "No details yet."}</p>;
 		} else if (type == contentTypes.PHOTOS) {
 			return <Photos />;
+		}
+	}
+
+	useEffect(() => {
+		fetchProfileData(profileId);
+	}, [profileId]);
+
+	async function fetchProfileData(id) {
+		try {
+			const response = await fetch(
+				`${host}/user/get-user-profile-data?userId=${id ?? ""}`,
+				{
+					method: "GET",
+					credentials: "include",
+				}
+			);
+
+			const data = await response.json();
+
+			if (!profileUserId) {
+				navigate(`/profile/${data}`);
+				return;
+			}
+
+			setProfileData(data);
+		} catch (err) {
+			console.log(err);
 		}
 	}
 
@@ -94,7 +122,7 @@ export default function Profile() {
 				</li>
 			</ul>
 
-			{generateContent(content)}
+			<div className="p-3">{generateContent(content)}</div>
 		</div>
 	);
 }
