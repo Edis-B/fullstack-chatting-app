@@ -64,7 +64,10 @@ const photoService = {
 			throw new Error("User id missing!");
 		}
 
-		const user = await userModel.findById(userId).populate("photos").lean();
+		const user = await userModel
+			.findById(userId)
+			.populate({ path: "photos", populate: "user" })
+			.lean();
 
 		if (!user) {
 			throw new Error("User not found!");
@@ -79,6 +82,29 @@ const photoService = {
 		}
 
 		return user.photos;
+	},
+	async updatePhotoCaption(req) {
+		const { photoId, caption } = req.body;
+
+		const photo = await photoModel.findById(photoId);
+
+		if (!photo) {
+			throw new Error("Could not find photo by id!");
+		}
+
+		if (photo.user._id != req.user?.id) {
+			throw new Error("Unauthorized");
+		}
+
+		try {
+			photo.caption = caption;
+			await photo.save();
+		} catch (err) {
+			console.log(err);
+			throw new Error("Something went wrong saving photo caption");
+		}
+
+		return "Successfully updated caption";
 	},
 };
 

@@ -4,6 +4,7 @@ import { useUser } from "../../contexts/UserContext";
 import { useProfile } from "../../contexts/ProfileContext.jsx";
 import { host, httpUrlRegex } from "../../common/appConstants.js";
 import request from "../../utils/request.js";
+import ImagePreviewModal from "../Photos/ImagePreviewModal.jsx";
 
 export default function Photos() {
 	const { userId, enqueueError } = useUser();
@@ -14,6 +15,8 @@ export default function Photos() {
 
 	const [imageUrl, setImageUrl] = useState("");
 	const [preview, setPreview] = useState(null);
+
+	const [selectedImage, setSelectedImage] = useState(null);
 
 	useEffect(() => {
 		if (!userId) return;
@@ -180,11 +183,13 @@ export default function Photos() {
 								<img
 									src={photo.url}
 									alt={`Uploaded ${index}`}
+									onClick={() => setSelectedImage(photo)}
 									className="rounded mb-2"
 									width="100"
 									height="100"
 									style={{
 										objectFit: "cover",
+										cursor: "pointer",
 										border: "2px solid #ddd",
 									}}
 								/>
@@ -222,30 +227,35 @@ export default function Photos() {
 							>
 								<div className="p-3 border rounded bg-light shadow-sm text-center">
 									<div
-										className="d-flex flex-wrap"
+										className="d-grid gap-1"
 										style={{
 											width: "100px",
 											height: "100px",
+											gridTemplateColumns:
+												"repeat(2, 1fr)", // 2 columns
+											gridTemplateRows: "repeat(2, 1fr)", // 2 rows
+											overflow: "hidden",
 										}}
 									>
-										{gallery.previews?.length > 0 ? (
-											gallery.previews.map((img) => (
-												<img
-													key={img._id}
-													src={img.url}
-													alt="Preview"
-													className="m-1"
-													style={{
-														width: "45px",
-														height: "45px",
-														objectFit: "cover",
-													}}
-												/>
-											))
-										) : (
-											<></>
-										)}
+										{gallery.previews?.length > 0
+											? gallery.previews
+													.slice(0, 4)
+													.map((img) => (
+														<img
+															key={img._id}
+															src={img.url}
+															alt="Preview"
+															style={{
+																width: "100%",
+																height: "100%",
+																objectFit:
+																	"cover",
+															}}
+														/>
+													))
+											: null}
 									</div>
+
 									<h6 className="mt-2">{gallery.name}</h6>
 								</div>
 							</Link>
@@ -255,6 +265,11 @@ export default function Photos() {
 					)}
 				</div>
 			</div>
+
+			<ImagePreviewModal
+				selectedImage={selectedImage}
+				setSelectedImage={setSelectedImage}
+			/>
 		</div>
 	);
 }

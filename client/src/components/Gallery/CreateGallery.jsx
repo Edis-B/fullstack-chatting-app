@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useFetchUserPhotos } from "../../hooks/images";
+import { useFetchUserPhotos } from "../../hooks/photos.js";
 import { useNavigate } from "react-router";
 
 import request from "../../utils/request";

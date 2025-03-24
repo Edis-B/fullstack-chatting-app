@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { Modal, Button } from "react-bootstrap"; // Modal and Button for styling
+import { useParams } from "react-router-dom";
+import { Button } from "react-bootstrap";
 
 import { host } from "../../common/appConstants";
 import { useUser } from "../../contexts/UserContext";
@@ -10,13 +10,13 @@ import EditGalleryMenu from "./EditGalleryMenu.jsx";
 import request from "../../utils/request.js";
 
 import "../../css/gallery-details.css";
+import ImagePreviewModal from "../Photos/ImagePreviewModal.jsx";
 
 export default function GalleryDetails() {
 	const { galleryId } = useParams();
 	const { userId, enqueueError } = useUser();
 
 	const [selectedImage, setSelectedImage] = useState(null);
-
 	const [gallery, setGallery] = useState({});
 
 	useEffect(() => {
@@ -115,7 +115,7 @@ export default function GalleryDetails() {
 								key={img._id}
 								alt="Gallery"
 								className="img-fluid rounded shadow-sm gallery-img"
-								onClick={() => setSelectedImage(img.url)}
+								onClick={() => setSelectedImage(img)}
 							/>
 
 							<div className="d-flex justify-content-end m-1">
@@ -149,19 +149,12 @@ export default function GalleryDetails() {
 			</div>
 
 			{/* Modal for Image Preview */}
-			<Modal
-				show={!!selectedImage}
-				onHide={() => setSelectedImage(null)}
-				centered
-			>
-				<Modal.Body className="text-center">
-					<img
-						src={selectedImage}
-						alt="Preview"
-						className="img-fluid rounded"
-					/>
-				</Modal.Body>
-			</Modal>
+			<ImagePreviewModal
+				selectedImage={selectedImage}
+				setSelectedImage={setSelectedImage}
+				user={gallery.user}
+				gallery={gallery}
+			/>
 		</div>
 	);
 }

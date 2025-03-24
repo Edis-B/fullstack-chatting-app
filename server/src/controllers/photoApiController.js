@@ -4,6 +4,17 @@ import { getErrorMessage } from "../utils/errorUtils.js";
 
 const photoApiController = Router();
 
+
+photoApiController.put("/update-photo-caption", async (req, res) => {
+	try {
+		const result = await photoService.updatePhotoCaption(req);
+		res.json(result);
+	} catch (err) {
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
+	}
+});
+
 photoApiController.get("/get-user-photos", async (req, res) => {
 	try {
 		const result = await photoService.getUserPhotos(req);
