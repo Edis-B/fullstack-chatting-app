@@ -21,3 +21,12 @@ export const visibilityTypes = {
 	FRIENDS: "friends",
 	ONLY_ME: "only me",
 };
+
+export const friendStatuses = {
+	OUTGOING_REQUEST: "outgoing request",
+	INCOMING_REQUEST: "incoming request",
+	FRIENDS: "friends",
+	NOT_FRIENDS: "not friends",
+	BLOCKED: "blocked",
+	BLOCKED_BY: "blocked by",
+};

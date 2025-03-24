@@ -1,3 +1,6 @@
+import { Link } from "react-router";
+
+import { contentTypes } from "../../common/appConstants.js";
 import { host } from "../../common/appConstants.js";
 import { useUser } from "../../contexts/UserContext.jsx";
 import { useProfile } from "../../contexts/ProfileContext.jsx";
@@ -5,9 +8,9 @@ import { useProfile } from "../../contexts/ProfileContext.jsx";
 import "../../css/profile.css";
 
 export default function ProfileHeaderEdit() {
-	const { enqueueError } = useUser();
+	const { enqueueError, enqueueInfo } = useUser();
 
-	const { profileData } = useProfile();
+	const { profileId, profileData, setProfileData, setEditActive } = useProfile();
 
 	function handleChange(e) {
 		setProfileData({ ...profileData, [e.target.name]: e.target.value });
@@ -31,6 +34,7 @@ export default function ProfileHeaderEdit() {
 				return;
 			}
 
+			enqueueInfo(data);
 			setProfileData(profileData);
 			setEditActive(false);
 		} catch (err) {
@@ -60,9 +64,17 @@ export default function ProfileHeaderEdit() {
 
 					<div className="ms-3">
 						<h2 className="mb-0">{profileData.username}</h2>
-						<p className="mb-0 text-muted">
-							{profileData.about ?? "No details yet."}
-						</p>
+						<Link
+							className="mb-0 text-muted"
+							to={`/profile/${profileId}/${contentTypes.ABOUT}`}
+						>
+							{profileData.about?.length > 20
+								? `${profileData.about.slice(
+										0,
+										20
+								  )} ...View More`
+								: profileData.about || "No details yet."}
+						</Link>
 					</div>
 				</div>
 			</div>

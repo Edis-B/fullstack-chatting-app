@@ -21,7 +21,11 @@ export async function fetchUsers(substring) {
 	}
 }
 
-export async function sendFriendRequest(senderId, receiverId) {
+export async function sendFriendRequest(
+	senderId,
+	receiverId,
+	{ enqueueError, enqueueInfo }
+) {
 	try {
 		const response = await fetch(`${host}/user/send-friend-request`, {
 			method: "POST",
@@ -36,13 +40,23 @@ export async function sendFriendRequest(senderId, receiverId) {
 		});
 
 		const data = await response.json();
-		console.log(data);
+		if (!response.ok) {
+			enqueueError(data);
+			return;
+		}
+
+		enqueueInfo(data);
 	} catch (err) {
+		enqueueError(err);
 		console.log(err);
 	}
 }
 
-export async function unfriend(senderId, receiverId) {
+export async function unfriend(
+	senderId,
+	receiverId,
+	{ enqueueError, enqueueInfo }
+) {
 	try {
 		const response = await fetch(`${host}/user/unfriend`, {
 			method: "POST",
@@ -57,13 +71,22 @@ export async function unfriend(senderId, receiverId) {
 		});
 
 		const data = await response.json();
-		console.log(data);
+		if (!response.ok) {
+			enqueueError(data);
+		}
+
+		enqueueInfo(data);
 	} catch (err) {
+		enqueueError(err);
 		console.log(err);
 	}
 }
 
-export async function acceptFriendRequest(senderId, receiverId) {
+export async function acceptFriendRequest(
+	senderId,
+	receiverId,
+	{ enqueueError, enqueueInfo }
+) {
 	try {
 		const response = await fetch(`${host}/user/accept-friend-request`, {
 			method: "POST",
@@ -78,13 +101,22 @@ export async function acceptFriendRequest(senderId, receiverId) {
 		});
 
 		const data = await response.json();
-		console.log(data);
+		if (!response.ok) {
+			enqueueError("Failed to accept friend request.");
+		}
+
+		enqueueInfo(data);
 	} catch (err) {
+		enqueueError(err);
 		console.log(err);
 	}
 }
 
-export async function declineFriendRequest(senderId, receiverId) {
+export async function declineFriendRequest(
+	senderId,
+	receiverId,
+	{ enqueueError, enqueueInfo }
+) {
 	try {
 		const response = await fetch(`${host}/user/decline-friend-request`, {
 			method: "POST",
@@ -99,13 +131,23 @@ export async function declineFriendRequest(senderId, receiverId) {
 		});
 
 		const data = await response.json();
-		console.log(data);
+
+		if (!response.ok && enqueueError) {
+			enqueueError("Failed to decline friend request.");
+		}
+
+		enqueueInfo(data);
 	} catch (err) {
+		enqueueError(err);
 		console.log(err);
 	}
 }
 
-export async function cancelFriendRequest(senderId, receiverId) {
+export async function cancelFriendRequest(
+	senderId,
+	receiverId,
+	{ enqueueError, enqueueInfo }
+) {
 	try {
 		const response = await fetch(`${host}/user/cancel-friend-request`, {
 			method: "POST",
@@ -120,8 +162,15 @@ export async function cancelFriendRequest(senderId, receiverId) {
 		});
 
 		const data = await response.json();
-		console.log(data);
+
+		if (!response.ok) {
+			enqueueError(data);
+			return;
+		}
+
+		enqueueInfo(data);
 	} catch (err) {
+		enqueueError(err);
 		console.log(err);
 	}
 }

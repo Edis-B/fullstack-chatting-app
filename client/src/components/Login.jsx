@@ -4,7 +4,7 @@ import { useUser } from "../contexts/UserContext.jsx";
 import { useNavigate } from "react-router";
 
 export default function Login() {
-	const { userId, autherized, enqueueMessage, enqueueError } = useUser();
+	const { userId, autherized, enqueueInfo, enqueueError } = useUser();
 	const navigate = useNavigate();
 
 	// Redirect to home if already logged in
@@ -40,7 +40,7 @@ export default function Login() {
 				return;
 			}
 
-			enqueueMessage("Login successful!");
+			enqueueInfo("Login successful!");
 			window.location.href = "/";
 
 		} catch (err) {

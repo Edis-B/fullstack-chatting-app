@@ -1,8 +1,11 @@
-import {useNavigate} from "react-router"
+import { Link } from "react-router";
+import { useNavigate } from "react-router";
 
 import { useProfile } from "../../contexts/ProfileContext.jsx";
-import { friendStatusButton } from "../../utils/friendUtils.jsx";
 import { useUser } from "../../contexts/UserContext.jsx";
+import AutoFriendButton from "./AutoFriendButton.jsx";
+
+import { contentTypes } from "../../common/appConstants.js";
 import { redirectToChat } from "../../services/chatAPIs.js";
 
 import "../../css/profile.css";
@@ -12,6 +15,13 @@ export default function ProfileHeader() {
 	const { userId } = useUser();
 	const { profileId, setEditActive, profileData, setProfileData } =
 		useProfile();
+
+	const changeStatus = ({ type }) => {
+		setProfileData((prev) => ({
+			...prev,
+			ourStatus: type,
+		}));
+	};
 
 	return (
 		<>
@@ -34,9 +44,14 @@ export default function ProfileHeader() {
 
 				<div className="ms-3">
 					<h2 className="mb-0">{profileData.username}</h2>
-					<p className="mb-0 text-muted">
-						{profileData.about ?? "No details yet."}
-					</p>
+					<Link
+						className="mb-0 text-muted"
+						to={`/profile/${profileId}/${contentTypes.ABOUT}`}
+					>
+						{profileData.about?.length > 20
+							? `${profileData.about.slice(0, 20)} ...View More`
+							: profileData.about || "No details yet."}
+					</Link>
 				</div>
 
 				{profileData.owner ? (
@@ -57,17 +72,22 @@ export default function ProfileHeader() {
 							<button
 								className="btn btn-primary"
 								onClick={() =>
-									redirectToChat(profileData.username, navigate)
+									redirectToChat(
+										profileData.username,
+										navigate
+									)
 								}
 							>
 								Message
 							</button>
-							{friendStatusButton(
-								profileData.ourStatus,
-								userId,
-								profileId,
-								setProfileData
-							)}
+							<AutoFriendButton
+								params={{
+									status: profileData.ourStatus,
+									senderId: userId,
+									receiverId: profileId,
+									changeStatus,
+								}}
+							/>
 						</div>
 					)
 				)}

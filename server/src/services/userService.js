@@ -15,6 +15,7 @@ const userService = {
 					image: profileData.image,
 					banner: profileData.banner,
 					username: profileData.username,
+					about: profileData.about,
 				},
 				{ new: true }
 			)
@@ -166,26 +167,16 @@ const userService = {
 		const userObj = (await user.populate("friends.friend")).toObject();
 
 		const result = {};
-		result.friends = userObj.friends.filter(
-			(f) => f.status === friendStatuses.FRIENDS
-		);
 
-		result.owner = req.user?.id == userObj._id;
-		if (!result.owner) {
-			return result;
+		for (const type of Object.values(friendStatuses)) {
+			result[type] = [];
 		}
 
-		result.incoming = userObj.friends.filter(
-			(f) => f.status === friendStatuses.INCOMING_REQUEST
-		);
+		for (const friendObj of userObj.friends) {
+			result[friendObj.status].push(friendObj.friend);
+		}
 
-		result.outgoing = userObj.friends.filter(
-			(f) => f.status === friendStatuses.OUTGOING_REQUEST
-		);
-
-		result.blocked = userObj.friends.filter(
-			(f) => f.status === friendStatuses.BLOCKED
-		);
+		result.owner = req.user?.id == userObj._id;
 
 		return result;
 	},

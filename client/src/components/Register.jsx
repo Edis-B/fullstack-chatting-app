@@ -3,7 +3,7 @@ import { useUser } from "../contexts/UserContext.jsx";
 import { host } from "../common/appConstants.js";
 import { useNavigate } from "react-router";
 export default function Register() {
-	const { userId, autherized, enqueueError, enqueueMessage } = useUser();
+	const { userId, autherized, enqueueError, enqueueInfo } = useUser();
 	const navigate = useNavigate();
 
 	// Redirect to home if already logged in
@@ -41,7 +41,7 @@ export default function Register() {
 				return;
 			}
 
-			enqueueMessage("Registration successful!");
+			enqueueInfo("Registration successful!");
 			window.location.href = "/";
 		} catch (err) {
 			console.log(err);
