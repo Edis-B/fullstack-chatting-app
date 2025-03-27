@@ -10,6 +10,8 @@ import UserPosts from "./UserPosts.jsx";
 import Friends from "./Friends.jsx";
 import Photos from "./Photos.jsx";
 
+import "../../css/profile.css"
+
 export default function Profile() {
 	const navigate = useNavigate();
 

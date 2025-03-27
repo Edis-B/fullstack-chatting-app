@@ -8,8 +8,6 @@ import AutoFriendButton from "./AutoFriendButton.jsx";
 import { contentTypes } from "../../common/appConstants.js";
 import { redirectToChat } from "../../services/chatAPIs.js";
 
-import "../../css/profile.css";
-
 export default function ProfileHeader() {
 	const navigate = useNavigate();
 	const { userId } = useUser();

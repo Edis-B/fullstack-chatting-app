@@ -1,8 +1,9 @@
 import { Link } from "react-router";
 import { dateToString } from "../../utils/dateUtils.js";
 import { likePost } from "../../services/postAPIs.js";
+import LikePost from "../Buttons/LikePost.jsx";
 
-export default function Post({ post, user }) {
+export default function Post({ post, user, likeState }) {
 	return (
 		<div className="card m-3 p-3 shadow-sm">
 			{/* Card Header */}
@@ -16,7 +17,9 @@ export default function Post({ post, user }) {
 				/>
 				<div>
 					<h6 className="mb-0">{user.username}</h6>
-					<p className="text-muted small mb-0">{dateToString(post.date)}</p>
+					<p className="text-muted small mb-0">
+						{dateToString(post.date)}
+					</p>
 				</div>
 			</div>
 
@@ -46,7 +49,7 @@ export default function Post({ post, user }) {
 				>
 					View Details
 				</Link>
-				<button onClick={() => likePost(postId, user._id, enqueueError)} className="btn btn-outline-primary btn-sm">Like</button>
+				<LikePost value={{post, stateFlip: likeState}} />
 				<Link
 					to={`/post/${post._id}`}
 					className="btn btn-outline-secondary btn-sm"

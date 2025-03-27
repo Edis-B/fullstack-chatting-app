@@ -1,7 +1,7 @@
 import { host } from "../common/appConstants.js";
 import { useUser } from "../contexts/UserContext.jsx";
 
-export async function likePost(postId, userId, enqueueError) {
+export async function likePost(postId, userId, { enqueueError, enqueueInfo }) {
 	try {
 		if (!postId) return;
 		if (!userId) return;
@@ -25,6 +25,7 @@ export async function likePost(postId, userId, enqueueError) {
 			return;
 		}
 
+		enqueueInfo(data);
 		return { message: data, success: true };
 	} catch (err) {
 		console.log(err);
@@ -32,7 +33,11 @@ export async function likePost(postId, userId, enqueueError) {
 	}
 }
 
-export async function removeLikeFromPost(postId, userId, enqueueError) {
+export async function removeLikeFromPost(
+	postId,
+	userId,
+	{ enqueueError, enqueueInfo }
+) {
 	try {
 		if (!postId) return;
 		if (!userId) return;
@@ -56,6 +61,7 @@ export async function removeLikeFromPost(postId, userId, enqueueError) {
 			return;
 		}
 
+		enqueueInfo(data);
 		return { message: data, success: true };
 	} catch (err) {
 		console.log(err);
@@ -63,7 +69,12 @@ export async function removeLikeFromPost(postId, userId, enqueueError) {
 	}
 }
 
-export async function commentOnPost(postId, userId, content, enqueueError) {
+export async function commentOnPost(
+	postId,
+	userId,
+	content,
+	{ enqueueError, enqueueInfo }
+) {
 	try {
 		if (!postId) return;
 		if (!userId) return;
@@ -99,7 +110,7 @@ export async function removeCommentFromPost(
 	postId,
 	userId,
 	commentId,
-	enqueueError
+	{ enqueueError, enqueueInfo }
 ) {
 	try {
 		if (!postId) return;
@@ -134,7 +145,12 @@ export async function removeCommentFromPost(
 	}
 }
 
-export async function likeComment(postId, userId, commentId, enqueueError) {
+export async function likeComment(
+	postId,
+	userId,
+	commentId,
+	{ enqueueError, enqueueInfo }
+) {
 	try {
 		if (!postId) return;
 		if (!userId) return;
@@ -159,6 +175,7 @@ export async function likeComment(postId, userId, commentId, enqueueError) {
 			return;
 		}
 
+		enqueueInfo(data);
 		return data;
 	} catch (err) {
 		console.log(err);
@@ -171,7 +188,7 @@ export async function removeLikeFromComment(
 	postId,
 	userId,
 	commentId,
-	enqueueError
+	{ enqueueError, enqueueInfo }
 ) {
 	try {
 		if (!postId) return;
@@ -197,6 +214,7 @@ export async function removeLikeFromComment(
 			return;
 		}
 
+		enqueueInfo(data);
 		return data;
 	} catch (err) {
 		console.log(err);

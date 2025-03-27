@@ -13,6 +13,9 @@ const photoService = {
 
 		if (!imageUrls) throw new Error("Image url is required!");
 
+		const user = await userModel.findById(userId).lean();
+
+		const photos = [];
 		try {
 			for (const imageUrl of imageUrls) {
 				const photo = await photoModel.create({
@@ -26,13 +29,15 @@ const photoService = {
 						photos: photo._id,
 					},
 				});
+
+				photos.push({ ...photo.toObject(), user });
 			}
 		} catch (err) {
 			console.log(err);
 			throw new Error("Something went wrong saving photo!");
 		}
 
-		return "Successfully saved image!";
+		return { message: "Successfully saved image!", data: photos };
 	},
 	async removePhoto(req) {
 		const { userId, photoId } = req.body;

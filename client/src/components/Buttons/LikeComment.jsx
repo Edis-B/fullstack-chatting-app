@@ -2,7 +2,7 @@ import { useUser } from "../../contexts/UserContext";
 import { likeComment, removeLikeFromComment } from "../../services/postAPIs";
 
 export default function LikeComment({ value }) {
-	const { enqueueError, userId } = useUser();
+	const { enqueueError, enqueueInfo, userId } = useUser();
 
 	// Required values
 	const { postId, comment, stateFlip } = value;
@@ -11,6 +11,8 @@ export default function LikeComment({ value }) {
 
 	const likesCount =
 		comment.likesCount !== undefined ? comment.likesCount : likes.length;
+
+	const userActions = { enqueueError, enqueueInfo };
 
 	return (
 		<div>
@@ -23,7 +25,7 @@ export default function LikeComment({ value }) {
 								postId,
 								userId,
 								commentId,
-								enqueueError
+								userActions
 							)
 						) {
 							stateFlip(commentId);
@@ -45,7 +47,7 @@ export default function LikeComment({ value }) {
 								postId,
 								userId,
 								commentId,
-								enqueueError
+								userActions
 							)
 						) {
 							stateFlip(commentId);

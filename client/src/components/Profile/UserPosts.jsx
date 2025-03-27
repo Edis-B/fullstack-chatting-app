@@ -6,7 +6,7 @@ import request from "../../utils/request";
 import { useUser } from "../../contexts/UserContext";
 
 export default function UserPosts() {
-	const { enqueueError}  = useUser();
+	const { enqueueError } = useUser();
 	const { profileId } = useProfile() || {};
 	const [postsData, setPostsData] = useState({ posts: [], user: {} });
 
@@ -34,18 +34,37 @@ export default function UserPosts() {
 				enqueueError(data);
 				return;
 			}
-			
+
 			setPostsData(data);
 		} catch (err) {
-			console.error(err);
+			if (err.name !== "AbortError") console.error(err);
 		}
+	}
+
+	function likeStateChange(id) {
+		setPostsData((prev) => ({
+			...prev,
+			posts: prev.posts.map((p) =>
+				p._id == id
+					? {
+							...p,
+							liked: !p.liked,
+					  }
+					: p
+			),
+		}));
 	}
 
 	return (
 		<div>
 			{postsData.posts?.length > 0 ? (
 				postsData.posts.map((post) => (
-					<Post key={post._id} post={post} user={postsData.user} />
+					<Post
+						key={post._id}
+						post={post}
+						user={postsData.user}
+						likeState={likeStateChange}
+					/>
 				))
 			) : (
 				<span>No posts.</span>

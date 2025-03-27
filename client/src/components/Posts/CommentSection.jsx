@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useParams, Link } from "react-router";
 import { useEffect, useState } from "react";
 
 import { dateToString } from "../../utils/dateUtils.js";
@@ -43,38 +43,37 @@ export default function CommentSection({ post }) {
 
 	return (
 		<>
-			{/* Comments */}
+			{/* Comments Section */}
 			{comments?.length > 0 ? (
-				<div className="comment">
+				<div className="comments-list">
 					{comments.map((comment) => (
-						<div
-							key={comment._id}
-							className="comment-container d-flex align-items-start justify-content-between gap-2 p-2 border rounded"
-						>
+						<div key={comment._id} className="comment-item">
 							{/* Profile Picture */}
-							<div
-								className="d-inline align-items-center justify-content-center"
-								style={{ height: "100%" }}
+							<Link
+								to={`/profile/${comment.user._id}`}
+								className="profile-picture-link"
 							>
 								<img
 									src={comment.user.image}
 									alt={`${comment.user.username}'s profile`}
-									className="rounded-circle"
-									width="40"
-									height="40"
+									className="profile-picture"
 								/>
-							</div>
+								<strong>{comment.user.username}</strong>
+							</Link>
 
 							{/* Comment Content */}
-							<div style={{ width: "auto" }}>
-								<strong>{comment.user.username}</strong>{" "}
-								<small className="text-muted d-block">
-									{dateToString(comment.date)}
-								</small>
-								<p className="mb-0">{comment.content}</p>
+							<div className="comment-content">
+								<div className="comment-header">
+									<small className="comment-date">
+										{dateToString(comment.date)}
+									</small>
+								</div>
+								<p className="comment-text">
+									{comment.content}
+								</p>
 							</div>
 
-							<div className="d-flex flex-column">
+							<div className="comment-actions">
 								{/* Like Button (Heart) */}
 								<LikeComment
 									value={{
@@ -84,23 +83,21 @@ export default function CommentSection({ post }) {
 									}}
 								/>
 
-								<div>
-									{comment.user._id == userId && (
-										<DeleteComment
-											value={{
-												postId,
-												commentId: comment._id,
-												stateChange: deleteCommentState,
-											}}
-										/>
-									)}
-								</div>
+								{comment.user._id == userId && (
+									<DeleteComment
+										value={{
+											postId,
+											commentId: comment._id,
+											stateChange: deleteCommentState,
+										}}
+									/>
+								)}
 							</div>
 						</div>
 					))}
 				</div>
 			) : (
-				<p>No comments yet!</p>
+				<p className="no-comments-text">No comments yet!</p>
 			)}
 		</>
 	);

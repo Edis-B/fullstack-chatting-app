@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import { useUser } from "../../contexts/UserContext";
 import { host, httpUrlRegex } from "../../common/appConstants.js";
 
 import "../../css/create-post.css";
 export default function CreatePost() {
-	const { userId, enqueueError } = useUser();
+	const navigate = useNavigate();
+	const { userId, enqueueError, enqueueInfo } = useUser();
 
 	const [content, setContent] = useState("");
 	const [images, setImages] = useState([]);
@@ -58,7 +60,11 @@ export default function CreatePost() {
 
 			if (!response.ok) {
 				enqueueError(data);
+				return;
 			}
+
+			enqueueInfo("Successfully created post");
+			navigate(`/post/${data}`);
 		} catch (err) {
 			enqueueError(err);
 		}
@@ -85,7 +91,7 @@ export default function CreatePost() {
 							<label className="form-label">Images</label>
 							{images?.length > 0 ? (
 								images.map((image, index) => (
-									<div className="d-flex flex-column image-container">
+									<div className="d-flex flex-column image-container" key={`${image}-${index}`}>
 										<img
 											className="preview-image"
 											src={image}

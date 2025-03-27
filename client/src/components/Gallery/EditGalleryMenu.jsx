@@ -216,6 +216,7 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 									!isUrlUploadActive ? "primary" : "secondary"
 								}
 								onClick={() => {
+									setSelectedPhotos([]);
 									setIsUrlUploadActive(false);
 									fetchUploadedImages();
 								}}
@@ -264,7 +265,7 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 												<img
 													src={image.url}
 													alt="Uploaded"
-													className="img-fluid rounded shadow-sm gallery-img"
+													className="img-fluid rounded shadow-sm gallery-img m-2"
 													onClick={() =>
 														toggleImageSelection(
 															image
@@ -277,7 +278,7 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 																i._id ===
 																image._id
 														)
-															? "3px solid green"
+															? "6px solid green"
 															: "none",
 													}}
 												/>
@@ -317,7 +318,7 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 				<div className="menu-overlay mt-4">
 					<div className="menu-content">
 						<h4>Edit Gallery</h4>
-                        <hr />
+						<hr />
 
 						{/* Edit Gallery Form */}
 						<form onSubmit={saveEditGallery}>

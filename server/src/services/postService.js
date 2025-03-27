@@ -31,7 +31,12 @@ const postService = {
 			throw new Error("User not found!");
 		}
 
-		const { posts, ...user } = userObj;
+		let { posts, ...user } = userObj;
+
+		for (const post of posts) {
+			post.liked = post.likes.some((p) => p._id.toString() === req.user?.id);
+		}
+
 		return { user, posts };
 	},
 	async createPost(req) {
@@ -47,18 +52,18 @@ const postService = {
 			images,
 		};
 
-		const newPostId = await postModel.create(post);
-
 		try {
+			const newPostId = await postModel.create(post);
+
 			await userModel.findByIdAndUpdate(userId, {
 				$push: { posts: newPostId },
 			});
+
+			return newPostId._id;
 		} catch (err) {
 			console.log(err);
 			throw new Error("Somehing went wrong creating post!");
 		}
-
-		return "Successfully created post";
 	},
 	async getPost(req) {
 		const { postId } = req.query;

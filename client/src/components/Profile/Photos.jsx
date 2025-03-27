@@ -7,7 +7,7 @@ import request from "../../utils/request.js";
 import ImagePreviewModal from "../Photos/ImagePreviewModal.jsx";
 
 export default function Photos() {
-	const { userId, enqueueError } = useUser();
+	const { userId, enqueueError, enqueueInfo } = useUser();
 	const { profileId } = useProfile();
 
 	const [photos, setPhotos] = useState([]);
@@ -19,10 +19,10 @@ export default function Photos() {
 	const [selectedImage, setSelectedImage] = useState(null);
 
 	useEffect(() => {
-		if (!userId) return;
+		if (!profileId) return;
 
-		fetchUserPhotos(userId);
-	}, [userId]);
+		fetchUserPhotos(profileId);
+	}, [profileId]);
 
 	useEffect(() => {
 		if (!profileId) return;
@@ -39,9 +39,7 @@ export default function Photos() {
 		setImageUrl(url);
 
 		if (!isValidImageUrl(url)) {
-			enqueueError(
-				"Please enter a valid image URL ending in .jpg, .png, etc."
-			);
+			enqueueError("Photo url must begin with http:// or https://");
 			setPreview(null);
 		} else {
 			setPreview(url); // Show the image preview
@@ -49,22 +47,25 @@ export default function Photos() {
 	}
 
 	async function handleUpload() {
-		if (!imageUrl) {
-			enqueueError("Please enter a valid image URL before uploading.");
+		if (!imageUrl || !isValidImageUrl(imageUrl)) {
+			enqueueError("Photo url must begin with http:// or https://");
 			return;
 		}
 
-		await uploadPhoto(userId, imageUrl);
+		const { message, data } = await uploadPhoto(userId, imageUrl);
+
+		const asdfa = [...photos, ...data];
+		setPhotos(asdfa);
 
 		// Clear input after upload
 		setImageUrl("");
 		setPreview(null);
 	}
 
-	async function fetchUserPhotos(userId) {
+	async function fetchUserPhotos(profileId) {
 		try {
 			const response = await fetch(
-				`${host}/photo/get-user-photos?userId=${userId}`,
+				`${host}/photo/get-user-photos?userId=${profileId}`,
 				{
 					method: "GET",
 					credentials: "include",
@@ -122,12 +123,16 @@ export default function Photos() {
 			const data = await response.json();
 
 			if (!response.ok) {
-				enqueueError(data);
+				enqueueError(data.message);
 				return;
 			}
+
+			enqueueInfo(data.message);
+			return data;
 		} catch (err) {
 			console.log(err);
 			enqueueError("Something went wrong uploading image");
+
 			return;
 		}
 	}

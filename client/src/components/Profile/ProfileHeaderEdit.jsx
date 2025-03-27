@@ -5,8 +5,6 @@ import { host } from "../../common/appConstants.js";
 import { useUser } from "../../contexts/UserContext.jsx";
 import { useProfile } from "../../contexts/ProfileContext.jsx";
 
-import "../../css/profile.css";
-
 export default function ProfileHeaderEdit() {
 	const { enqueueError, enqueueInfo } = useUser();
 

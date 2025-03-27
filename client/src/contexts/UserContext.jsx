@@ -81,6 +81,7 @@ export function UserProvider({ children }) {
 				logout,
 				enqueueInfo,
 				enqueueError,
+				notifications: { enqueueError, enqueueInfo },
 			}}
 		>
 			{children}

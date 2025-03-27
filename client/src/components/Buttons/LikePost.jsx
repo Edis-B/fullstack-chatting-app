@@ -2,14 +2,14 @@ import { useUser } from "../../contexts/UserContext";
 import { likePost, removeLikeFromPost } from "../../services/postAPIs";
 
 export default function LikePost({ value }) {
-	const { userId, enqueueError } = useUser();
+	const { userId, notifications } = useUser();
 	const { post, stateFlip } = value;
 
 	const likesCount =
 		post.likesCount !== undefined ? post.likesCount : post.likes.length;
 
 	return (
-		<div>
+		<div className="d-flex">
 			{post.liked ? (
 				<button
 					className="btn p-0"
@@ -17,12 +17,14 @@ export default function LikePost({ value }) {
 						const result = await removeLikeFromPost(
 							post._id,
 							userId,
-							enqueueError
+							notifications
 						);
 
-						if (!result.success) return;
+						if (!result.success) {
+							return;
+						}
 
-						stateFlip();
+						stateFlip(post._id);
 					}}
 				>
 					<span className="m-2">{likesCount}</span>
@@ -38,12 +40,14 @@ export default function LikePost({ value }) {
 						const result = await likePost(
 							post._id,
 							userId,
-							enqueueError
+							notifications
 						);
 
-						if (!result.success) return;
+						if (!result.success) {
+							return;
+						}
 
-						stateFlip();
+						stateFlip(post._id);
 					}}
 				>
 					<span className="m-2">{likesCount}</span>
