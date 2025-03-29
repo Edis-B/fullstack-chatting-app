@@ -3,16 +3,19 @@ import { useNavigate, Link } from "react-router";
 
 import { host } from "../../common/appConstants.js";
 
-import { useSearch } from "../../contexts/SearchContext";
-import { useUser } from "../../contexts/UserContext";
+import { useSearch } from "../../contexts/SearchContext.jsx";
+import { useUser } from "../../contexts/UserContext.jsx";
 import request from "../../utils/request.js";
 import { redirectToChat } from "../../services/chatAPIs.js";
 import AutoFriendButton from "../Profile/AutoFriendButton.jsx";
 
-export default function People() {
+export default function SearchPeople() {
 	const navigate = useNavigate();
 
-	const { query } = useSearch().queryParameters;
+	const { searchParams } = useSearch();
+	const query = searchParams.get("query");
+	const page = searchParams.get("page");
+
 	const { userId, enqueueError } = useUser();
 
 	const [people, setPeople] = useState([]);
@@ -20,14 +23,14 @@ export default function People() {
 	useEffect(() => {
 		if (query === undefined) return;
 
-		fetchPeopleByQuery(query);
+		fetchPeopleByQuery(query, page);
 	}, [query]);
 
-	async function fetchPeopleByQuery(query) {
+	async function fetchPeopleByQuery(query, page) {
 		try {
 			const { response, data } = await request.get(
 				`${host}/user/get-users-by-username`,
-				{ usernameSubstr: query, exclude: true }
+				{ usernameSubstr: query || "", page, exclude: true }
 			);
 
 			if (!response.ok) {
@@ -41,8 +44,8 @@ export default function People() {
 		}
 	}
 
-	const changeStatus = ({id, type}) => {
-		setPeople((prev) => 
+	const changeStatus = ({ id, type }) => {
+		setPeople((prev) =>
 			prev.map((p) =>
 				p._id == id
 					? {
@@ -50,7 +53,7 @@ export default function People() {
 							friendshipStatus: type,
 					  }
 					: p
-			),
+			)
 		);
 	};
 

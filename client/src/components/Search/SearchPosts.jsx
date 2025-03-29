@@ -10,7 +10,9 @@ import Post from "../Posts/Post";
 
 export default function SearchPosts() {
 	const { enqueueError } = useUser();
-	const { query } = useSearch().queryParameters;
+	const { searchParams } = useSearch();
+	const { query } = searchParams;
+
 	const [posts, setPosts] = useState([]);
 
 	useEffect(() => {
@@ -21,7 +23,7 @@ export default function SearchPosts() {
 		try {
 			const { response, data } = await request.get(
 				`${host}/post/get-posts-by-query`,
-				{ query }
+				{ query: query || "" }
 			);
 
 			if (!response.ok) {
@@ -36,7 +38,7 @@ export default function SearchPosts() {
 	}
 
 	return (
-		<>
+		<div className="d-flex flex-column align-items-center">
 			<h3>Posts</h3>
 			{posts.length > 0 ? (
 				posts.map((post) => (
@@ -45,6 +47,6 @@ export default function SearchPosts() {
 			) : (
 				<p>No posts found!</p>
 			)}
-		</>
+		</div>
 	);
 }

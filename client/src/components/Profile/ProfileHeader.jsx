@@ -60,9 +60,6 @@ export default function ProfileHeader() {
 						>
 							Edit Profile
 						</button>
-						<button className="btn btn-outline-secondary">
-							Settings
-						</button>
 					</div>
 				) : (
 					!!userId && (

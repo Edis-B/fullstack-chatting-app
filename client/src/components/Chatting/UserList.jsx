@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from "react-router";
 import { host, client } from "../../common/appConstants.js";
 import { useChat } from "../../contexts/ChatContext.jsx";
 import { useUser } from "../../contexts/UserContext.jsx";
+import SearchBar from "../Search/SearchBar.jsx";
 
 export default function UserList() {
 	const { id } = useParams();
@@ -138,18 +139,24 @@ export default function UserList() {
 					allChats.length > 0 ? (
 						iterateChats(allChats)
 					) : (
-						<>
-							<p>No chats yet? </p>
-							<p> Search for user:</p> <input></input>
-						</>
+						<div>
+							<b>No chats yet? </b>
+							<div className="d-flex flex-row">
+								<p> Search for users:</p>
+								<SearchBar />
+							</div>
+						</div>
 					)
 				) : filteredChats.length > 0 ? (
 					iterateChats(filteredChats)
 				) : (
-					<>
-						<p>No finding chat?</p>
-						<p>Search for user:</p> <input></input>
-					</>
+					<div>
+						<b>Not finding chat?</b>
+						<div className="d-flex flex-row">
+							<p>Search for users:</p>
+							<SearchBar />
+						</div>
+					</div>
 				)}
 			</ul>
 		</div>

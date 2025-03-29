@@ -181,17 +181,33 @@ const userService = {
 		return result;
 	},
 	async getPeopleByUserSubstring(req) {
+		const { usernameSubstr } = req.query;
 		const exclude = req.query.exclude === "true";
+		const page = Number(req.query.page) || 1;
 
-		const filter = {
-			username: { $regex: req.query.usernameSubstr, $options: "i" },
-		};
+		const filter = [
+			{
+				username: { $regex: usernameSubstr, $options: "i" },
+			},
+		];
 
 		if (exclude && req.user) {
-			filter.username.$ne = req.user.username;
+			filter.push({ username: { $ne: req.user.username } });
 		}
 
-		const users = await userModel.find(filter).limit(10).lean();
+		const mongoFilter = {
+			$and: [
+				{ username: { $regex: usernameSubstr, $options: "i" } },
+				{ username: { $ne: req.user.username } },
+			],
+		};
+
+		const pageSize = 10;
+		const users = await userModel
+			.find(mongoFilter)
+			.skip(pageSize * (page - 1))
+			.limit(pageSize)
+			.lean();
 
 		if (req.user) {
 			const myFriends = (await userModel.findById(req.user.id).lean())

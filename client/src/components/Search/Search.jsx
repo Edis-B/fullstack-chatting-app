@@ -4,21 +4,22 @@ import { useEffect } from "react";
 import { contentTypes } from "../../common/appConstants";
 import { useSearch } from "../../contexts/SearchContext";
 
-import People from "./People";
+import SearchPeople from "./SearchPeople";
 import SearchPosts from "./SearchPosts";
 import "../../css/search.css";
 
 export default function Search() {
 	const navigate = useNavigate();
 
-	const { queryParameters, content } = useSearch();
+	const { searchParams } = useSearch();
+	const content = searchParams.get("content");
 
 	function updateParameters(newParameters) {
 		const updatedParameters = {
-			...queryParameters,
+			...Object.fromEntries(searchParams.entries()),
 			...newParameters,
 		};
-
+		
 		const queryString = new URLSearchParams(updatedParameters).toString();
 
 		navigate(`/search?${queryString}`);
@@ -26,7 +27,7 @@ export default function Search() {
 
 	function getContent(content) {
 		if (!content || content === contentTypes.PEOPLE) {
-			return <People />;
+			return <SearchPeople />;
 		} else if (content === contentTypes.POSTS) {
 			return <SearchPosts />;
 		}
@@ -61,7 +62,7 @@ export default function Search() {
 					</nav>
 				</div>
 
-				<div className="col-md-9">{getContent(content)}</div>
+				<div className="col-md-9 mt-2">{getContent(content)}</div>
 			</div>
 		</div>
 	);

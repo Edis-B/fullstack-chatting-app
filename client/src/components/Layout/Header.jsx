@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
+
 import { host } from "../../common/appConstants.js";
 import { useUser } from "../../contexts/UserContext.jsx";
+
+import SearchBar from "../Search/SearchBar.jsx";
 
 import "../../css/header.css"; // Import the new CSS file
 
 export default function Header() {
 	const { userId, enqueueError, logout } = useUser();
 	const [image, setImage] = useState("");
-	const [searchQuery, setSearchQuery] = useState("");
 
 	useEffect(() => {
 		fetchUserImageUrl();
@@ -55,25 +57,10 @@ export default function Header() {
 					Socialize
 				</Link>
 
-				<div className="search-container">
-					<input
-						type="text"
-						placeholder="Search..."
-						value={searchQuery}
-						onChange={(e) => setSearchQuery(e.target.value)}
-						className="search-input"
-					/>
-					<Link
-						to={`/search?query=${searchQuery}`}
-						className="search-button"
-					>
-						🔍
-					</Link>
-				</div>
+				<SearchBar />
 
 				<nav className="nav-links">
 					<Link to="/chat">Chats</Link>
-
 					<Link to="/post/create">New Post</Link>
 
 					{!!image ? (

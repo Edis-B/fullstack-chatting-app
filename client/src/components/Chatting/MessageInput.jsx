@@ -6,11 +6,14 @@ import { useUser } from "../../contexts/UserContext.jsx";
 export default function MessageInput() {
 	const { socket } = useUser();
 	const { chatId } = useChat();
-	
+
 	const [message, setMessage] = useState("");
 
 	function sendMessage(messageData) {
-		socket.emit("send_message", { receiverIds: messageData.participants, message: messageData });
+		socket.emit("send_message", {
+			receiverIds: messageData.participants,
+			message: messageData,
+		});
 		setMessage("");
 	}
 
@@ -40,12 +43,20 @@ export default function MessageInput() {
 		sendMessage(data);
 	}
 
+	const handleKeyPress = (e) => {
+		if (e.key === "Enter") {
+			sendButtonHandler();
+			return;
+		}
+	};
+
 	return (
 		<div className="d-flex m-3">
 			<input
 				type="text"
 				className="form-control"
 				placeholder="Type a message..."
+				onKeyDown={handleKeyPress}
 				onChange={(e) => setMessage(e.target.value)}
 				value={message}
 				id="messageInput"

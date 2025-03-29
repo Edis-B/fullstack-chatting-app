@@ -16,6 +16,7 @@ import LikePost from "../Buttons/LikePost.jsx";
 
 import "../../css/post.css";
 import DeletePost from "../Buttons/DeletePost.jsx";
+import { useImageModal } from "../../hooks/photos.jsx";
 
 export default function PostDetails() {
 	const navigate = useNavigate();
@@ -25,6 +26,8 @@ export default function PostDetails() {
 
 	const [post, setPost] = useState({});
 	const [myComment, setMyComment] = useState(null);
+
+	const { Image, ImageModal } = useImageModal();
 
 	useEffect(() => {
 		if (!postId) return;
@@ -90,15 +93,9 @@ export default function PostDetails() {
 						<p>{post.content}</p>
 						{post.images?.length > 0 && (
 							<div className="d-flex flex-wrap">
-								{post.images.map((image, index) => (
-									<img
-										key={index}
-										src={image}
-										className="img-fluid rounded me-2 mb-2"
-										alt="Post"
-										style={{ maxWidth: "100px" }}
-									/>
-								))}
+								{post.images.map((image, index) =>
+									Image(image, index)
+								)}
 							</div>
 						)}
 					</div>
@@ -106,7 +103,14 @@ export default function PostDetails() {
 
 				{/* Card Footer (Interactions) */}
 				<div className="d-flex justify-content-between mt-3 border-top pt-2">
-					<DeletePost value={{ postId, action: () => navigate('/profile') }} />
+					{post.user._id === userId && (
+						<DeletePost
+							value={{
+								postId,
+								action: () => navigate("/profile"),
+							}}
+						/>
+					)}
 
 					<LikePost value={{ post, likeStateChange }} />
 
@@ -152,6 +156,8 @@ export default function PostDetails() {
 
 				<CommentSection post={post} />
 			</div>
+
+			{ImageModal(post.user)}
 		</div>
 	);
 }

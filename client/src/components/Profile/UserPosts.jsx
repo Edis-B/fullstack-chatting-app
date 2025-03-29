@@ -8,6 +8,7 @@ import { useUser } from "../../contexts/UserContext";
 export default function UserPosts() {
 	const { enqueueError } = useUser();
 	const { profileId } = useProfile() || {};
+
 	const [postsData, setPostsData] = useState({ posts: [], user: {} });
 
 	useEffect(() => {
@@ -56,7 +57,7 @@ export default function UserPosts() {
 	}
 
 	return (
-		<div>
+		<div className="d-flex flex-column align-items-center">
 			{postsData.posts?.length > 0 ? (
 				postsData.posts.map((post) => (
 					<Post

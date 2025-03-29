@@ -339,6 +339,9 @@ const postService = {
 
 		return "Successfully deleted post";
 	},
+	async getTrendingPosts(req) {
+		
+	}
 };
 
 export default postService;
