@@ -149,7 +149,7 @@ export default function ChatBox() {
 			<div
 				className="messages flex-grow-1 overflow-auto p-3"
 				ref={chatBoxRef}
-				style={{ maxHeight: "calc(100vh - 150px)" }} // Adjust based on header and input height
+				style={{ height: "calc(100vh - 150px)" }} // Adjust based on header and input height
 			>
 				{chatHistory.length > 0 ? (
 					chatHistory.map((message, index) => {

@@ -26,7 +26,7 @@ export default function UserPosts() {
 			const { response, data } = await request.get(
 				`${host}/post/get-users-posts`,
 				{
-					userId: profileId,
+					profileId,
 					signal,
 				}
 			);
@@ -38,14 +38,16 @@ export default function UserPosts() {
 
 			setPostsData(data);
 		} catch (err) {
-			if (err.name !== "AbortError") console.error(err);
+			if (err.name !== "AbortError") {
+				console.error(err);
+			}
 		}
 	}
 
 	function likeStateChange(id) {
 		setPostsData((prev) => ({
 			...prev,
-			posts: prev.posts.map((p) =>
+			posts: prev.posts?.map((p) =>
 				p._id == id
 					? {
 							...p,
@@ -59,7 +61,7 @@ export default function UserPosts() {
 	return (
 		<div className="d-flex flex-column align-items-center">
 			{postsData.posts?.length > 0 ? (
-				postsData.posts.map((post) => (
+				postsData.posts?.map((post) => (
 					<Post
 						key={post._id}
 						post={post}

@@ -1,8 +1,31 @@
+import {
+	friendStatuses,
+	visibilityTypes,
+} from "../common/entityConstraints.js";
 import commentModel from "../models/Comment.js";
 import postModel from "../models/Post.js";
 import userModel from "../models/User.js";
 
 const postService = {
+	async updatePostVisibility(req) {
+		const { userId, postId, newStatus } = req.body;
+
+		const post = await postModel.findById(postId).populate("user");
+
+		if (post.user._id.toString() != userId) {
+			throw new Error("Unauthorized!");
+		}
+
+		try {
+			post.visibility = newStatus;
+			await post.save();
+		} catch (err) {
+			console.log(err);
+			throw new Error("Something went wrong updating post visibility!");
+		}
+
+		return `Successfully updated post visibility to ${newStatus}`;
+	},
 	async getPostsFromQuery(req) {
 		const { query, page } = req.query;
 
@@ -20,12 +43,35 @@ const postService = {
 		return posts;
 	},
 	async getUserPosts(req) {
-		const identifier = req.query.userId;
+		const { profileId } = req.query;
+		const userId = req.user?.id;
 
 		const userObj = await userModel
-			.findById(identifier)
+			.findById(profileId)
 			.populate("posts")
+			.populate({
+				path: "friends.friend",
+				match: { _id: userId },
+			})
 			.lean();
+
+		const posibilities = [visibilityTypes.PUBLIC];
+
+		if (userObj.friends?.length > 0) {
+			const friendShipStatus = userObj.friends[0].status;
+			if (friendShipStatus === friendStatuses.FRIENDS) {
+				posibilities.push(visibilityTypes.FRIENDS);
+			}
+		}
+
+		if (userId === profileId) {
+			posibilities.push(visibilityTypes.ONLY_ME);
+			posibilities.push(visibilityTypes.FRIENDS);
+		}
+
+		userObj.posts = userObj.posts.filter((p) => {
+			return posibilities.includes(p.visibility);
+		});
 
 		if (!userObj) {
 			throw new Error("User not found!");
@@ -33,8 +79,12 @@ const postService = {
 
 		let { posts, ...user } = userObj;
 
-		for (const post of posts) {
-			post.liked = post.likes.some((p) => p._id.toString() === req.user?.id);
+		if (posts?.length > 0) {
+			for (const post of posts) {
+				post.liked = post.likes.some(
+					(p) => p._id.toString() === req.user?.id
+				);
+			}
 		}
 
 		return { user, posts };
@@ -110,8 +160,6 @@ const postService = {
 		const user = await userModel.findById(userId);
 
 		if (!user) throw new Error("Could not find user");
-
-		if (post.user == userId) throw new Error("Cannot like your own post!");
 
 		const hasAlreadyLiked = post.likes.some(
 			(p) => p._id.toString() == userId
@@ -339,9 +387,7 @@ const postService = {
 
 		return "Successfully deleted post";
 	},
-	async getTrendingPosts(req) {
-		
-	}
+	async getTrendingPosts(req) {},
 };
 
 export default postService;

@@ -17,6 +17,7 @@ import LikePost from "../Buttons/LikePost.jsx";
 import "../../css/post.css";
 import DeletePost from "../Buttons/DeletePost.jsx";
 import { useImageModal } from "../../hooks/photos.jsx";
+import EditPostVisibility from "./EditPostVisibility.jsx";
 
 export default function PostDetails() {
 	const navigate = useNavigate();
@@ -60,6 +61,13 @@ export default function PostDetails() {
 		});
 	}
 
+	function setPostStatus(newStatus) {
+		setPost((prev) => ({
+			...prev,
+			visibility: newStatus,
+		}));
+	}
+
 	if (!post.user) {
 		return <span>Loading...</span>;
 	}
@@ -70,8 +78,11 @@ export default function PostDetails() {
 			<div className="post-box d-flex flex-column justify-content-between card p-3 shadow-sm">
 				<div>
 					{/* Card Header */}
-					<Link to={`/profile/${post.user._id}`}>
-						<div className="d-flex align-items-center border-bottom pb-2">
+					<div className="border-bottom pb-2 d-flex flex-row justify-content-between">
+						<Link
+							to={`/profile/${post.user._id}`}
+							className="d-flex align-items-center "
+						>
 							<img
 								src={post.user.image}
 								className="rounded-circle me-2"
@@ -85,11 +96,24 @@ export default function PostDetails() {
 									{dateToString(post.date)}
 								</p>
 							</div>
-						</div>
-					</Link>
+						</Link>
+
+						{userId === post.user._id ? (
+							<EditPostVisibility
+								post={post}
+								userId={userId}
+								setPostStatus={setPostStatus}
+							/>
+						) : (
+							<div className="d-flex flex-row">
+								<p className="m-1">Visibility:</p>
+								<b className="m-1">{post.visibility}</b>
+							</div>
+						)}
+					</div>
 
 					{/* Card Body (Content) */}
-					<div className="mt-2">
+					<div className="mt-2 d-flex justify-content-start flex-wrap">
 						<p>{post.content}</p>
 						{post.images?.length > 0 && (
 							<div className="d-flex flex-wrap">
@@ -102,7 +126,7 @@ export default function PostDetails() {
 				</div>
 
 				{/* Card Footer (Interactions) */}
-				<div className="d-flex justify-content-between mt-3 border-top pt-2">
+				<div className="d-flex justify-content-between align-items-center mt-3 border-top pt-2">
 					{post.user._id === userId && (
 						<DeletePost
 							value={{

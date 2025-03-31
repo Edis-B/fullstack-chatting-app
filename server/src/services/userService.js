@@ -1,6 +1,6 @@
 import userModel from "../models/User.js";
 import bcrypt from "bcrypt";
-import friendStatuses from "../common/friendStatusConstants.js";
+import { friendStatuses } from "../common/entityConstraints.js";
 import { attachAuthCookie } from "../utils/authUtils.js";
 import photoModel from "../models/Photo.js";
 

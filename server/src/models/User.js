@@ -1,7 +1,7 @@
 import { Schema, Types, model } from "mongoose";
 import bcrypt from "bcrypt";
 
-import friendStatuses from "../common/friendStatusConstants.js";
+import {friendStatuses} from "../common/entityConstraints.js";
 import {
 	usernameMinLength,
 	usernameMaxLength,

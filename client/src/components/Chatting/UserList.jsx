@@ -122,8 +122,17 @@ export default function UserList() {
 		));
 	}
 
+	function searchBar() {
+		return (
+			<div className="d-flex flex-row">
+				<p>Search for users:</p>
+				<SearchBar />
+			</div>
+		);
+	}
+
 	return (
-		<div className="user-list p-3 bg-light" style={{ flex: 1 }}>
+		<div className="user-list p-3 bg-light">
 			<h5>Chats</h5>
 
 			<input
@@ -141,10 +150,7 @@ export default function UserList() {
 					) : (
 						<div>
 							<b>No chats yet? </b>
-							<div className="d-flex flex-row">
-								<p> Search for users:</p>
-								<SearchBar />
-							</div>
+							{searchBar()}
 						</div>
 					)
 				) : filteredChats.length > 0 ? (
@@ -152,10 +158,7 @@ export default function UserList() {
 				) : (
 					<div>
 						<b>Not finding chat?</b>
-						<div className="d-flex flex-row">
-							<p>Search for users:</p>
-							<SearchBar />
-						</div>
+						{searchBar()}
 					</div>
 				)}
 			</ul>

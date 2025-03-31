@@ -27,6 +27,30 @@ body {
 	animation: fadeIn 0.3s ease-in-out;
 }
 
+@keyframes fadeIn {
+	0% {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.fade-out {
+	animation: fadeOut 0.3s ease-in-out forwards;
+}
+
+@keyframes fadeOut {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+}
+
 .message-box.info {
 	background-color: #007bff;
 	border: 1px solid #0056b3;
@@ -37,13 +61,8 @@ body {
 	border: 1px solid #b71c1c;
 }
 
-@keyframes fadeIn {
-	0% { opacity: 0; transform: translateY(-10px); }
-	100% { opacity: 1; transform: translateY(0); }
-}
-
 a {
-    text-decoration: none;
+	text-decoration: none;
 	color: inherit;
 }
 

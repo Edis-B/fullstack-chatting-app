@@ -5,6 +5,16 @@ import { getErrorMessage } from "../utils/errorUtils.js";
 
 const postApiController = Router();
 
+postApiController.put("/update-post-visibility", async (req, res) => {
+	try {
+		const result = await postService.updatePostVisibility(req);
+		res.json(result);
+	} catch (err) {
+		const errMessage = getErrorMessage(err);
+		res.status(400).json(errMessage);
+	}
+});
+
 postApiController.get("/get-trending-posts", async (req, res) => {
 	try {
 		const result = await postService.getTrendingPosts(req);

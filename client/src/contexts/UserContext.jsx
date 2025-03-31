@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+
 import { host, unauthorizedString } from "../common/appConstants.js";
 import { io } from "socket.io-client";
-
 const UserContext = createContext();
 
 export function UserProvider({ children }) {
@@ -61,11 +62,17 @@ export function UserProvider({ children }) {
 	}
 
 	const enqueueInfo = async (message) => {
-		setMessages((prev) => [...prev, { type: "info", message }]);
+		setMessages((prev) => [
+			...prev,
+			{ type: "info", message, id: uuidv4() },
+		]);
 	};
 
 	const enqueueError = async (message) => {
-		setMessages((prev) => [...prev, { type: "error", message }]);
+		setMessages((prev) => [
+			...prev,
+			{ type: "error", message, id: uuidv4() },
+		]);
 	};
 
 	return (

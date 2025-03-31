@@ -14,7 +14,7 @@ export default function Chat() {
 
 				<div
 					className="chat-box p-3"
-					style={{ maxHeight: "calc(100vh - 100px)" }}
+					style={{ height: "calc(100vh - 100px)" }}
 				>
 					{/* Chat Box */}
 					<ChatBox />

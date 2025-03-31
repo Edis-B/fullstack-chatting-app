@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import chatTypes from "../common/chatTypeConstants.js";
+import {chatTypes} from "../common/entityConstraints.js";
 import chatService from "../services/chatService.js";
 import { getErrorMessage } from "../utils/errorUtils.js";
 

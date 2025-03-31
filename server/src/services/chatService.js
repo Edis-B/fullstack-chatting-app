@@ -2,7 +2,7 @@ import { Error, Types } from "mongoose";
 
 import messageModel from "../models/Message.js";
 import chatModel from "../models/Chat.js";
-import chatTypes from "../common/chatTypeConstants.js";
+import { chatTypes } from "../common/entityConstraints.js";
 import userModel from "../models/User.js";
 import userService from "./userService.js";
 

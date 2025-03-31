@@ -19,12 +19,13 @@ export async function redirectToChat(username, navigate) {
 		const { data: currentUser } = await request.get(
 			`${host}/user/get-username`
 		);
+
 		const { data: chatTypes } = await request.get(
 			`${host}/chat/chat-types`
 		);
 
 		// Create a new chat
-		const { data: newChatData } = await request.post(
+		const { data: newChatId } = await request.post(
 			`${host}/chat/create-new-chat`,
 			{
 				participants: [username, currentUser],
@@ -32,8 +33,8 @@ export async function redirectToChat(username, navigate) {
 			}
 		);
 
-		if (newChatData) {
-			return navigate(`/chat/${newChatData.chatId}`);
+		if (newChatId) {
+			return navigate(`/chat/${newChatId}`);
 		}
 	} catch (err) {
 		console.error("Error checking or creating chat:", err);

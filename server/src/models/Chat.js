@@ -1,5 +1,5 @@
 import { Schema, Types, model } from "mongoose";
-import chatTypes from "../common/chatTypeConstants.js";
+import {chatTypes} from "../common/entityConstraints.js";
 
 const chatSchema = new Schema({
 	name: String,

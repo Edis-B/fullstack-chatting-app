@@ -210,19 +210,20 @@ export default function Photos() {
 			<div className="mt-4 w-100">
 				<h5>Photo Galleries</h5>
 				<div className="d-flex flex-wrap justify-content-center gap-3">
-					<div
-						className="p-3 border rounded bg-light shadow-sm text-center d-flex flex-column align-items-center justify-content-center"
-						style={{
-							width: "100px",
-							height: "100px",
-							cursor: "pointer",
-						}}
-					>
-						<h2 className="text-primary mb-2">+</h2>
-						<Link className="mb-0" to="/gallery/create">
-							Create Gallery
+					{userId === profileId && (
+						<Link
+							to="/gallery/create"
+							className="p-3 border rounded bg-light shadow-sm text-center d-flex flex-column align-items-center justify-content-center"
+							style={{
+								width: "100px",
+								height: "100px",
+								cursor: "pointer",
+							}}
+						>
+							<h2 className="text-primary mb-2">+</h2>
+							<div className="mb-0">Create Gallery</div>
 						</Link>
-					</div>
+					)}
 
 					{galleries.length > 0 ? (
 						galleries.map((gallery) => (

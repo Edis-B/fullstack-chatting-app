@@ -1,6 +1,6 @@
 async function request(method, url, params) {
 	const options = { method, credentials: "include" };
-	let { signal, ...restOfParams } = params;
+	let { signal, ...restOfParams } = params || {};
 
 	if (method === "GET") {
 		url = `${url}?${new URLSearchParams(restOfParams)}`;

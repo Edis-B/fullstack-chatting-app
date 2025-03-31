@@ -4,36 +4,35 @@ import { useUser } from "../../contexts/UserContext";
 export default function Messages() {
 	const { messages, setMessages } = useUser();
 
-	const messagesWithId = messages?.map((msg, index) => ({
-		id: msg.id || `message-${Date.now()}-${index}`,
-		message: msg.message || msg,
-		type: msg.type || "info",
-	}));
-
 	useEffect(() => {
-		if (!messagesWithId || messagesWithId.length === 0) {
+		if (!messages || messages.length === 0) {
 			return;
 		}
 
-		const timers = messagesWithId.map((_, index) => {
-			return setTimeout(() => {
-				setMessages((prevMessages) =>
-					prevMessages.filter((_, i) => i !== index)
-				);
-			}, 3000);
+		const timers = messages.map((msg) => {
+			if (!msg.timer) {
+				setTimeout(() => {
+					setMessages((prevMessages) =>
+						prevMessages.filter((m) => m.id !== msg.id)
+					);
+				}, 3000);
+			}
+			msg.timer = true;
 		});
 
 		return () => {
 			timers.forEach((timer) => clearTimeout(timer));
 		};
-	}, [messagesWithId, setMessages]);
+	}, [messages, setMessages]);
 
 	return (
 		<div className="message-container">
-			{messagesWithId?.map((msg) => (
+			{messages?.map((msg) => (
 				<div
 					key={msg.id}
-					className={`message-box ${msg.type === "error" ? "error" : "info"}`}
+					className={`message-box ${
+						msg.type === "error" ? "error" : "info"
+					}`}
 				>
 					<p className="m-0">{msg.message}</p>
 				</div>

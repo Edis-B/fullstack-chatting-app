@@ -8,14 +8,6 @@ export const httpUrlRegex = /^https?\:\/\//i;
 
 export const unauthorizedString = "Unauthorized!";
 
-export const contentTypes = {
-	POSTS: "posts",
-	FRIENDS: "friends",
-	ABOUT: "about",
-	PHOTOS: "photos",
-	PEOPLE: "people",
-};
-
 export const visibilityTypes = {
 	PUBLIC: "public",
 	FRIENDS: "friends",
@@ -29,4 +21,17 @@ export const friendStatuses = {
 	NOT_FRIENDS: "not friends",
 	BLOCKED: "blocked",
 	BLOCKED_BY: "blocked by",
+};
+
+export const contentTypes = {
+	POSTS: "posts",
+	FRIENDS: "friends",
+	ABOUT: "about",
+	PHOTOS: "photos",
+	PEOPLE: "people",
+};
+
+export const chatTypes = {
+	DIRECT_MESSAGES: "direct messages",
+	GROUP_CHAT: "group chat",
 };
