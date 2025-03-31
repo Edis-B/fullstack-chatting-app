@@ -7,6 +7,7 @@ import { useUser } from "../../contexts/UserContext.jsx";
 import SearchBar from "../Search/SearchBar.jsx";
 
 import "../../css/header.css"; // Import the new CSS file
+import request from "../../utils/request.js";
 
 export default function Header() {
 	const { userId, enqueueError, logout } = useUser();
@@ -18,11 +19,15 @@ export default function Header() {
 
 	async function fetchUserImageUrl() {
 		try {
-			const response = await fetch(`${host}/user/get-image-url`, {
-				method: "GET",
-				credentials: "include",
-			});
-			const data = await response.json();
+			const { response, responseData } = await request.get(
+				`${host}/user/get-image-url`,
+				{
+					userId,
+				}
+			);
+
+			const { status, results, data } = responseData;
+
 			setImage(data);
 		} catch (err) {
 			console.log(err);
@@ -31,13 +36,11 @@ export default function Header() {
 
 	async function handleLogout() {
 		try {
-			const response = await fetch(`${host}/user/logout`, {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				credentials: "include",
-			});
+			const { response, responseData } = await request.post(
+				`${host}/user/logout`
+			);
 
-			const data = await response.json();
+			const { status, results, data } = responseData;
 
 			if (!response.ok) {
 				enqueueError(data);

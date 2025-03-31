@@ -18,6 +18,7 @@ import "../../css/post.css";
 import DeletePost from "../Buttons/DeletePost.jsx";
 import { useImageModal } from "../../hooks/photos.jsx";
 import EditPostVisibility from "./EditPostVisibility.jsx";
+import request from "../../utils/request.js";
 
 export default function PostDetails() {
 	const navigate = useNavigate();
@@ -38,15 +39,15 @@ export default function PostDetails() {
 
 	async function fetchPostData() {
 		try {
-			const response = await fetch(
-				`${host}/post/get-post?postId=${postId}`,
-				{
-					method: "GET",
-					credentials: "include",
-				}
-			);
+			const { response, responseData } = await request.get(`${host}/post/get-post`, {
+				postId,
+			});
 
-			const data = await response.json();
+			const { status, results, data } = responseData;
+
+			if (!response.ok) {
+				
+			}
 
 			setPost(data);
 		} catch (err) {

@@ -4,11 +4,13 @@ import { contentTypes } from "../../common/appConstants.js";
 import { host } from "../../common/appConstants.js";
 import { useUser } from "../../contexts/UserContext.jsx";
 import { useProfile } from "../../contexts/ProfileContext.jsx";
+import request from "../../utils/request.js";
 
 export default function ProfileHeaderEdit() {
 	const { enqueueError, enqueueInfo } = useUser();
 
-	const { profileId, profileData, setProfileData, setEditActive } = useProfile();
+	const { profileId, profileData, setProfileData, setEditActive } =
+		useProfile();
 
 	function handleChange(e) {
 		setProfileData({ ...profileData, [e.target.name]: e.target.value });
@@ -16,16 +18,11 @@ export default function ProfileHeaderEdit() {
 
 	async function handleSaveChanges() {
 		try {
-			const response = await fetch(`${host}/user/update-profile`, {
-				method: "PUT",
-				credentials: "include",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					profileData,
-				}),
+			const { response, responseData }  = await request.put(`${host}/user/update-profile`, {
+				profileData,
 			});
 
-			const data = await response.json();
+			const { status, results, data } = responseData;
 
 			if (!response.ok) {
 				enqueueError(data);

@@ -5,6 +5,7 @@ import { host, client } from "../../common/appConstants.js";
 import { useChat } from "../../contexts/ChatContext.jsx";
 import { useUser } from "../../contexts/UserContext.jsx";
 import SearchBar from "../Search/SearchBar.jsx";
+import request from "../../utils/request.js";
 
 export default function UserList() {
 	const { id } = useParams();
@@ -60,12 +61,14 @@ export default function UserList() {
 
 	async function fetchChats() {
 		try {
-			const response = await fetch(`${host}/chat/get-user-chats`, {
-				method: "GET",
-				credentials: "include",
-			});
+			const { response, responseData } = await request.get(
+				`${host}/chat/get-user-chats`,
+				{
+					userId,
+				}
+			);
 
-			const data = await response.json();
+			const { status, results, data } = responseData;
 
 			if (!response.ok) {
 				enqueueError(data);

@@ -11,7 +11,7 @@ export default function EditPostVisibility({ post, userId, setPostStatus }) {
 
 	const handleSave = async () => {
 		try {
-			const { response, data } = await request.put(
+			const { response, responseData } = await request.put(
 				`${host}/post/update-post-visibility`,
 				{
 					userId,
@@ -19,6 +19,8 @@ export default function EditPostVisibility({ post, userId, setPostStatus }) {
 					newStatus,
 				}
 			);
+		
+			const { status, results, data } = responseData;
 
 			if (!response.ok) {
 				enqueueError(data);

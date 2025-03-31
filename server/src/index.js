@@ -11,6 +11,10 @@ import { cookieProtectorKey } from "./common/secretKeys.js";
 import { frontEnd } from "./common/appConstants.js";
 import { attachUserToRequest } from "./middlewares/authMiddleware.js";
 import routes from "./routes.js";
+import {
+	notFoundHandler,
+	errorHandler,
+} from "./middlewares/errorMiddleware.js";
 
 const app = express();
 
@@ -43,8 +47,10 @@ const io = new Server(server, {
 });
 setUpSocket(io);
 
-app.use((req, res, next) => persistCookie(req, res, next));
-app.use(async (req, res, next) => attachUserToRequest(req, res, next));
+app.use(persistCookie);
+app.use(attachUserToRequest);
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 // Routing
 app.use(routes);

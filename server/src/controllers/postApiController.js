@@ -1,138 +1,147 @@
 import { Router } from "express";
-
 import postService from "../services/postService.js";
-import { getErrorMessage } from "../utils/errorUtils.js";
+import { catchAsync } from "../utils/errorUtils.js";
 
 const postApiController = Router();
 
-postApiController.put("/update-post-visibility", async (req, res) => {
-	try {
+// Apply catchAsync to all route handlers to avoid try-catch blocks
+postApiController.put(
+	"/update-post-visibility",
+	catchAsync(async (req, res) => {
 		const result = await postService.updatePostVisibility(req);
 		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+	})
+);
 
-postApiController.get("/get-trending-posts", async (req, res) => {
-	try {
+postApiController.get(
+	"/get-trending-posts",
+	catchAsync(async (req, res) => {
 		const result = await postService.getTrendingPosts(req);
 		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+	})
+);
 
-postApiController.delete("/delete-post", async (req, res) => {
-	try {
+postApiController.delete(
+	"/delete-post",
+	catchAsync(async (req, res) => {
 		const result = await postService.deletePost(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+		res.json({
+			status: "success",
+			data: result,
+		});
+	})
+);
 
-postApiController.get("/get-posts-by-query", async (req, res) => {
-	try {
+postApiController.get(
+	"/get-posts-by-content",
+	catchAsync(async (req, res) => {
 		const result = await postService.getPostsFromQuery(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+		res.json({
+			status: "success",
+			results: result.length,
+			data: result,
+		});
+	})
+);
 
-postApiController.post("/remove-like-from-comment", async (req, res) => {
-	try {
+postApiController.post(
+	"/remove-like-from-comment",
+	catchAsync(async (req, res) => {
 		const result = await postService.removeLikeFromComment(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+		res.json({
+			status: "success",
+			data: result,
+		});
+	})
+);
 
-postApiController.post("/like-comment", async (req, res) => {
-	try {
+postApiController.post(
+	"/like-comment",
+	catchAsync(async (req, res) => {
 		const result = await postService.likeComment(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+		res.json({
+			status: "success",
+			data: result,
+		});
+	})
+);
 
-postApiController.post("/remove-comment-from-post", async (req, res) => {
-	try {
+postApiController.post(
+	"/remove-comment-from-post",
+	catchAsync(async (req, res) => {
 		const result = await postService.removeCommentFromPost(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+		res.json({
+			status: "success",
+			data: result,
+		});
+	})
+);
 
-postApiController.post("/comment-on-post", async (req, res) => {
-	try {
+postApiController.post(
+	"/comment-on-post",
+	catchAsync(async (req, res) => {
 		const result = await postService.commentOnPost(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+		res.status(201).json({
+			status: "success",
+			data: result,
+		});
+	})
+);
 
-postApiController.post("/remove-like-from-post", async (req, res) => {
-	try {
+postApiController.post(
+	"/remove-like-from-post",
+	catchAsync(async (req, res) => {
 		const result = await postService.removeLikeFromPost(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+		res.json({
+			status: "success",
+			data: result,
+		});
+	})
+);
 
-postApiController.post("/like-post", async (req, res) => {
-	try {
+postApiController.post(
+	"/like-post",
+	catchAsync(async (req, res) => {
 		const result = await postService.likePost(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+		res.status(201).json({
+			status: "success",
+			data: result,
+		});
+	})
+);
 
-postApiController.get("/get-post", async (req, res) => {
-	try {
+postApiController.get(
+	"/get-post",
+	catchAsync(async (req, res) => {
 		const result = await postService.getPost(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+		res.json({
+			status: "success",
+			data: result,
+		});
+	})
+);
 
-postApiController.post("/create-post", async (req, res) => {
-	try {
+postApiController.post(
+	"/create-post",
+	catchAsync(async (req, res) => {
 		const result = await postService.createPost(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+		res.status(201).json({
+			status: "success",
+			data: result,
+		});
+	})
+);
 
-postApiController.get("/get-users-posts", async (req, res) => {
-	try {
+postApiController.get(
+	"/get-user-posts",
+	catchAsync(async (req, res) => {
 		const result = await postService.getUserPosts(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+		res.json({
+			status: "success",
+			results: result.posts.length,
+			data: result,
+		});
+	})
+);
 
 export default postApiController;

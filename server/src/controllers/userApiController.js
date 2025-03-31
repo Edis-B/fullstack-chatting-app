@@ -1,171 +1,202 @@
 import { Router } from "express";
-
 import userService from "../services/userService.js";
 import { autherize } from "../utils/authUtils.js";
-import { getErrorMessage } from "../utils/errorUtils.js";
+import { catchAsync } from "../utils/errorUtils.js";
 
 const userApiController = Router();
 
-userApiController.put("/update-profile", async (req, res) => {
-	try {
-		const result = await userService.updateProfile(req, res);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+// Profile Updates
+userApiController.put(
+	"/update-profile",
+	catchAsync(async (req, res) => {
+		const updatedProfile = await userService.updateProfile(req, res);
+		res.json({
+			status: "success",
+			data: updatedProfile,
+		});
+	})
+);
 
-userApiController.post("/unfriend", async (req, res) => {
-	try {
-		const result = await userService.unfriend(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+// Friend Management
+userApiController.post(
+	"/unfriend",
+	catchAsync(async (req, res) => {
+		await userService.unfriend(req);
+		res.json({
+			status: "success",
+			data: null,
+		});
+	})
+);
 
-userApiController.post("/send-friend-request", async (req, res) => {
-	try {
-		const result = await userService.sendFriendRequest(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+userApiController.post(
+	"/send-friend-request",
+	catchAsync(async (req, res) => {
+		const request = await userService.sendFriendRequest(req);
+		res.status(201).json({
+			status: "success",
+			data: request,
+		});
+	})
+);
 
-userApiController.post("/accept-friend-request", async (req, res) => {
-	try {
-		const result = await userService.acceptFriendRequest(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+userApiController.post(
+	"/accept-friend-request",
+	catchAsync(async (req, res) => {
+		const friendship = await userService.acceptFriendRequest(req);
+		res.json({
+			status: "success",
+			data: friendship,
+		});
+	})
+);
 
-userApiController.post("/decline-friend-request", async (req, res) => {
-	try {
-		const result = await userService.declineFriendRequest(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+userApiController.post(
+	"/decline-friend-request",
+	catchAsync(async (req, res) => {
+		await userService.declineFriendRequest(req);
+		res.json({
+			status: "success",
+			data: null,
+		});
+	})
+);
 
-userApiController.post("/cancel-friend-request", async (req, res) => {
-	try {
-		const result = await userService.cancelFriendRequest(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+userApiController.post(
+	"/cancel-friend-request",
+	catchAsync(async (req, res) => {
+		await userService.cancelFriendRequest(req);
+		res.json({
+			status: "success",
+			data: null,
+		});
+	})
+);
 
-userApiController.get("/get-user-profile-data", async (req, res) => {
-	try {
+// User Data
+userApiController.get(
+	"/get-user-profile-data",
+	catchAsync(async (req, res) => {
 		if (!req.query.userId) {
-			return res.json(req.user?.id);
+			return res.json({
+				status: "success",
+				data: { id: req.user?.id },
+			});
 		}
-		const result = await userService.getUserProfileData(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+		const profile = await userService.getUserProfileData(req);
+		res.json({
+			status: "success",
+			data: profile,
+		});
+	})
+);
 
-userApiController.get("/get-user-id", async (req, res) => {
-	try {
-		res.json({ id: req.user.id, autherized: !!req.user?.id });
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
-
-userApiController.get("/get-user-friends", async (req, res) => {
-	try {
+userApiController.get(
+	"/get-user-friends",
+	catchAsync(async (req, res) => {
 		const friends = await userService.getAllFriendsOfUser(req);
-		res.json(friends);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+		res.json({
+			status: "success",
+			results: friends.length,
+			data: friends,
+		});
+	})
+);
 
-userApiController.get("/get-image-url", async (req, res) => {
+// Auth Related
+userApiController.get("/get-image-url", (req, res) => {
 	try {
 		autherize(req);
-		res.json(req.user.image);
+		res.json({
+			status: "success",
+			data: req.user.image,
+		});
 	} catch (err) {
-		res.status(400).json("");
+		res.status(401).json({
+			status: "fail",
+			message: "Unauthorized",
+		});
 	}
+});
+
+userApiController.get("/get-user-id", (req, res) => {
+	res.json({
+		status: "success",
+		data: {
+			id: req.user?.id,
+			autherized: !!req.user?.id,
+		},
+	});
 });
 
 userApiController.get("/get-username", (req, res) => {
 	if (!req.user) {
-		return res.status(400).json(null);
+		return res.status(401).json({
+			status: "fail",
+			message: "Unauthorized",
+		});
 	}
-
-	res.json(req.user.username);
+	res.json({
+		status: "success",
+		data: req.user.username,
+	});
 });
 
-userApiController.get("/get-users-by-username", async (req, res) => {
-	try {
-		const result = await userService.getPeopleByUserSubstring(req);
-
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
+userApiController.get("/get-current-user-data", (req, res) => {
+	if (!req.user) {
+		return res.status(401).json({
+			status: "fail",
+			message: "Unauthorized",
+		});
 	}
+	res.json({
+		status: "success",
+		data: { ...req.user.toObject(), autherized: true },
+	});
 });
 
-userApiController.post("/register", async (req, res) => {
-	let result;
-	try {
-		result = await userService.registerUser(res, req.body);
-	} catch (err) {
-		result = getErrorMessage(err);
-		res.status(400);
-	}
+// Search
+userApiController.get(
+	"/get-users-by-username",
+	catchAsync(async (req, res) => {
+		const users = await userService.getPeopleByUserSubstring(req);
+		res.json({
+			status: "success",
+			results: users.length,
+			data: users,
+		});
+	})
+);
 
-	res.json(result);
-});
+// Authentication
+userApiController.post(
+	"/register",
+	catchAsync(async (req, res) => {
+		const user = await userService.registerUser(res, req.body);
+		res.status(201).json({
+			status: "success",
+			data: user,
+		});
+	})
+);
 
-userApiController.post("/login", async (req, res) => {
-	try {
-		const result = await userService.loginUser(req, res);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+userApiController.post(
+	"/login",
+	catchAsync(async (req, res) => {
+		const authData = await userService.loginUser(req, res);
+		res.json({
+			status: "success",
+			data: authData,
+		});
+	})
+);
 
 userApiController.post("/logout", (req, res) => {
-	try {
-		const result = userService.logoutUser(req, res);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
-
-userApiController.post("/send-friend-request", async (req, res) => {
-	try {
-		const result = await userService.sendFriendRequest(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
+	userService.logoutUser(req, res);
+	res.json({
+		status: "success",
+		data: null,
+	});
 });
 
 export default userApiController;

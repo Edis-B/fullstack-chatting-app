@@ -11,10 +11,12 @@ export default function DeletePost({ value }) {
 
 	async function deletePost() {
 		try {
-			const { response, data } = await request.delete(
+			const { response, responseData } = await request.delete(
 				`${host}/post/delete-post`,
 				{ userId, postId }
 			);
+			
+			const { status, results, data } = responseData;
 
 			if (!response.ok) {
 				enqueueError(data);

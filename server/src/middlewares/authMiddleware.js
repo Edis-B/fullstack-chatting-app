@@ -1,6 +1,6 @@
 import userService from "../services/userService.js";
 
-export async function attachUserToRequest(req, res, next) {
+export const attachUserToRequest = async (req, res, next) => {
 	req.user = await userService.getUserFromReq(req);
 	next();
 }

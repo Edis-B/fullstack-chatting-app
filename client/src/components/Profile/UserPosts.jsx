@@ -23,20 +23,22 @@ export default function UserPosts() {
 
 	async function fetchPosts(signal) {
 		try {
-			const { response, data } = await request.get(
-				`${host}/post/get-users-posts`,
+			const { response, responseData } = await request.get(
+				`${host}/post/get-user-posts`,
 				{
 					profileId,
 					signal,
 				}
 			);
 
+			const { status, results, data } = responseData;
+
 			if (!response.ok) {
-				enqueueError(data);
+				enqueueError(responseData);
 				return;
 			}
 
-			setPostsData(data);
+			setPostsData(responseData);
 		} catch (err) {
 			if (err.name !== "AbortError") {
 				console.error(err);

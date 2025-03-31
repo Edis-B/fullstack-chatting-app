@@ -5,6 +5,7 @@ import { useProfile } from "../../contexts/ProfileContext.jsx";
 import { useUser } from "../../contexts/UserContext.jsx";
 
 import AutoFriendButton from "./AutoFriendButton.jsx";
+import request from "../../utils/request.js";
 
 export default function Friends() {
 	const { userId } = useUser();
@@ -21,14 +22,15 @@ export default function Friends() {
 
 	async function fetchFriendsData() {
 		try {
-			const response = await fetch(
-				`${host}/user/get-user-friends?userId=${profileId}`,
+			const { response, responseData } = await request.get(
+				`${host}/user/get-user-friends?`,
 				{
-					method: "GET",
-					credentials: "include",
+					userId: profileId,
 				}
 			);
-			const data = await response.json();
+
+			const { status, results, data } = responseData;
+			
 			setFriendsArray(data);
 		} catch (err) {
 			console.log(err);

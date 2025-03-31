@@ -3,10 +3,13 @@ import { v4 as uuidv4 } from "uuid";
 
 import { host, unauthorizedString } from "../common/appConstants.js";
 import { io } from "socket.io-client";
+import request from "../utils/request.js";
+
 const UserContext = createContext();
 
 export function UserProvider({ children }) {
 	const [userId, setUserId] = useState(null);
+	const [user, setUser] = useState({});
 	const [socket, setSocket] = useState(null);
 	const [messages, setMessages] = useState([]);
 	const [autherized, setAutherized] = useState(null);
@@ -46,15 +49,16 @@ export function UserProvider({ children }) {
 
 	async function fetchUser() {
 		try {
-			const response = await fetch(`${host}/user/get-user-id`, {
-				method: "GET",
-				credentials: "include",
-			});
+			const { response, responseData } = await request.get(
+				`${host}/user/get-current-user-data`
+			);
 
-			const data = await response.json();
-			setUserId(data.id);
+			const { status, results, data } = responseData;
+
+			setUserId(data._id);
+			setUser(data);
+
 			setAutherized(data.autherized);
-
 			return data;
 		} catch (err) {
 			console.log(err);
@@ -88,6 +92,8 @@ export function UserProvider({ children }) {
 				logout,
 				enqueueInfo,
 				enqueueError,
+				user,
+				setUser,
 				notifications: { enqueueError, enqueueInfo },
 			}}
 		>

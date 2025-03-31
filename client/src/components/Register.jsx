@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
+
 import { useUser } from "../contexts/UserContext.jsx";
 import { host } from "../common/appConstants.js";
 import { useNavigate } from "react-router";
+import request  from "../utils/request.js";
+
 export default function Register() {
 	const { userId, autherized, enqueueError, enqueueInfo } = useUser();
 	const navigate = useNavigate();
@@ -22,19 +25,17 @@ export default function Register() {
 		e.preventDefault();
 
 		try {
-			const response = await fetch(`${host}/user/register`, {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
+			const { response, responseData } = await request.post(
+				`${host}/user/register`,
+				{
 					email,
 					username,
 					password,
 					confirmPassword,
-				}),
-			});
+				}
+			);
 
-			const data = await response.json();
-			console.log(data);
+			const { status, results, data } = responseData;
 
 			if (!response.ok) {
 				enqueueError(data);

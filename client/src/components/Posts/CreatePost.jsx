@@ -4,6 +4,7 @@ import { useUser } from "../../contexts/UserContext";
 import { host, httpUrlRegex } from "../../common/appConstants.js";
 
 import "../../css/create-post.css";
+import request from "../../utils/request.js";
 export default function CreatePost() {
 	const navigate = useNavigate();
 	const { userId, enqueueError, enqueueInfo } = useUser();
@@ -44,19 +45,15 @@ export default function CreatePost() {
 		e.preventDefault();
 
 		try {
-			const response = await fetch(`${host}/post/create-post`, {
-				method: "POST",
-				credentials: "include",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
+			const { response, responseData } = await request.post(
+				`${host}/post/create-post`,
+				{
 					...postData,
 					userId,
-				}),
-			});
+				}
+			);
 
-			const data = await response.json();
+			const { status, results, data } = responseData;
 
 			if (!response.ok) {
 				enqueueError(data);
@@ -91,7 +88,10 @@ export default function CreatePost() {
 							<label className="form-label">Images</label>
 							{images?.length > 0 ? (
 								images.map((image, index) => (
-									<div className="d-flex flex-column image-container" key={`${image}-${index}`}>
+									<div
+										className="d-flex flex-column image-container"
+										key={`${image}-${index}`}
+									>
 										<img
 											className="preview-image"
 											src={image}

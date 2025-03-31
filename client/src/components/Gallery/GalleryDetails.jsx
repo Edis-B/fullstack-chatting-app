@@ -27,12 +27,14 @@ export default function GalleryDetails() {
 
 	// Fetch gallery data from the server
 	async function fetchGallery(galleryId) {
-		const { response, data } = await request.get(
+		const { response, responseData } = await request.get(
 			`${host}/gallery/get-gallery`,
 			{
 				galleryId,
 			}
 		);
+		
+		const { status, results, data } = responseData;
 
 		if (!response.ok) {
 			enqueueError(data);
@@ -50,7 +52,7 @@ export default function GalleryDetails() {
 	}
 
 	async function removePhotoFromGallery(galleryId, userId, photoId) {
-		const { response, data } = await request.delete(
+		const { response, responseData } = await request.delete(
 			`${host}/gallery/remove-photo-from-gallery`,
 			{
 				galleryId,
@@ -58,6 +60,8 @@ export default function GalleryDetails() {
 				userId,
 			}
 		);
+		
+		const { status, results, data } = responseData;
 
 		if (!response.ok) {
 			enqueueError(data);

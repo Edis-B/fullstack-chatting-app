@@ -30,10 +30,12 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 		setIsFetchingPhotos(true);
 		try {
 			const currentPhotos = gallery.photos.map((p) => p._id);
-			const { response, data } = await request.get(
+			const { response, responseData } = await request.get(
 				`${host}/photo/get-user-photos`,
 				{ userId, excluded: currentPhotos }
 			);
+
+			const { status, results, data } = responseData;
 
 			if (!response.ok) {
 				enqueueError(data);
@@ -52,7 +54,7 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 		if (!imageUrl) return;
 
 		try {
-			const { response, data } = await request.post(
+			const { response, responseData } = await request.post(
 				`${host}/gallery/create-image-urls-to-gallery`,
 				{
 					imageUrls: [imageUrl],
@@ -60,6 +62,9 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 					userId,
 				}
 			);
+
+			const { status, results, data } = responseData;
+
 
 			if (!response.ok) {
 				enqueueError(data);
@@ -75,13 +80,15 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 	};
 
 	async function saveEditGallery() {
-		const { response, data } = await request.put(
+		const { response, responseData } = await request.put(
 			`${host}/gallery/edit-gallery`,
 			{
 				userId,
 				galleryData: editedGallery,
 			}
 		);
+
+		const { status, results, data } = responseData;
 
 		if (!response.ok) {
 			enqueueError(data);
@@ -92,13 +99,15 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 	}
 
 	async function deleteGallery(galleryId) {
-		const { response, data } = await request.delete(
+		const { response, responseData } = await request.delete(
 			`${host}/gallery/delete-gallery`,
 			{
 				galleryId,
 				userId,
 			}
 		);
+
+		const { status, results, data } = responseData;
 
 		if (!response.ok) {
 			enqueueError(data);
@@ -110,13 +119,15 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 
 	const handleAddSelectedImages = async () => {
 		try {
-			const { response, data } = await request.post(
+			const { response, responseData } = await request.post(
 				`${host}/gallery/add-photos-to-gallery`,
 				{
 					galleryId,
 					photoIds: selectedPhotos.map((p) => p._id),
 				}
 			);
+
+			const { status, results, data } = responseData;
 
 			if (!response.ok) {
 				enqueueError(data);

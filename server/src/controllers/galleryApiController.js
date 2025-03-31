@@ -1,87 +1,98 @@
 import { Router } from "express";
 import galleryService from "../services/galleryService.js";
-import { getErrorMessage } from "../utils/errorUtils.js";
+import { catchAsync } from "../utils/errorUtils.js";
 
 const galleryApiController = Router();
 
-galleryApiController.put("/edit-gallery", async (req, res) => {
-	try {
-		const result = await galleryService.editGallery(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+galleryApiController.put(
+	"/edit-gallery",
+	catchAsync(async (req, res) => {
+		const gallery = await galleryService.editGallery(req);
+		res.json({
+			status: "success",
+			data: gallery,
+		});
+	})
+);
 
-galleryApiController.post("/add-photos-to-gallery", async (req, res) => {
-	try {
-		const result = await galleryService.addExistingPhotosToGallery(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+galleryApiController.post(
+	"/add-photos-to-gallery",
+	catchAsync(async (req, res) => {
+		const updatedGallery = await galleryService.addExistingPhotosToGallery(
+			req
+		);
+		res.status(200).json({
+			status: "success",
+			data: updatedGallery,
+		});
+	})
+);
 
-galleryApiController.post("/create-image-urls-to-gallery", async (req, res) => {
-	try {
+galleryApiController.post(
+	"/create-image-urls-to-gallery",
+	catchAsync(async (req, res) => {
 		const result = await galleryService.createImagesAndAddToGallery(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+		res.status(201).json({
+			status: "success",
+			data: result,
+		});
+	})
+);
 
-galleryApiController.get("/get-user-galleries", async (req, res) => {
-	try {
-		const result = await galleryService.getUserGalleries(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+galleryApiController.get(
+	"/get-user-galleries",
+	catchAsync(async (req, res) => {
+		const galleries = await galleryService.getUserGalleries(req);
+		res.json({
+			status: "success",
+			results: galleries.length,
+			data: galleries,
+		});
+	})
+);
 
-galleryApiController.get("/get-gallery", async (req, res) => {
-	try {
-		const result = await galleryService.getGallery(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+galleryApiController.get(
+	"/get-gallery",
+	catchAsync(async (req, res) => {
+		const gallery = await galleryService.getGallery(req);
+		res.json({
+			status: "success",
+			data: gallery,
+		});
+	})
+);
 
-galleryApiController.post("/create-gallery", async (req, res) => {
-	try {
-		const result = await galleryService.createGallery(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+galleryApiController.post(
+	"/create-gallery",
+	catchAsync(async (req, res) => {
+		const newGallery = await galleryService.createGallery(req);
+		res.status(201).json({
+			status: "success",
+			data: newGallery,
+		});
+	})
+);
 
-galleryApiController.delete("/delete-gallery", async (req, res) => {
-	try {
-		const result = await galleryService.deleteGallery(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+galleryApiController.delete(
+	"/delete-gallery",
+	catchAsync(async (req, res) => {
+		await galleryService.deleteGallery(req);
+		res.status(204).json({
+			status: "success",
+			data: null,
+		});
+	})
+);
 
-galleryApiController.delete("/remove-photo-from-gallery", async (req, res) => {
-	try {
-		const result = await galleryService.removePhotoFromGallery(req);
-		res.json(result);
-	} catch (err) {
-		const errMessage = getErrorMessage(err);
-		res.status(400).json(errMessage);
-	}
-});
+galleryApiController.delete(
+	"/remove-photo-from-gallery",
+	catchAsync(async (req, res) => {
+		const updatedGallery = await galleryService.removePhotoFromGallery(req);
+		res.json({
+			status: "success",
+			data: updatedGallery,
+		});
+	})
+);
 
 export default galleryApiController;

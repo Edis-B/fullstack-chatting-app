@@ -6,13 +6,13 @@ import ChatBoxHeader from "./ChatBoxHeader";
 import { useChat } from "../../contexts/ChatContext.jsx";
 import { useUser } from "../../contexts/UserContext.jsx";
 import { dateTimeFormat } from "../../utils/dateUtils.js";
+import request from "../../utils/request.js";
 
 export default function ChatBox() {
-	const { socket, enqueueError } = useUser();
+	const { user, socket, enqueueError } = useUser();
 	const { chatId } = useChat();
 
 	const chatBoxRef = useRef(null);
-	const [currentUsername, setCurrentUsername] = useState("");
 	const [chatHistory, setChatHistory] = useState([]);
 
 	const [isAtBottom, setIsAtBottom] = useState(true);
@@ -35,8 +35,6 @@ export default function ChatBox() {
 
 	useEffect(() => {
 		if (!chatId) return;
-
-		fetchData();
 
 		setChatHistory([]);
 		setPage(1);
@@ -85,20 +83,6 @@ export default function ChatBox() {
 		chatBox.scrollTop = chatBox.scrollHeight;
 	}
 
-	async function fetchData() {
-		try {
-			const response = await fetch(`${host}/user/get-username`, {
-				method: "GET",
-				credentials: "include",
-			});
-
-			const data = await response.json();
-			setCurrentUsername(data);
-		} catch (err) {
-			console.log(err);
-		}
-	}
-
 	const handleMessage = (data) => {
 		if (data.message.chat === chatId) {
 			setChatHistory((prev) => [...prev, data.message]);
@@ -107,15 +91,15 @@ export default function ChatBox() {
 
 	async function fetchChatHistory(id, page) {
 		try {
-			const response = await fetch(
-				`${host}/chat/get-chat-history?chatId=${id}&page=${page}`,
+			const { response, responseData } = await request.get(
+				`${host}/chat/get-chat-history`,
 				{
-					method: "GET",
-					credentials: "include",
+					chatId: id,
+					page,
 				}
 			);
 
-			const data = await response.json();
+			const { status, results, data } = responseData;
 
 			if (response.ok && data?.length > 0) {
 				setChatHistory((prev) => {
@@ -154,7 +138,7 @@ export default function ChatBox() {
 				{chatHistory.length > 0 ? (
 					chatHistory.map((message, index) => {
 						const isCurrentUser =
-							message.user?.username === currentUsername;
+							message.user?.username === user?.username;
 
 						previousDate = chatHistory[index - 1]?.date;
 						const within5Minutes =

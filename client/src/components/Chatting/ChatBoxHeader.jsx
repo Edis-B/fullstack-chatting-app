@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import { host } from "../../common/appConstants.js";
 import { useChat } from "../../contexts/ChatContext.jsx";
 import { useUser } from "../../contexts/UserContext.jsx";
+import request from "../../utils/request.js";
 
 export default function ChatBoxHeader() {
 	const { enqueueError } = useUser();
@@ -26,15 +27,15 @@ export default function ChatBoxHeader() {
 				return;
 			}
 
-			const response = await fetch(
-				`${host}/chat/get-chat-header?chatId=${chatId}`,
+			const { response, responseData } = await request.get(
+				`${host}/chat/get-chat-header`,
 				{
-					method: "GET",
-					credentials: "include",
+					chatId,
 				}
 			);
 
-			const data = await response.json();
+			const { status, results, data } = responseData;
+
 			if (!response.ok) {
 				enqueueError(data);
 			}

@@ -3,7 +3,9 @@ async function request(method, url, params) {
 	let { signal, ...restOfParams } = params || {};
 
 	if (method === "GET") {
-		url = `${url}?${new URLSearchParams(restOfParams)}`;
+		if (Object.keys(restOfParams).length > 0) {
+			url = `${url}?${new URLSearchParams(restOfParams)}`;
+		}
 	} else {
 		options.headers = {
 			"Content-Type": "application/json",
@@ -17,11 +19,13 @@ async function request(method, url, params) {
 
 	try {
 		const response = await fetch(url, options);
-		const data = await response.json();
+		const responseData = await response.json();
 
-		return { response, data };
+		return { response, responseData };
 	} catch (err) {
-		if (err.name !== "AbortError") console.log(err);
+		if (err.name !== "AbortError") {
+			console.log(`${err} at ${url}`);
+		}
 
 		throw err;
 	}

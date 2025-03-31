@@ -1,4 +1,5 @@
 import { host } from "../common/appConstants.js";
+import request from "../utils/request.js";
 
 export async function fetchUsers(substring) {
 	try {
@@ -6,15 +7,16 @@ export async function fetchUsers(substring) {
 			return [];
 		}
 
-		const response = await fetch(
-			`${host}/user/get-users-by-username?usernameSubstr=${substring}&exclude=true`,
+		const { response, responseData } = await request.get(
+			`${host}/user/get-users-by-username?`,
 			{
-				method: "GET",
-				credentials: "include",
+				usernameSubstr: substring,
+				exclude: true,
 			}
 		);
 
-		const data = await response.json();
+		const { status, results, data } = responseData;
+
 		return data;
 	} catch (err) {
 		console.log(err);
@@ -27,19 +29,16 @@ export async function sendFriendRequest(
 	{ enqueueError, enqueueInfo }
 ) {
 	try {
-		const response = await fetch(`${host}/user/send-friend-request`, {
-			method: "POST",
-			headers: {
-				"Content-type": "application/json",
-			},
-			body: JSON.stringify({
+		const { response, responseData } = await request.post(
+			`${host}/user/send-friend-request`,
+			{
 				senderId,
 				receiverId,
-			}),
-			credentials: "include",
-		});
+			}
+		);
 
-		const data = await response.json();
+		const { status, results, data } = responseData;
+
 		if (!response.ok) {
 			enqueueError(data);
 			return;
@@ -58,19 +57,16 @@ export async function unfriend(
 	{ enqueueError, enqueueInfo }
 ) {
 	try {
-		const response = await fetch(`${host}/user/unfriend`, {
-			method: "POST",
-			headers: {
-				"Content-type": "application/json",
-			},
-			body: JSON.stringify({
+		const { response, responseData } = await request.post(
+			`${host}/user/unfriend`,
+			{
 				senderId,
 				receiverId,
-			}),
-			credentials: "include",
-		});
+			}
+		);
 
-		const data = await response.json();
+		const { status, results, data } = responseData;
+
 		if (!response.ok) {
 			enqueueError(data);
 		}
@@ -88,19 +84,16 @@ export async function acceptFriendRequest(
 	{ enqueueError, enqueueInfo }
 ) {
 	try {
-		const response = await fetch(`${host}/user/accept-friend-request`, {
-			method: "POST",
-			headers: {
-				"Content-type": "application/json",
-			},
-			body: JSON.stringify({
+		const { response, responseData } = await request.post(
+			`${host}/user/accept-friend-request`,
+			{
 				senderId,
 				receiverId,
-			}),
-			credentials: "include",
-		});
+			}
+		);
 
-		const data = await response.json();
+		const { status, results, data } = responseData;
+
 		if (!response.ok) {
 			enqueueError("Failed to accept friend request.");
 		}
@@ -118,19 +111,15 @@ export async function declineFriendRequest(
 	{ enqueueError, enqueueInfo }
 ) {
 	try {
-		const response = await fetch(`${host}/user/decline-friend-request`, {
-			method: "POST",
-			headers: {
-				"Content-type": "application/json",
-			},
-			body: JSON.stringify({
+		const { response, responseData } = await request.post(
+			`${host}/user/decline-friend-request`,
+			{
 				senderId,
 				receiverId,
-			}),
-			credentials: "include",
-		});
+			}
+		);
 
-		const data = await response.json();
+		const { status, results, data } = responseData;
 
 		if (!response.ok && enqueueError) {
 			enqueueError("Failed to decline friend request.");
@@ -149,19 +138,15 @@ export async function cancelFriendRequest(
 	{ enqueueError, enqueueInfo }
 ) {
 	try {
-		const response = await fetch(`${host}/user/cancel-friend-request`, {
-			method: "POST",
-			headers: {
-				"Content-type": "application/json",
-			},
-			body: JSON.stringify({
+		const { response, responseData } = await request.post(
+			`${host}/user/cancel-friend-request`,
+			{
 				senderId,
 				receiverId,
-			}),
-			credentials: "include",
-		});
+			}
+		);
 
-		const data = await response.json();
+		const { status, results, data } = responseData;
 
 		if (!response.ok) {
 			enqueueError(data);

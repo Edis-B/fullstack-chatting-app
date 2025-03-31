@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { host } from "../common/appConstants.js";
 import { useUser } from "../contexts/UserContext.jsx";
 import { useNavigate } from "react-router";
+import request from "../utils/request.js";
 
 export default function Login() {
 	const { userId, autherized, enqueueInfo, enqueueError } = useUser();
@@ -22,18 +23,16 @@ export default function Login() {
 		e.preventDefault();
 
 		try {
-			const response = await fetch(`${host}/user/login`, {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				credentials: "include",
-				body: JSON.stringify({
+			const { response, responseData } = await request.post(
+				`${host}/user/login`,
+				{
 					identifier,
 					password,
 					rememberMe,
-				}),
-			});
+				}
+			);
 
-			const data = await response.json();
+			const { status, results, data } = responseData;
 
 			if (!response.ok) {
 				enqueueError(data);
@@ -42,9 +41,8 @@ export default function Login() {
 
 			enqueueInfo("Login successful!");
 			window.location.href = "/";
-
 		} catch (err) {
-			enqueueError(err)
+			enqueueError(err);
 			console.log(err);
 		}
 	};

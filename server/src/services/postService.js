@@ -5,374 +5,494 @@ import {
 import commentModel from "../models/Comment.js";
 import postModel from "../models/Post.js";
 import userModel from "../models/User.js";
+import { AppError } from "../utils/errorUtils.js";
 
 const postService = {
 	async updatePostVisibility(req) {
 		const { userId, postId, newStatus } = req.body;
 
+		if (!userId || !postId || !newStatus) {
+			throw new AppError("Missing required fields", 400);
+		}
+
 		const post = await postModel.findById(postId).populate("user");
 
-		if (post.user._id.toString() != userId) {
-			throw new Error("Unauthorized!");
+		if (!post) {
+			throw new AppError("Post not found", 404);
+		}
+
+		if (post.user._id.toString() !== userId) {
+			throw new AppError("Unauthorized to update this post", 403);
+		}
+
+		if (!Object.values(visibilityTypes).includes(newStatus)) {
+			throw new AppError("Invalid visibility status", 400);
 		}
 
 		try {
 			post.visibility = newStatus;
 			await post.save();
+			return `Successfully updated post visibility to ${newStatus}`;
 		} catch (err) {
-			console.log(err);
-			throw new Error("Something went wrong updating post visibility!");
+			console.error("Update post visibility error:", err);
+			throw new AppError("Failed to update post visibility", 500);
+		}
+	},
+
+	async getPostsFromQuery(req) {
+		const { query, page = 1 } = req.query;
+
+		if (!query) {
+			throw new AppError("Search query is required", 400);
 		}
 
-		return `Successfully updated post visibility to ${newStatus}`;
-	},
-	async getPostsFromQuery(req) {
-		const { query, page } = req.query;
-
 		const pageSize = 20;
+		const skip = (page - 1) * pageSize;
 
-		const posts = await postModel
-			.find({
-				content: { $regex: query, $options: "i" },
-			})
-			.populate("user")
-			.skip((page - 1) * pageSize)
-			.limit(pageSize)
-			.lean();
+		try {
+			const posts = await postModel
+				.find({
+					content: { $regex: query, $options: "i" },
+				})
+				.populate("user")
+				.skip(skip)
+				.limit(pageSize)
+				.lean();
 
-		return posts;
+			return posts;
+		} catch (err) {
+			console.error("Search posts error:", err);
+			throw new AppError("Failed to search posts", 500);
+		}
 	},
+
 	async getUserPosts(req) {
 		const { profileId } = req.query;
 		const userId = req.user?.id;
 
-		const userObj = await userModel
-			.findById(profileId)
-			.populate("posts")
-			.populate({
-				path: "friends.friend",
-				match: { _id: userId },
-			})
-			.lean();
+		if (!profileId) {
+			throw new AppError("Profile ID is required", 400);
+		}
 
-		const posibilities = [visibilityTypes.PUBLIC];
+		try {
+			const userObj = await userModel
+				.findById(profileId)
+				.populate("posts")
+				.populate({
+					path: "friends.friend",
+					match: { _id: userId },
+				})
+				.lean();
 
-		if (userObj.friends?.length > 0) {
-			const friendShipStatus = userObj.friends[0].status;
-			if (friendShipStatus === friendStatuses.FRIENDS) {
+			if (!userObj) {
+				throw new AppError("User not found", 404);
+			}
+
+			const posibilities = [visibilityTypes.PUBLIC];
+
+			if (userObj.friends?.length > 0) {
+				const friendShipStatus = userObj.friends[0].status;
+				if (friendShipStatus === friendStatuses.FRIENDS) {
+					posibilities.push(visibilityTypes.FRIENDS);
+				}
+			}
+
+			if (userId === profileId) {
+				posibilities.push(visibilityTypes.ONLY_ME);
 				posibilities.push(visibilityTypes.FRIENDS);
 			}
-		}
 
-		if (userId === profileId) {
-			posibilities.push(visibilityTypes.ONLY_ME);
-			posibilities.push(visibilityTypes.FRIENDS);
-		}
-
-		userObj.posts = userObj.posts.filter((p) => {
-			return posibilities.includes(p.visibility);
-		});
-
-		if (!userObj) {
-			throw new Error("User not found!");
-		}
-
-		let { posts, ...user } = userObj;
-
-		if (posts?.length > 0) {
-			for (const post of posts) {
-				post.liked = post.likes.some(
-					(p) => p._id.toString() === req.user?.id
-				);
+			if (!userObj.posts) {
+				return;
 			}
-		}
 
-		return { user, posts };
+			userObj.posts = userObj.posts.filter((p) => {
+				return posibilities.includes(p.visibility);
+			});
+
+			let { posts, ...user } = userObj;
+
+			if (posts?.length > 0) {
+				for (const post of posts) {
+					post.liked = post.likes.some(
+						(p) => p._id.toString() === req.user?.id
+					);
+				}
+			}
+
+			return { user, posts };
+		} catch (err) {
+			console.error("Get user posts error:", err);
+			throw new AppError("Failed to get user posts", 500);
+		}
 	},
+
 	async createPost(req) {
 		const { userId, content, images } = req.body;
-		if (req.user?.id != userId) {
-			throw new Error("Unauthorized");
+
+		if (!userId || !content) {
+			throw new AppError("User ID and content are required", 400);
+		}
+
+		if (req.user?.id !== userId) {
+			throw new AppError("Unauthorized to create post", 403);
 		}
 
 		const post = {
 			date: Date.now(),
 			user: userId,
 			content,
-			images,
+			images: images || [],
+			visibility: visibilityTypes.PUBLIC, // Default visibility
 		};
 
 		try {
-			const newPostId = await postModel.create(post);
-
+			const newPost = await postModel.create(post);
 			await userModel.findByIdAndUpdate(userId, {
-				$push: { posts: newPostId },
+				$push: { posts: newPost._id },
 			});
-
-			return newPostId._id;
+			return newPost._id;
 		} catch (err) {
-			console.log(err);
-			throw new Error("Somehing went wrong creating post!");
+			console.error("Create post error:", err);
+			throw new AppError("Failed to create post", 500);
 		}
 	},
+
 	async getPost(req) {
 		const { postId } = req.query;
-
-		const post = await postModel
-			.findById(postId)
-			.populate("user")
-			.populate("images")
-			.populate({
-				path: "comments",
-				populate: { path: "user" },
-			})
-			.populate("likes")
-			.lean();
-
-		if (!post) {
-			throw new Error("Could not find post!");
-		}
-
 		const userId = req.user?.id;
 
-		post.comments.map((comment) => {
-			if (userId) {
-				const hasLiked = comment.likes.some(
-					(uId) => uId.toString() === userId
-				);
-				comment.liked = hasLiked;
+		if (!postId) {
+			throw new AppError("Post ID is required", 400);
+		}
+
+		try {
+			const post = await postModel
+				.findById(postId)
+				.populate("user")
+				.populate("images")
+				.populate({
+					path: "comments",
+					populate: { path: "user" },
+				})
+				.populate("likes")
+				.lean();
+
+			if (!post) {
+				throw new AppError("Post not found", 404);
 			}
 
-			comment.likesCount = comment.likes.length;
-		});
+			// Check post visibility
+			if (
+				post.visibility === visibilityTypes.ONLY_ME &&
+				post.user._id.toString() !== userId
+			) {
+				throw new AppError("This post is private", 403);
+			}
 
-		post.liked = post.likes.some((id) => id.toString() === userId);
+			if (
+				post.visibility === visibilityTypes.FRIENDS &&
+				!post.user.friends.some((f) => f._id.toString() === userId)
+			) {
+				throw new AppError(
+					"Friends-only post: You must be friends to view",
+					403
+				);
+			}
 
-		return post;
+			// Process comments
+			post.comments.forEach((comment) => {
+				if (userId) {
+					comment.liked = comment.likes.some(
+						(uId) => uId.toString() === userId
+					);
+				}
+				comment.likesCount = comment.likes.length;
+			});
+
+			post.liked = post.likes.some((id) => id.toString() === userId);
+
+			return post;
+		} catch (err) {
+			console.error("Get post error:", err);
+			if (err instanceof AppError) throw err;
+			throw new AppError("Failed to get post", 500);
+		}
 	},
+
 	async likePost(req) {
 		const { postId, userId } = req.body;
 
-		const post = await postModel.findById(postId);
-		if (!post) throw new Error("Post not found");
+		if (!postId || !userId) {
+			throw new AppError("Post ID and User ID are required", 400);
+		}
 
-		if (req.user?.id != userId) throw new Error("Unauthorized!");
-		const user = await userModel.findById(userId);
-
-		if (!user) throw new Error("Could not find user");
-
-		const hasAlreadyLiked = post.likes.some(
-			(p) => p._id.toString() == userId
-		);
-
-		if (hasAlreadyLiked)
-			throw new Error("You have already liked this post!");
+		if (req.user?.id !== userId) {
+			throw new AppError("Unauthorized to like this post", 403);
+		}
 
 		try {
+			const post = await postModel.findById(postId);
+			if (!post) throw new AppError("Post not found", 404);
+
+			const user = await userModel.findById(userId);
+			if (!user) throw new AppError("User not found", 404);
+
+			const hasAlreadyLiked = post.likes.some(
+				(p) => p._id.toString() === userId
+			);
+			if (hasAlreadyLiked) {
+				throw new AppError("You have already liked this post", 400);
+			}
+
 			await postModel.findByIdAndUpdate(postId, {
-				$push: {
-					likes: userId,
-				},
+				$push: { likes: userId },
 			});
 
 			await userModel.findByIdAndUpdate(userId, {
-				$push: {
-					likedPosts: postId,
-				},
+				$push: { likedPosts: postId },
 			});
-		} catch (err) {
-			console.log(err);
-			throw new Error("Something went wrong liking the post");
-		}
 
-		return "Successfully liked the post!";
+			return "Successfully liked the post!";
+		} catch (err) {
+			console.error("Like post error:", err);
+			if (err instanceof AppError) throw err;
+			throw new AppError("Failed to like post", 500);
+		}
 	},
+
 	async removeLikeFromPost(req) {
 		const { postId, userId } = req.body;
 
-		const post = await postModel.findById(postId);
-		if (!post) throw new Error("Post not found");
+		if (!postId || !userId) {
+			throw new AppError("Post ID and User ID are required", 400);
+		}
 
-		if (req.user?.id != userId) throw new Error("Unauthorized!");
-		const user = await userModel.findById(userId);
-
-		if (!user) throw new Error("Could not find user");
-
-		if (post.user == userId)
-			throw new Error("Cannot unlike your own post!");
-
-		const hasAlreadyLiked = post.likes.some(
-			(p) => p._id.toString() == userId
-		);
-
-		if (!hasAlreadyLiked) throw new Error("You have not liked this post!");
+		if (req.user?.id !== userId) {
+			throw new AppError("Unauthorized to unlike this post", 403);
+		}
 
 		try {
+			const post = await postModel.findById(postId);
+			if (!post) throw new AppError("Post not found", 404);
+
+			const user = await userModel.findById(userId);
+			if (!user) throw new AppError("User not found", 404);
+
+			const hasLiked = post.likes.some(
+				(p) => p._id.toString() === userId
+			);
+			if (!hasLiked) {
+				throw new AppError("You haven't liked this post yet", 400);
+			}
+
 			await postModel.findByIdAndUpdate(postId, {
-				$pull: {
-					likes: userId,
-				},
+				$pull: { likes: userId },
 			});
 
 			await userModel.findByIdAndUpdate(userId, {
-				$pull: {
-					likedPosts: postId,
-				},
+				$pull: { likedPosts: postId },
 			});
-		} catch (err) {
-			console.log(err);
-			throw new Error("Something went wrong unliking the post");
-		}
 
-		return "Successfully unliked the post!";
+			return "Successfully unliked the post!";
+		} catch (err) {
+			console.error("Unlike post error:", err);
+			if (err instanceof AppError) throw err;
+			throw new AppError("Failed to unlike post", 500);
+		}
 	},
+
 	async commentOnPost(req) {
 		const { postId, userId, content } = req.body;
 
-		const post = await postModel.findById(postId);
-		if (!post) throw new Error("Post not found");
+		if (!postId || !userId || !content) {
+			throw new AppError(
+				"Post ID, User ID and content are required",
+				400
+			);
+		}
 
-		if (req.user?.id != userId) throw new Error("Unauthorized!");
-		const user = await userModel.findById(userId);
-
-		if (!user) throw new Error("Could not find user");
-
-		const newComment = {
-			date: Date.now(),
-			content,
-			user: userId,
-		};
-
-		let comment;
+		if (req.user?.id !== userId) {
+			throw new AppError("Unauthorized to comment on this post", 403);
+		}
 
 		try {
-			comment = await commentModel.create(newComment);
+			const post = await postModel.findById(postId);
+			if (!post) throw new AppError("Post not found", 404);
+
+			const user = await userModel.findById(userId);
+			if (!user) throw new AppError("User not found", 404);
+
+			const newComment = {
+				date: Date.now(),
+				content,
+				user: userId,
+			};
+
+			const comment = await commentModel.create(newComment);
 
 			await userModel.findByIdAndUpdate(userId, {
-				$push: {
-					comments: comment._id,
-				},
+				$push: { comments: comment._id },
 			});
 
 			await postModel.findByIdAndUpdate(postId, {
-				$push: {
-					comments: comment._id,
-				},
+				$push: { comments: comment._id },
 			});
-		} catch (err) {
-			console.log(err);
-			throw new Error("There has been an error creating commment");
-		}
 
-		try {
 			await comment.populate("user");
+			return comment.toObject();
 		} catch (err) {
-			console.log(err);
+			console.error("Create comment error:", err);
+			if (err instanceof AppError) throw err;
+			throw new AppError("Failed to create comment", 500);
 		}
-
-		return comment.toObject();
 	},
+
 	async removeCommentFromPost(req) {
 		const { postId, userId, commentId } = req.body;
 
-		const post = await postModel.findById(postId);
-		if (!post) throw new Error("Post not found");
+		if (!postId || !userId || !commentId) {
+			throw new AppError(
+				"Post ID, User ID and Comment ID are required",
+				400
+			);
+		}
 
-		if (req.user?.id != userId) throw new Error("Unauthorized!");
-		const user = await userModel.findById(userId);
-
-		if (!user) throw new Error("Could not find user");
-
-		const exists = post.comments.some((c) => c.toString() == commentId);
-
-		if (!exists)
-			throw new Error("Such a comment does not exist on this post!");
+		if (req.user?.id !== userId) {
+			throw new AppError("Unauthorized to remove this comment", 403);
+		}
 
 		try {
+			const post = await postModel.findById(postId);
+			if (!post) throw new AppError("Post not found", 404);
+
+			const user = await userModel.findById(userId);
+			if (!user) throw new AppError("User not found", 404);
+
+			const commentExists = post.comments.some(
+				(c) => c.toString() === commentId
+			);
+			if (!commentExists) {
+				throw new AppError("Comment not found on this post", 404);
+			}
+
 			await userModel.findByIdAndUpdate(userId, {
-				$pull: {
-					comments: commentId,
-				},
+				$pull: { comments: commentId },
 			});
 
 			await postModel.findByIdAndUpdate(postId, {
-				$pull: {
-					comments: commentId,
-				},
+				$pull: { comments: commentId },
 			});
-		} catch (err) {
-			console.log(err);
-			throw new Error("There has been an error creating commment");
-		}
 
-		return "Successfully removed comment";
+			return "Successfully removed comment";
+		} catch (err) {
+			console.error("Remove comment error:", err);
+			if (err instanceof AppError) throw err;
+			throw new AppError("Failed to remove comment", 500);
+		}
 	},
+
 	async likeComment(req) {
 		const { postId, userId, commentId } = req.body;
 
-		const post = await postModel.findById(postId);
-		if (!post) throw new Error("Post not found");
-
-		if (req.user?.id != userId) throw new Error("Unauthorized!");
-		const user = await userModel.findById(userId);
-
-		if (!user) throw new Error("Could not find user");
-
-		const comment = post.comments.find((p) => p.toString() === commentId);
-
-		if (!comment)
-			throw new Error("Such a comment does not exist on this post!");
-
-		try {
-			await commentModel.findByIdAndUpdate(commentId, {
-				$push: {
-					likes: userId,
-				},
-			});
-		} catch (err) {
-			console.log(err);
-			throw new Error("There has been an error liking commment");
+		if (!postId || !userId || !commentId) {
+			throw new AppError(
+				"Post ID, User ID and Comment ID are required",
+				400
+			);
 		}
 
-		return "Successfully liked comment";
+		if (req.user?.id !== userId) {
+			throw new AppError("Unauthorized to like this comment", 403);
+		}
+
+		try {
+			const post = await postModel.findById(postId);
+			if (!post) throw new AppError("Post not found", 404);
+
+			const user = await userModel.findById(userId);
+			if (!user) throw new AppError("User not found", 404);
+
+			const comment = await commentModel.findById(commentId);
+			if (!comment) throw new AppError("Comment not found", 404);
+
+			const hasAlreadyLiked = comment.likes.some(
+				(uId) => uId.toString() === userId
+			);
+			if (hasAlreadyLiked) {
+				throw new AppError("You have already liked this comment", 400);
+			}
+
+			await commentModel.findByIdAndUpdate(commentId, {
+				$push: { likes: userId },
+			});
+
+			return "Successfully liked comment";
+		} catch (err) {
+			console.error("Like comment error:", err);
+			if (err instanceof AppError) throw err;
+			throw new AppError("Failed to like comment", 500);
+		}
 	},
+
 	async removeLikeFromComment(req) {
 		const { postId, userId, commentId } = req.body;
 
-		const post = await postModel.findById(postId);
-		if (!post) throw new Error("Post not found");
-
-		if (req.user?.id != userId) throw new Error("Unauthorized!");
-		const user = await userModel.findById(userId);
-
-		if (!user) throw new Error("Could not find user");
-
-		const comment = post.comments.find((p) => p.toString() === commentId);
-
-		if (!comment)
-			throw new Error("Such a comment does not exist on this post!");
-
-		try {
-			await commentModel.findByIdAndUpdate(commentId, {
-				$pull: {
-					likes: userId,
-				},
-			});
-		} catch (err) {
-			console.log(err);
-			throw new Error("There has been an error unliking the commment");
+		if (!postId || !userId || !commentId) {
+			throw new AppError(
+				"Post ID, User ID and Comment ID are required",
+				400
+			);
 		}
 
-		return "Successfully unliked comment";
+		if (req.user?.id !== userId) {
+			throw new AppError("Unauthorized to unlike this comment", 403);
+		}
+
+		try {
+			const post = await postModel.findById(postId);
+			if (!post) throw new AppError("Post not found", 404);
+
+			const user = await userModel.findById(userId);
+			if (!user) throw new AppError("User not found", 404);
+
+			const comment = await commentModel.findById(commentId);
+			if (!comment) throw new AppError("Comment not found", 404);
+
+			const hasLiked = comment.likes.some(
+				(uId) => uId.toString() === userId
+			);
+			if (!hasLiked) {
+				throw new AppError("You haven't liked this comment yet", 400);
+			}
+
+			await commentModel.findByIdAndUpdate(commentId, {
+				$pull: { likes: userId },
+			});
+
+			return "Successfully unliked comment";
+		} catch (err) {
+			console.error("Unlike comment error:", err);
+			if (err instanceof AppError) throw err;
+			throw new AppError("Failed to unlike comment", 500);
+		}
 	},
+
 	async deletePost(req) {
 		const { userId, postId } = req.body;
 
-		if (userId != req.user._id) {
-			throw new Error("Unauthorized");
+		if (!userId || !postId) {
+			throw new AppError("User ID and Post ID are required", 400);
+		}
+
+		if (userId !== req.user?.id) {
+			throw new AppError("Unauthorized to delete this post", 403);
 		}
 
 		try {
+			const post = await postModel.findById(postId);
+			if (!post) throw new AppError("Post not found", 404);
+
 			await postModel.findByIdAndDelete(postId);
 			await userModel.findByIdAndUpdate(userId, {
 				$pull: {
@@ -380,14 +500,35 @@ const postService = {
 					likedPosts: postId,
 				},
 			});
-		} catch (err) {
-			console.log(err);
-			throw new Error("Something went wrong deleting post");
-		}
 
-		return "Successfully deleted post";
+			return "Successfully deleted post";
+		} catch (err) {
+			console.error("Delete post error:", err);
+			if (err instanceof AppError) throw err;
+			throw new AppError("Failed to delete post", 500);
+		}
 	},
-	async getTrendingPosts(req) {},
+
+	async getTrendingPosts(req) {
+		try {
+			const trendingPosts = await postModel
+				.find()
+				.sort({ likes: -1, comments: -1, date: -1 })
+				.limit(10)
+				.populate("user")
+				.populate("comments")
+				.lean();
+
+			if (!trendingPosts.length) {
+				throw new AppError("No trending posts found", 404);
+			}
+
+			return trendingPosts;
+		} catch (error) {
+			console.error("Error fetching trending posts:", error);
+			throw new AppError("Failed to fetch trending posts", 500);
+		}
+	},
 };
 
 export default postService;

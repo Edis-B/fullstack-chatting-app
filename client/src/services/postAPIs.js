@@ -1,24 +1,21 @@
 import { host } from "../common/appConstants.js";
 import { useUser } from "../contexts/UserContext.jsx";
+import request from "../utils/request.js";
 
 export async function likePost(postId, userId, { enqueueError, enqueueInfo }) {
 	try {
 		if (!postId) return;
 		if (!userId) return;
 
-		const response = await fetch(`${host}/post/like-post`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-			body: JSON.stringify({
+		const { response, responseData } = await request.post(
+			`${host}/post/like-post`,
+			{
 				postId,
 				userId,
-			}),
-		});
+			}
+		);
 
-		const data = await response.json();
+		const { status, results, data } = responseData;
 
 		if (!response.ok) {
 			enqueueError(data);
@@ -42,19 +39,15 @@ export async function removeLikeFromPost(
 		if (!postId) return;
 		if (!userId) return;
 
-		const response = await fetch(`${host}/post/remove-like-from-post`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-			body: JSON.stringify({
+		const { response, responseData } = await request.post(
+			`${host}/post/remove-like-from-post`,
+			{
 				postId,
 				userId,
-			}),
-		});
+			}
+		);
 
-		const data = await response.json();
+		const { status, results, data } = responseData;
 
 		if (!response.ok) {
 			enqueueError(data);
@@ -79,20 +72,16 @@ export async function commentOnPost(
 		if (!postId) return;
 		if (!userId) return;
 
-		const response = await fetch(`${host}/post/comment-on-post`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-			body: JSON.stringify({
+		const { response, responseData } = await request.post(
+			`${host}/post/comment-on-post`,
+			{
 				postId,
 				userId,
 				content,
-			}),
-		});
+			}
+		);
 
-		const data = await response.json();
+		const { status, results, data } = responseData;
 
 		if (!response.ok) {
 			enqueueError(data);
@@ -116,20 +105,16 @@ export async function removeCommentFromPost(
 		if (!postId) return;
 		if (!userId) return;
 
-		const response = await fetch(`${host}/post/remove-comment-from-post`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-			body: JSON.stringify({
+		const { response, responseData } = await request.post(
+			`${host}/post/remove-comment-from-post`,
+			{
 				postId,
 				userId,
 				commentId,
-			}),
-		});
+			}
+		);
 
-		const data = await response.json();
+		const { status, results, data } = responseData;
 
 		if (!response.ok) {
 			enqueueError(data);
@@ -155,20 +140,16 @@ export async function likeComment(
 		if (!postId) return;
 		if (!userId) return;
 
-		const response = await fetch(`${host}/post/like-comment`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-			body: JSON.stringify({
+		const { response, responseData } = await request.post(
+			`${host}/post/like-comment`,
+			{
 				postId,
 				userId,
 				commentId,
-			}),
-		});
+			}
+		);
 
-		const data = await response.json();
+		const { status, results, data } = responseData;
 
 		if (!response.ok) {
 			enqueueError(data);
@@ -194,20 +175,16 @@ export async function removeLikeFromComment(
 		if (!postId) return;
 		if (!userId) return;
 
-		const response = await fetch(`${host}/post/remove-like-from-comment`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-			body: JSON.stringify({
+		const { response, responseData }  = await request.post(
+			`${host}/post/remove-like-from-comment`,
+			{
 				postId,
 				userId,
 				commentId,
-			}),
-		});
+			}
+		);
 
-		const data = await response.json();
+		const { status, results, data } = responseData;
 
 		if (!response.ok) {
 			enqueueError(data);

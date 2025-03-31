@@ -28,10 +28,12 @@ export default function SearchPeople() {
 
 	async function fetchPeopleByQuery(query, page) {
 		try {
-			const { response, data } = await request.get(
+			const { response, responseData } = await request.get(
 				`${host}/user/get-users-by-username`,
 				{ usernameSubstr: query || "", page, exclude: true }
 			);
+		
+			const { status, results, data } = responseData;
 
 			if (!response.ok) {
 				enqueueError(data);

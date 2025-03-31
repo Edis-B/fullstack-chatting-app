@@ -10,7 +10,8 @@ import UserPosts from "./UserPosts.jsx";
 import Friends from "./Friends.jsx";
 import Photos from "./Photos.jsx";
 
-import "../../css/profile.css"
+import "../../css/profile.css";
+import request from "../../utils/request.js";
 
 export default function Profile() {
 	const navigate = useNavigate();
@@ -47,15 +48,14 @@ export default function Profile() {
 
 	async function fetchProfileData(id) {
 		try {
-			const response = await fetch(
-				`${host}/user/get-user-profile-data?userId=${id ?? ""}`,
+			const { response, responseData } = await request.get(
+				`${host}/user/get-user-profile-data`,
 				{
-					method: "GET",
-					credentials: "include",
+					userId: id ?? "",
 				}
 			);
 
-			const data = await response.json();
+			const { status, results, data } = responseData;
 
 			if (!profileUserId) {
 				navigate(`/profile/${data}`);

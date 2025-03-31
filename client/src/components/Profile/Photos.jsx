@@ -64,15 +64,14 @@ export default function Photos() {
 
 	async function fetchUserPhotos(profileId) {
 		try {
-			const response = await fetch(
-				`${host}/photo/get-user-photos?userId=${profileId}`,
+			const { response, responseData } = await request.get(
+				`${host}/photo/get-user-photos`,
 				{
-					method: "GET",
-					credentials: "include",
+					userId: profileId,
 				}
 			);
 
-			const data = await response.json();
+			const { status, results, data } = responseData;
 
 			if (!response.ok) {
 				enqueueError(data);
@@ -89,10 +88,12 @@ export default function Photos() {
 
 	async function fetchUserGalleries(profileId) {
 		try {
-			const { response, data } = await request.get(
+			const { response, responseData } = await request.get(
 				`${host}/gallery/get-user-galleries`,
 				{ profileId }
 			);
+
+			const { status, results, data } = responseData;
 
 			if (!response.ok) {
 				enqueueError(data);
@@ -108,19 +109,15 @@ export default function Photos() {
 
 	async function uploadPhoto(userId, imageUrl) {
 		try {
-			const response = await fetch(`${host}/photo/upload-photo`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				credentials: "include",
-				body: JSON.stringify({
+			const { response, responseData } = await request.post(
+				`${host}/photo/upload-photo`,
+				{
 					userId,
 					imageUrls: imageUrl,
-				}),
-			});
+				}
+			);
 
-			const data = await response.json();
+			const { status, results, data } = responseData;
 
 			if (!response.ok) {
 				enqueueError(data.message);

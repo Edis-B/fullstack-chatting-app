@@ -1,5 +1,5 @@
 // Middleware to refresh the session expiration on each request
-export function persistCookie(req, res, next) {
+export const persistCookie = (req, res, next) => {
 	if (req.cookies.userId) {
 		const userIdCookieParsed = JSON.parse(req.cookies.userId);
 		const expiryDate = new Date(userIdCookieParsed.expires);

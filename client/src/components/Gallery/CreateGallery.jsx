@@ -19,7 +19,7 @@ export default function CreateGallery() {
 	const [images, setImages] = useFetchUserPhotos();
 
 	async function handleCreateGallery() {
-		const { response, data } = await request.post(
+		const { response, responseData } = await request.post(
 			`${host}/gallery/create-gallery`,
 			{
 				photos: selectedImages.map(img => img._id),
@@ -28,6 +28,8 @@ export default function CreateGallery() {
 				userId
 			}
 		);
+
+		const { status, results, data } = responseData;
 
 		if (!response.ok) {
 			enqueueError(data);

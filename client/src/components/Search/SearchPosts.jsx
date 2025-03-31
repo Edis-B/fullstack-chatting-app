@@ -21,10 +21,12 @@ export default function SearchPosts() {
 
 	async function fetchPosts(query) {
 		try {
-			const { response, data } = await request.get(
+			const { response, responseData } = await request.get(
 				`${host}/post/get-posts-by-query`,
 				{ query: query || "" }
 			);
+		
+			const { status, results, data } = responseData;
 
 			if (!response.ok) {
 				enqueueError(data);

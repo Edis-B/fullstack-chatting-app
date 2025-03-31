@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { host } from "../../common/appConstants.js";
 import { useChat } from "../../contexts/ChatContext.jsx";
 import { useUser } from "../../contexts/UserContext.jsx";
+import request from "../../utils/request.js";
 
 export default function MessageInput() {
 	const { socket } = useUser();
@@ -22,19 +23,15 @@ export default function MessageInput() {
 			return;
 		}
 
-		const response = await fetch(`${host}/chat/send-message`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-			body: JSON.stringify({
+		const { response, responseData } = await request.post(
+			`${host}/chat/send-message`,
+			{
 				chat: chatId,
 				text: message,
-			}),
-		});
+			}
+		);
 
-		const data = await response.json();
+		const { status, results, data } = responseData;
 
 		if (!response.ok) {
 			console.log(data);

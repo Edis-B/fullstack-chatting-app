@@ -11,12 +11,14 @@ export function useFetchUserPhotos() {
 
 	async function fetchImages() {
 		try {
-			const { response, data } = await request.get(
+			const { response, responseData } = await request.get(
 				`${host}/photo/get-user-photos`,
 				{
 					userId,
 				}
 			);
+		
+			const { status, results, data } = responseData;
 
 			if (!response.ok) {
 				enqueueError(data);
