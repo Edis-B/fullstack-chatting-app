@@ -99,7 +99,7 @@ export default function ChatBox() {
 				}
 			);
 
-			const { status, results, data } = responseData;
+			const { data } = responseData;
 
 			if (response.ok && data?.length > 0) {
 				setChatHistory((prev) => {
@@ -115,7 +115,7 @@ export default function ChatBox() {
 			}
 
 			if (!response.ok) {
-				enqueueError(data);
+				enqueueError(responseData.message);
 			}
 		} catch (err) {
 			console.log(err);

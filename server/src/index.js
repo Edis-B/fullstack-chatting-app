@@ -49,11 +49,12 @@ setUpSocket(io);
 
 app.use(persistCookie);
 app.use(attachUserToRequest);
-app.use(notFoundHandler);
-app.use(errorHandler);
 
 // Routing
 app.use(routes);
+
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 app.get("*", (req, res) => {
 	res.status(404);

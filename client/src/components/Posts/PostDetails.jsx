@@ -43,7 +43,7 @@ export default function PostDetails() {
 				postId,
 			});
 
-			const { status, results, data } = responseData;
+			const { data } = responseData;
 
 			if (!response.ok) {
 				

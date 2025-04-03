@@ -3,7 +3,7 @@ import { likePost, removeLikeFromPost } from "../../services/postAPIs";
 
 export default function LikePost({ value }) {
 	const { userId, notifications } = useUser();
-	const { post, stateFlip } = value;
+	const { post, likeStateChange  } = value;
 
 	const likesCount =
 		post.likesCount !== undefined ? post.likesCount : post.likes.length;
@@ -24,7 +24,7 @@ export default function LikePost({ value }) {
 							return;
 						}
 
-						stateFlip(post._id);
+						likeStateChange(post._id);
 					}}
 				>
 					<span className="m-2">{likesCount}</span>
@@ -47,7 +47,7 @@ export default function LikePost({ value }) {
 							return;
 						}
 
-						stateFlip(post._id);
+						likeStateChange (post._id);
 					}}
 				>
 					<span className="m-2">{likesCount}</span>

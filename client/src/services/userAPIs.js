@@ -8,14 +8,14 @@ export async function fetchUsers(substring) {
 		}
 
 		const { response, responseData } = await request.get(
-			`${host}/user/get-users-by-username?`,
+			`${host}/user/get-users-by-username`,
 			{
 				usernameSubstr: substring,
 				exclude: true,
 			}
 		);
 
-		const { status, results, data } = responseData;
+		const { data } = responseData;
 
 		return data;
 	} catch (err) {
@@ -37,10 +37,10 @@ export async function sendFriendRequest(
 			}
 		);
 
-		const { status, results, data } = responseData;
+		const { data } = responseData;
 
 		if (!response.ok) {
-			enqueueError(data);
+			enqueueError(responseData.message);
 			return;
 		}
 
@@ -65,10 +65,10 @@ export async function unfriend(
 			}
 		);
 
-		const { status, results, data } = responseData;
+		const { data } = responseData;
 
 		if (!response.ok) {
-			enqueueError(data);
+			enqueueError(responseData.message);
 		}
 
 		enqueueInfo(data);
@@ -92,7 +92,7 @@ export async function acceptFriendRequest(
 			}
 		);
 
-		const { status, results, data } = responseData;
+		const { data } = responseData;
 
 		if (!response.ok) {
 			enqueueError("Failed to accept friend request.");
@@ -119,7 +119,7 @@ export async function declineFriendRequest(
 			}
 		);
 
-		const { status, results, data } = responseData;
+		const { data } = responseData;
 
 		if (!response.ok && enqueueError) {
 			enqueueError("Failed to decline friend request.");
@@ -146,10 +146,10 @@ export async function cancelFriendRequest(
 			}
 		);
 
-		const { status, results, data } = responseData;
+		const { data } = responseData;
 
 		if (!response.ok) {
-			enqueueError(data);
+			enqueueError(responseData.message);
 			return;
 		}
 

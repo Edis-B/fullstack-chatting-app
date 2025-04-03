@@ -18,7 +18,7 @@ export default function Catalog() {
 				`${host}/post/get-trending-posts`
 			);
 
-			const { status, results, data } = responseData;
+			const { data } = responseData;
 
 			if (!response.ok) {
 				return;

@@ -26,7 +26,7 @@ export default function Header() {
 				}
 			);
 
-			const { status, results, data } = responseData;
+			const { data } = responseData;
 
 			setImage(data);
 		} catch (err) {
@@ -40,10 +40,10 @@ export default function Header() {
 				`${host}/user/logout`
 			);
 
-			const { status, results, data } = responseData;
+			const { data } = responseData;
 
 			if (!response.ok) {
-				enqueueError(data);
+				enqueueError(responseData.message);
 				return;
 			}
 

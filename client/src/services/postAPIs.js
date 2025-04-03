@@ -15,10 +15,10 @@ export async function likePost(postId, userId, { enqueueError, enqueueInfo }) {
 			}
 		);
 
-		const { status, results, data } = responseData;
+		const { data } = responseData;
 
 		if (!response.ok) {
-			enqueueError(data);
+			enqueueError(responseData.message);
 			return;
 		}
 
@@ -47,10 +47,10 @@ export async function removeLikeFromPost(
 			}
 		);
 
-		const { status, results, data } = responseData;
+		const { data } = responseData;
 
 		if (!response.ok) {
-			enqueueError(data);
+			enqueueError(responseData.message);
 			return;
 		}
 
@@ -81,10 +81,10 @@ export async function commentOnPost(
 			}
 		);
 
-		const { status, results, data } = responseData;
+		const { data } = responseData;
 
 		if (!response.ok) {
-			enqueueError(data);
+			enqueueError(responseData.message);
 			return;
 		}
 
@@ -114,10 +114,10 @@ export async function removeCommentFromPost(
 			}
 		);
 
-		const { status, results, data } = responseData;
+		const { data } = responseData;
 
 		if (!response.ok) {
-			enqueueError(data);
+			enqueueError(responseData.message);
 			return;
 		}
 
@@ -149,10 +149,10 @@ export async function likeComment(
 			}
 		);
 
-		const { status, results, data } = responseData;
+		const { data } = responseData;
 
 		if (!response.ok) {
-			enqueueError(data);
+			enqueueError(responseData.message);
 			return;
 		}
 
@@ -184,10 +184,10 @@ export async function removeLikeFromComment(
 			}
 		);
 
-		const { status, results, data } = responseData;
+		const { data } = responseData;
 
 		if (!response.ok) {
-			enqueueError(data);
+			enqueueError(responseData.message);
 			return;
 		}
 

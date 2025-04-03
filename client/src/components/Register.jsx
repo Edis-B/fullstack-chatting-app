@@ -35,10 +35,10 @@ export default function Register() {
 				}
 			);
 
-			const { status, results, data } = responseData;
+			const { data } = responseData;
 
 			if (!response.ok) {
-				enqueueError(data);
+				enqueueError(responseData.message);
 				return;
 			}
 

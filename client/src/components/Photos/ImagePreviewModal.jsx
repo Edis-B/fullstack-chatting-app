@@ -7,6 +7,7 @@ import { host } from "../../common/appConstants";
 export default function ImagePreviewModal({
 	selectedImage,
 	setSelectedImage,
+	changeCaptionState,
 	user,
 }) {
 	if (!user) {
@@ -24,14 +25,17 @@ export default function ImagePreviewModal({
 				`${host}/photo/update-photo-caption`,
 				{ photoId, caption }
 			);
-		
-			const { status, results, data } = responseData;
+
+			const { data } = responseData;
 
 			if (!response.ok) {
-				enqueueError(data);
+				enqueueError(responseData.message);
 				return;
 			}
 
+			setIsEditActive(false);
+			changeCaptionState(photoId, caption);
+			setSelectedImage((prev) => ({ ...prev, caption }));
 			enqueueInfo(data);
 		} catch (err) {
 			enqueueError("Something went wrong saving changes");

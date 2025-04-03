@@ -53,7 +53,7 @@ export function UserProvider({ children }) {
 				`${host}/user/get-current-user-data`
 			);
 
-			const { status, results, data } = responseData;
+			const { data } = responseData;
 
 			setUserId(data._id);
 			setUser(data);
@@ -66,17 +66,15 @@ export function UserProvider({ children }) {
 	}
 
 	const enqueueInfo = async (message) => {
-		setMessages((prev) => [
-			...prev,
-			{ type: "info", message, id: uuidv4() },
-		]);
+		pushMessage(message, "info");
 	};
 
 	const enqueueError = async (message) => {
-		setMessages((prev) => [
-			...prev,
-			{ type: "error", message, id: uuidv4() },
-		]);
+		pushMessage(message, "error");
+	};
+
+	const pushMessage = async (message, type) => {
+		setMessages((prev) => [{ type, message, id: uuidv4() }, ...prev]);
 	};
 
 	return (

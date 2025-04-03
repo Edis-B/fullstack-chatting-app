@@ -31,7 +31,7 @@ export default function MessageInput() {
 			}
 		);
 
-		const { status, results, data } = responseData;
+		const { data } = responseData;
 
 		if (!response.ok) {
 			console.log(data);

@@ -135,11 +135,11 @@ postApiController.post(
 postApiController.get(
 	"/get-user-posts",
 	catchAsync(async (req, res) => {
-		const result = await postService.getUserPosts(req);
+		const { posts, user } = await postService.getUserPosts(req);
 		res.json({
 			status: "success",
-			results: result.posts.length,
-			data: result,
+			results: posts.length,
+			data: { posts, user },
 		});
 	})
 );

@@ -27,7 +27,9 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 
 	// Fetch user's uploaded images
 	const fetchUploadedImages = async () => {
+		if (!userId) return;
 		setIsFetchingPhotos(true);
+		
 		try {
 			const currentPhotos = gallery.photos.map((p) => p._id);
 			const { response, responseData } = await request.get(
@@ -35,10 +37,10 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 				{ userId, excluded: currentPhotos }
 			);
 
-			const { status, results, data } = responseData;
+			const { data } = responseData;
 
 			if (!response.ok) {
-				enqueueError(data);
+				enqueueError(responseData.message);
 				return;
 			}
 
@@ -63,11 +65,10 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 				}
 			);
 
-			const { status, results, data } = responseData;
-
+			const { data } = responseData;
 
 			if (!response.ok) {
-				enqueueError(data);
+				enqueueError(responseData.message);
 				return;
 			}
 
@@ -88,10 +89,10 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 			}
 		);
 
-		const { status, results, data } = responseData;
+		const { data } = responseData;
 
 		if (!response.ok) {
-			enqueueError(data);
+			enqueueError(responseData.message);
 			return;
 		}
 
@@ -107,10 +108,10 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 			}
 		);
 
-		const { status, results, data } = responseData;
+		const { data } = responseData;
 
 		if (!response.ok) {
-			enqueueError(data);
+			enqueueError(responseData.message);
 			return;
 		}
 
@@ -127,10 +128,10 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 				}
 			);
 
-			const { status, results, data } = responseData;
+			const { data } = responseData;
 
 			if (!response.ok) {
-				enqueueError(data);
+				enqueueError(responseData.message);
 				return;
 			}
 

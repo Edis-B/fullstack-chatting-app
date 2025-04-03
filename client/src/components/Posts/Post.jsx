@@ -38,6 +38,7 @@ export default function Post({ post, user, likeState }) {
 						<p className="text-muted small mb-0">
 							{dateToString(post.date)}
 						</p>
+						<p>{post.visibility}</p>
 					</div>
 				</Link>
 

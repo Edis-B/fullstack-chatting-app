@@ -14,7 +14,7 @@ import ImagePreviewModal from "../Photos/ImagePreviewModal.jsx";
 
 export default function GalleryDetails() {
 	const { galleryId } = useParams();
-	const { userId, enqueueError } = useUser();
+	const { userId, enqueueError, enqueueInfo } = useUser();
 
 	const [selectedImage, setSelectedImage] = useState(null);
 	const [gallery, setGallery] = useState({});
@@ -33,11 +33,11 @@ export default function GalleryDetails() {
 				galleryId,
 			}
 		);
-		
-		const { status, results, data } = responseData;
+
+		const { data } = responseData;
 
 		if (!response.ok) {
-			enqueueError(data);
+			enqueueError(responseData.message);
 			return;
 		}
 
@@ -60,11 +60,11 @@ export default function GalleryDetails() {
 				userId,
 			}
 		);
-		
-		const { status, results, data } = responseData;
+
+		const { data } = responseData;
 
 		if (!response.ok) {
-			enqueueError(data);
+			enqueueError(responseData.message);
 			return;
 		}
 
@@ -72,7 +72,23 @@ export default function GalleryDetails() {
 			...prev,
 			photos: prev.photos.filter((p) => p._id != photoId),
 		}));
+
+		enqueueInfo(data);
 	}
+
+	const changeCaptionState = (photoId, newCaption) => {
+		setGallery((prev) => ({
+			...prev,
+			photos: prev.photos.map((photo) =>
+				photo._id === photoId
+					? {
+							...photo,
+							caption: newCaption,
+					  }
+					: photo
+			),
+		}));
+	};
 
 	return (
 		<div className="container mt-5 gallery-details">
@@ -112,31 +128,32 @@ export default function GalleryDetails() {
 			{/* Gallery Photos */}
 			<div className="row g-3 mt-3 mb-3">
 				{gallery.photos?.length > 0 ? (
-					gallery.photos.map((img) => (
-						<div key={img._id} className="col-6 col-md-4 col-lg-3">
+					gallery.photos.map((photo) => (
+						<div key={photo._id} className="col-6 col-md-4 col-lg-3">
 							<img
-								src={img.url}
-								key={img._id}
+								src={photo.url}
 								alt="Gallery"
 								className="img-fluid rounded shadow-sm gallery-img"
-								onClick={() => setSelectedImage(img)}
+								onClick={() => setSelectedImage(photo)}
 							/>
 
 							<div className="d-flex justify-content-end m-1">
 								<Button
 									variant="danger"
 									onClick={() => {
-										if (
-											confirm(
-												"Are you sure you want to remove this photo from the gallery?"
-											)
-										) {
-											removePhotoFromGallery(
-												galleryId,
-												userId,
-												img._id
-											);
+										const rep = confirm(
+											"Are you sure you want to remove this photo from the gallery?"
+										);
+
+										if (!rep) {
+											return;
 										}
+
+										const result = removePhotoFromGallery(
+											galleryId,
+											userId,
+											photo._id
+										);
 									}}
 								>
 									<i
@@ -156,6 +173,7 @@ export default function GalleryDetails() {
 			<ImagePreviewModal
 				selectedImage={selectedImage}
 				setSelectedImage={setSelectedImage}
+				changeCaptionState={changeCaptionState}
 				user={gallery.user}
 				gallery={gallery}
 			/>

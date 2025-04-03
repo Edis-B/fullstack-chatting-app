@@ -55,7 +55,7 @@ export default function Profile() {
 				}
 			);
 
-			const { status, results, data } = responseData;
+			const { data } = responseData;
 
 			if (!profileUserId) {
 				navigate(`/profile/${data}`);

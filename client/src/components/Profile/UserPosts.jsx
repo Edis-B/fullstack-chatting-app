@@ -31,14 +31,14 @@ export default function UserPosts() {
 				}
 			);
 
-			const { status, results, data } = responseData;
+			const { data } = responseData;
 
 			if (!response.ok) {
-				enqueueError(responseData);
+				enqueueError(responseData.message);
 				return;
 			}
 
-			setPostsData(responseData);
+			setPostsData(data);
 		} catch (err) {
 			if (err.name !== "AbortError") {
 				console.error(err);

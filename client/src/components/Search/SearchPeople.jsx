@@ -33,10 +33,10 @@ export default function SearchPeople() {
 				{ usernameSubstr: query || "", page, exclude: true }
 			);
 		
-			const { status, results, data } = responseData;
+			const { data } = responseData;
 
 			if (!response.ok) {
-				enqueueError(data);
+				enqueueError(responseData.message);
 				return;
 			}
 

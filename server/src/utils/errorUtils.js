@@ -7,11 +7,17 @@ export class AppError extends Error {
 	}
 }
 
-
-export const catchAsync = (fn) => (req, res, next) => {
-	Promise.resolve(fn(req, res, next)).catch((err) => next(err));
+export const catchAsync = (asyncFn) => {
+	return async (req, res, next) => {
+		try {
+			// Await the async operation to properly catch errors
+			await asyncFn(req, res, next);
+		} catch (error) {
+			// Forward to Express error handler
+			next(error);
+		}
+	};
 };
-
 
 export const getErrorMessage = (err) => {
 	switch (err.name) {

@@ -8,7 +8,7 @@ import AutoFriendButton from "./AutoFriendButton.jsx";
 import request from "../../utils/request.js";
 
 export default function Friends() {
-	const { userId } = useUser();
+	const { userId, enqueueError, enqueueInfo } = useUser();
 	const { profileId } = useProfile();
 	const [friendsObj, setFriendsArray] = useState({});
 
@@ -23,14 +23,19 @@ export default function Friends() {
 	async function fetchFriendsData() {
 		try {
 			const { response, responseData } = await request.get(
-				`${host}/user/get-user-friends?`,
+				`${host}/user/get-user-friends`,
 				{
 					userId: profileId,
 				}
 			);
 
-			const { status, results, data } = responseData;
-			
+			const { data } = responseData;
+
+			if (!response.ok) {
+				enqueueError(responseData);
+				return;
+			}
+
 			setFriendsArray(data);
 		} catch (err) {
 			console.log(err);
@@ -77,7 +82,11 @@ export default function Friends() {
 		},
 	];
 
-	if (!friendsObj.owner) sections = sections.slice(0, 1);
+	if (!friendsObj || Object.keys(friendsObj).length === 0) {
+		return <p>Loading...</p>;
+	}
+
+	sections = friendsObj.owner ? sections : sections.slice(0, 1);
 
 	return (
 		<div className="container mt-4">

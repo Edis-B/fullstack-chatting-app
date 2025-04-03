@@ -71,10 +71,10 @@ export default function Photos() {
 				}
 			);
 
-			const { status, results, data } = responseData;
+			const { data } = responseData;
 
 			if (!response.ok) {
-				enqueueError(data);
+				enqueueError(responseData.message);
 				return;
 			}
 
@@ -93,10 +93,10 @@ export default function Photos() {
 				{ profileId }
 			);
 
-			const { status, results, data } = responseData;
+			const { data } = responseData;
 
 			if (!response.ok) {
-				enqueueError(data);
+				enqueueError(responseData.message);
 				return;
 			}
 
@@ -117,10 +117,10 @@ export default function Photos() {
 				}
 			);
 
-			const { status, results, data } = responseData;
+			const { data } = responseData;
 
 			if (!response.ok) {
-				enqueueError(data.message);
+				enqueueError(responseData.message);
 				return;
 			}
 
@@ -133,6 +133,19 @@ export default function Photos() {
 			return;
 		}
 	}
+
+	const changeCaptionState = (photoId, newCaption) => {
+		setPhotos((prev) =>
+			prev.map((photo) =>
+				photo._id === photoId
+					? {
+							...photo,
+							caption: newCaption,
+					  }
+					: photo
+			)
+		);
+	};
 
 	return (
 		<div className="d-flex flex-column align-items-center p-3 border rounded">
@@ -272,6 +285,7 @@ export default function Photos() {
 			<ImagePreviewModal
 				selectedImage={selectedImage}
 				setSelectedImage={setSelectedImage}
+				changeCaptionState={changeCaptionState}
 			/>
 		</div>
 	);

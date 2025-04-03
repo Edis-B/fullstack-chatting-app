@@ -210,7 +210,7 @@ const postService = {
 				comment.likesCount = comment.likes.length;
 			});
 
-			post.liked = post.likes.some((id) => id.toString() === userId);
+			post.liked = post.likes.some((obj) => obj._id.toString() === userId);
 
 			return post;
 		} catch (err) {
@@ -241,6 +241,7 @@ const postService = {
 			const hasAlreadyLiked = post.likes.some(
 				(p) => p._id.toString() === userId
 			);
+
 			if (hasAlreadyLiked) {
 				throw new AppError("You have already liked this post", 400);
 			}
@@ -419,6 +420,7 @@ const postService = {
 			const hasAlreadyLiked = comment.likes.some(
 				(uId) => uId.toString() === userId
 			);
+			
 			if (hasAlreadyLiked) {
 				throw new AppError("You have already liked this comment", 400);
 			}
