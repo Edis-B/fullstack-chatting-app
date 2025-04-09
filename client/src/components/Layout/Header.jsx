@@ -19,14 +19,14 @@ export default function Header() {
 
 	async function fetchUserImageUrl() {
 		try {
-			const { response, responseData } = await request.get(
+			const { response, payload } = await request.get(
 				`${host}/user/get-image-url`,
 				{
 					userId,
 				}
 			);
 
-			const { data } = responseData;
+			const { data } = payload;
 
 			setImage(data);
 		} catch (err) {
@@ -36,14 +36,14 @@ export default function Header() {
 
 	async function handleLogout() {
 		try {
-			const { response, responseData } = await request.post(
+			const { response, payload } = await request.post(
 				`${host}/user/logout`
 			);
 
-			const { data } = responseData;
+			const { data } = payload;
 
 			if (!response.ok) {
-				enqueueError(responseData.message);
+				enqueueError(payload.message);
 				return;
 			}
 

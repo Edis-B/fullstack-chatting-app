@@ -45,7 +45,7 @@ export default function CreatePost() {
 		e.preventDefault();
 
 		try {
-			const { response, responseData } = await request.post(
+			const { response, payload } = await request.post(
 				`${host}/post/create-post`,
 				{
 					...postData,
@@ -53,10 +53,10 @@ export default function CreatePost() {
 				}
 			);
 
-			const { data } = responseData;
+			const { data } = payload;
 
 			if (!response.ok) {
-				enqueueError(responseData.message);
+				enqueueError(payload.message);
 				return;
 			}
 

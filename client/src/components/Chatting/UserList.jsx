@@ -61,17 +61,17 @@ export default function UserList() {
 
 	async function fetchChats() {
 		try {
-			const { response, responseData } = await request.get(
+			const { response, payload } = await request.get(
 				`${host}/chat/get-user-chats`,
 				{
 					userId,
 				}
 			);
 
-			const { data } = responseData;
+			const { data } = payload;
 
 			if (!response.ok) {
-				enqueueError(responseData.message);
+				enqueueError(payload.message);
 			}
 
 			if (!id) {

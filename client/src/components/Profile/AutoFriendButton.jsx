@@ -11,7 +11,7 @@ import { friendStatuses } from "../../common/appConstants.js";
 export default function AutoFriendButton({ params }) {
 	const { status, senderId, receiverId, changeStatus } = params;
 
-	const { enqueueError, enqueueInfo } = useUser();
+	const { autherized, enqueueError, enqueueInfo } = useUser();
 	const userFunctions = { enqueueError, enqueueInfo };
 
 	const handleCancelRequest = () => {
@@ -39,6 +39,10 @@ export default function AutoFriendButton({ params }) {
 		changeStatus({ prevType: null, type: friendStatuses.OUTGOING_REQUEST, id: receiverId });
 	};
 
+	if (autherized === false) {
+		return null;
+	}
+	
 	if (status === friendStatuses.OUTGOING_REQUEST) {
 		return (
 			<button
@@ -54,14 +58,14 @@ export default function AutoFriendButton({ params }) {
 				<button
 					className="btn btn-outline-secondary"
 					onClick={handleDeclineRequest}
-				>
+					>
 					Decline request
 				</button>
 
 				<button
 					className="btn btn-outline-secondary"
 					onClick={handleAcceptRequest}
-				>
+					>
 					Accept request
 				</button>
 			</>
@@ -69,8 +73,8 @@ export default function AutoFriendButton({ params }) {
 	} else if (status === friendStatuses.FRIENDS) {
 		return (
 			<button
-				className="btn btn-outline-secondary"
-				onClick={handleUnfriend}
+			className="btn btn-outline-secondary"
+			onClick={handleUnfriend}
 			>
 				Remove friend
 			</button>
@@ -78,13 +82,13 @@ export default function AutoFriendButton({ params }) {
 	} else if (!status || status === friendStatuses.NOT_FRIENDS) {
 		return (
 			<button
-				className="btn btn-outline-secondary"
-				onClick={handleSendFriendRequest}
+			className="btn btn-outline-secondary"
+			onClick={handleSendFriendRequest}
 			>
 				Add friend
 			</button>
 		);
 	}
-
+	
 	return null;
 }

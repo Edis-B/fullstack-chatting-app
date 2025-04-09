@@ -11,28 +11,48 @@ export default function Catalog() {
 	useEffect(() => {
 		fetchTrendingPosts();
 	}, []);
-	
+
 	async function fetchTrendingPosts() {
 		try {
-			const { response, responseData } = await request.get(
+			const { response, payload } = await request.get(
 				`${host}/post/get-trending-posts`
 			);
-
-			const { data } = responseData;
 
 			if (!response.ok) {
 				return;
 			}
 
-			setTrendingPosts()
-
+			setTrendingPosts(payload);
 		} catch (err) {}
 	}
 
+	const likeState = (postId) => {
+		setTrendingPosts((prev) =>
+			prev.map((post) =>
+				postId === post._id
+					? {
+							...post,
+							liked: !post.liked,
+					  }
+					: post
+			)
+		);
+	};
+
 	return (
-		<>
-			{/* Post({ post, user, likeState }) */}
-			<Post></Post>
-		</>
+		<div className="d-flex flex-column align-items-center">
+			{trendingPosts?.length > 0 ? (
+				trendingPosts.map((post) => (
+					<Post
+						key={post._id}
+						post={post}
+						user={post.user}
+						likeStateChange={likeState}
+					></Post>
+				))
+			) : (
+				<p>No posts.</p>
+			)}
+		</div>
 	);
 }

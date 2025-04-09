@@ -21,15 +21,15 @@ export default function ImagePreviewModal({
 	// Handle caption update
 	async function handleUpdateSaveChanges(photoId) {
 		try {
-			const { response, responseData } = await request.put(
+			const { response, payload } = await request.put(
 				`${host}/photo/update-photo-caption`,
 				{ photoId, caption }
 			);
 
-			const { data } = responseData;
+			const { data } = payload;
 
 			if (!response.ok) {
-				enqueueError(responseData.message);
+				enqueueError(payload.message);
 				return;
 			}
 

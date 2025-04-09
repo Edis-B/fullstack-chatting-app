@@ -1,26 +1,24 @@
-import { Error, Types } from "mongoose";
-
 import messageModel from "../models/Message.js";
 import chatModel from "../models/Chat.js";
-import { chatTypes } from "../common/entityConstraints.js";
 import userModel from "../models/User.js";
+
+import { chatTypes } from "../common/entityConstraints.js";
+import { AppError } from "../utils/errorUtils.js";
+
 import userService from "./userService.js";
 
 const chatService = {
-	// Creates new chat with given participants and chat type
 	async createNewChat(req) {
 		let participantsArr = [];
 		const { participants, type } = req.body;
 
 		const unique = [...new Set(participants)];
 		if (unique.length <= 1) {
-			throw new Error("Not enough members for chat!");
+			throw new AppError("Not enough members for chat!", 400);
 		}
 
-		for (const username of unique) {
-			participantsArr.push(
-				await userModel.findOne({ username: username })
-			);
+		for (const id of unique) {
+			participantsArr.push(await userModel.findById(id));
 		}
 
 		let newChatObj = {
@@ -29,14 +27,10 @@ const chatService = {
 			updatedAt: new Date(Date.now()),
 		};
 
-		let exists;
-		if (type == chatTypes.DIRECT_MESSAGES) {
-			// Check if such a chat already exists
-			exists = await this.checkIfChatExists(participantsArr);
-		}
+		const exists = await this.checkIfChatExists(participantsArr);
 
 		if (exists) {
-			throw new Error("Chat already exists!");
+			throw new AppError("Chat already exists!", 400);
 		}
 
 		const newChat = await chatModel.create(newChatObj);
@@ -52,76 +46,54 @@ const chatService = {
 
 		return newChat._id;
 	},
+
 	async checkIfChatExists(participantsArr) {
-		for (let part of participantsArr) {
-			const populatedParticipant = await part.populate({
-				path: "chats.chat",
-				match: { type: chatTypes.DIRECT_MESSAGES },
-				populate: { path: "participants.participant" },
-			});
+		const exists = await chatModel.exists({
+			$and: [
+				{ "participants.participant": { $all: participantsArr } },
+				{ participants: { $size: participantsArr.length } },
+			],
+		});
 
-			const populatedParticipantObj = populatedParticipant.toObject();
-
-			populatedParticipantObj.chats.some((chatObj) => {
-				// DMs have 2 participants
-				for (let i = 0; i < 2; i++) {
-					const user =
-						chatObj.chat.participants[i].participant.username;
-					if (participantsArr.some((p) => p.username == user)) {
-						return true;
-					}
-				}
-			});
-		}
+		return !!exists;
 	},
+
 	async getChatHistory(req) {
 		let { chatId, page } = req.query;
 		page = Number(page);
-		const chatQuery = chatModel.findOne({ _id: chatId });
-
-		const chat = await chatQuery
-			.populate({
-				path: "messages",
-				populate: {
-					path: "user",
-				},
-				options: {
-					limit: 20,
-					skip: (page - 1) * 20,
-					sort: {
-						date: -1,
-					},
-				},
-			})
-			.lean();
-
-		const chat2 = await chatModel
+		const chat = await chatModel
 			.findOne({ _id: chatId })
 			.populate({
 				path: "messages",
+				populate: { path: "user" },
+				options: {
+					limit: 20,
+					skip: (page - 1) * 20,
+					sort: { date: -1 },
+				},
 			})
 			.lean();
 
 		if (!chat) {
-			throw new Error("Chat not found!");
+			throw new AppError("Chat not found!", 404);
 		}
 
 		return chat.messages;
 	},
+
 	async sendMessage(req) {
 		if (!req.user) {
-			throw new Error("Not Logged in!");
+			throw new AppError("Not Logged in!", 401);
 		}
 
 		if (!req.body) {
-			throw new Error("No info sent");
+			throw new AppError("No info sent", 400);
 		}
 
 		const { chat: chatId, text } = req.body;
 
 		const newMessage = await messageModel.create({
 			text,
-			// chat id
 			chat: chatId,
 			date: Date.now(),
 			user: req.user.id,
@@ -156,65 +128,70 @@ const chatService = {
 
 		return messageData;
 	},
-	async checkIfDMsExistWithUser(req) {
-		const receiverUser = await userService.getUserByUsername(
-			req.query.receiverUsername
-		);
+
+	async checkIfChatExistsBetween2Users(req) {
+		const { userId, profileId } = req.query;
+
+		const receiverUser = await userModel.findById(profileId);
 
 		if (!receiverUser) {
-			throw new Error("Recepient not found");
+			throw new AppError("Recipient not found", 404);
 		}
 
-		const receiverId = receiverUser._id;
-
-		if (!receiverId || !req.user || req.user._id.equals(receiverId)) {
-			throw new Error("Sender or receiver not found!");
+		if (req.user?.id.toString() !== userId) {
+			throw new AppError("Unauthorized", 403);
 		}
 
-		const userQuery = userModel.findOne({ _id: req.user._id });
-
-		const userObj = await userQuery
-			.populate({
+		const userObj = (
+			await userModel.findById(userId).populate({
 				path: "chats.chat",
-				match: { "participants.participant": receiverId },
+				match: { "participants.participant": profileId },
 				populate: {
 					path: "participants.participant",
 				},
 			})
-			.exec();
+		).toObject();
 
-		if (!userObj.chats) {
-			return false;
+		const chats = userObj.chats.filter((c) => c.chat !== null);
+
+		if (chats.length === 0) {
+			return undefined;
 		}
 
-		return userObj.chats[0].chat._id;
+		return chats[0].chat._id;
 	},
+
 	async getChatHeader(req) {
 		if (!req.user) {
-			throw new Error("Not Logged in!");
+			throw new AppError("Not Logged in!", 401);
 		}
 
-		const id = (
-			await chatModel.findById(req.query.chatId).lean()
-		).participants.filter(
-			(p) => p.participant._id.toString() != req.user.id
-		)[0].participant;
+		const chat = await chatModel.findById(req.query.chatId).lean();
+
+		if (!chat) {
+			throw new AppError("Chat not found!", 404);
+		}
+
+		const id = chat.participants.filter(
+			(p) => p.participant._id.toString() !== req.user.id
+		)[0]?.participant;
 
 		const result = await this.getChatInfo(req.query.chatId, req.user.id);
 
 		return { image: result.chatImage, name: result.chatName, _id: id };
 	},
+
 	async getUserChats(req) {
 		const identifier = req.query.userId ?? req.user?.id;
 
 		if (!identifier) {
-			throw new Error("Problem fetching user id!");
+			throw new AppError("Problem fetching user id!", 400);
 		}
 
 		const user = await userModel.findById(req.user.id).lean();
 
 		if (!user) {
-			throw new Error("User not found");
+			throw new AppError("User not found", 404);
 		}
 
 		let chatInfos = user.chats.map((chatObj) => {
@@ -226,10 +203,12 @@ const chatService = {
 		} catch (err) {
 			console.log(err);
 		}
+
 		chatInfos = chatInfos.sort((a, b) => b.updatedAt - a.updatedAt);
 
 		return chatInfos;
 	},
+
 	async getChatInfo(chatId, userId) {
 		const chat = await chatModel
 			.findById(chatId)
@@ -245,14 +224,14 @@ const chatService = {
 		let chatName, chatImage;
 		const participantsObjs = chat.participants;
 
-		if (chat.type == chatTypes.DIRECT_MESSAGES) {
+		if (chat.type === chatTypes.DIRECT_MESSAGES) {
 			const participantObj =
-				participantsObjs.filter(
+				participantsObjs.find(
 					(obj) => !obj.participant._id.equals(userId)
-				)[0] ?? null;
+				) ?? null;
 
 			if (!participantObj) {
-				throw new Error("Recepient not found!");
+				throw new AppError("Recipient not found!", 404);
 			}
 
 			chatName = participantObj.participant.username;
@@ -269,7 +248,7 @@ const chatService = {
 								owner: chat.messages[0].user,
 								text: chat.messages[0].text,
 						  }
-						: null, // Handle case where there are no messages
+						: null,
 			};
 		}
 	},

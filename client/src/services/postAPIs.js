@@ -7,7 +7,7 @@ export async function likePost(postId, userId, { enqueueError, enqueueInfo }) {
 		if (!postId) return;
 		if (!userId) return;
 
-		const { response, responseData } = await request.post(
+		const { response, payload } = await request.post(
 			`${host}/post/like-post`,
 			{
 				postId,
@@ -15,10 +15,10 @@ export async function likePost(postId, userId, { enqueueError, enqueueInfo }) {
 			}
 		);
 
-		const { data } = responseData;
+		const { data } = payload;
 
 		if (!response.ok) {
-			enqueueError(responseData.message);
+			enqueueError(payload.message);
 			return;
 		}
 
@@ -39,7 +39,7 @@ export async function removeLikeFromPost(
 		if (!postId) return;
 		if (!userId) return;
 
-		const { response, responseData } = await request.post(
+		const { response, payload } = await request.post(
 			`${host}/post/remove-like-from-post`,
 			{
 				postId,
@@ -47,10 +47,10 @@ export async function removeLikeFromPost(
 			}
 		);
 
-		const { data } = responseData;
+		const { data } = payload;
 
 		if (!response.ok) {
-			enqueueError(responseData.message);
+			enqueueError(payload.message);
 			return;
 		}
 
@@ -72,7 +72,7 @@ export async function commentOnPost(
 		if (!postId) return;
 		if (!userId) return;
 
-		const { response, responseData } = await request.post(
+		const { response, payload } = await request.post(
 			`${host}/post/comment-on-post`,
 			{
 				postId,
@@ -81,10 +81,10 @@ export async function commentOnPost(
 			}
 		);
 
-		const { data } = responseData;
+		const { data } = payload;
 
 		if (!response.ok) {
-			enqueueError(responseData.message);
+			enqueueError(payload.message);
 			return;
 		}
 
@@ -105,7 +105,7 @@ export async function removeCommentFromPost(
 		if (!postId) return;
 		if (!userId) return;
 
-		const { response, responseData } = await request.post(
+		const { response, payload } = await request.post(
 			`${host}/post/remove-comment-from-post`,
 			{
 				postId,
@@ -114,13 +114,14 @@ export async function removeCommentFromPost(
 			}
 		);
 
-		const { data } = responseData;
+		const { data } = payload;
 
 		if (!response.ok) {
-			enqueueError(responseData.message);
+			enqueueError(payload.message);
 			return;
 		}
 
+		enqueueInfo(data);
 		return data;
 	} catch (err) {
 		console.log(err);
@@ -140,7 +141,7 @@ export async function likeComment(
 		if (!postId) return;
 		if (!userId) return;
 
-		const { response, responseData } = await request.post(
+		const { response, payload } = await request.post(
 			`${host}/post/like-comment`,
 			{
 				postId,
@@ -149,15 +150,15 @@ export async function likeComment(
 			}
 		);
 
-		const { data } = responseData;
+		const { data } = payload;
 
 		if (!response.ok) {
-			enqueueError(responseData.message);
+			enqueueError(payload.message);
 			return;
 		}
 
 		enqueueInfo(data);
-		return data;
+		return { data: data, success: true };
 	} catch (err) {
 		console.log(err);
 		enqueueError("There has been a problem liking comment");
@@ -175,7 +176,7 @@ export async function removeLikeFromComment(
 		if (!postId) return;
 		if (!userId) return;
 
-		const { response, responseData }  = await request.post(
+		const { response, payload } = await request.post(
 			`${host}/post/remove-like-from-comment`,
 			{
 				postId,
@@ -184,15 +185,15 @@ export async function removeLikeFromComment(
 			}
 		);
 
-		const { data } = responseData;
+		const { data } = payload;
 
 		if (!response.ok) {
-			enqueueError(responseData.message);
+			enqueueError(payload.message);
 			return;
 		}
 
 		enqueueInfo(data);
-		return data;
+		return { data: data, success: true };
 	} catch (err) {
 		console.log(err);
 		enqueueError("There has been a problem unliking comment");

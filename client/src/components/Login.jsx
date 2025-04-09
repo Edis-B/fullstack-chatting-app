@@ -23,7 +23,7 @@ export default function Login() {
 		e.preventDefault();
 
 		try {
-			const { response, responseData } = await request.post(
+			const { response, payload } = await request.post(
 				`${host}/user/login`,
 				{
 					identifier,
@@ -32,10 +32,10 @@ export default function Login() {
 				}
 			);
 
-			const { data } = responseData;
+			const { data } = payload;
 
 			if (!response.ok) {
-				enqueueError(responseData.message);
+				enqueueError(payload.message);
 				return;
 			}
 

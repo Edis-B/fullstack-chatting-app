@@ -23,7 +23,7 @@ export default function MessageInput() {
 			return;
 		}
 
-		const { response, responseData } = await request.post(
+		const { response, payload } = await request.post(
 			`${host}/chat/send-message`,
 			{
 				chat: chatId,
@@ -31,7 +31,7 @@ export default function MessageInput() {
 			}
 		);
 
-		const { data } = responseData;
+		const { data } = payload;
 
 		if (!response.ok) {
 			console.log(data);

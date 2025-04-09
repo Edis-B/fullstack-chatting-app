@@ -27,17 +27,17 @@ export default function ChatBoxHeader() {
 				return;
 			}
 
-			const { response, responseData } = await request.get(
+			const { response, payload } = await request.get(
 				`${host}/chat/get-chat-header`,
 				{
 					chatId,
 				}
 			);
 
-			const { data } = responseData;
+			const { data } = payload;
 
 			if (!response.ok) {
-				enqueueError(responseData.message);
+				enqueueError(payload.message);
 			}
 			return data;
 		} catch (err) {

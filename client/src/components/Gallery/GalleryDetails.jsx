@@ -18,6 +18,7 @@ export default function GalleryDetails() {
 
 	const [selectedImage, setSelectedImage] = useState(null);
 	const [gallery, setGallery] = useState({});
+	const [errorMessage, setErrorMessage] = useState(null);
 
 	useEffect(() => {
 		if (!galleryId) return;
@@ -27,20 +28,24 @@ export default function GalleryDetails() {
 
 	// Fetch gallery data from the server
 	async function fetchGallery(galleryId) {
-		const { response, responseData } = await request.get(
+		const { response, payload } = await request.get(
 			`${host}/gallery/get-gallery`,
 			{
 				galleryId,
 			}
 		);
 
-		const { data } = responseData;
+		const { data } = payload;
 
 		if (!response.ok) {
-			enqueueError(responseData.message);
+			if (payload.extraProps?.intentional) {
+				setErrorMessage(payload.message);
+			}
+			enqueueError(payload.message);
 			return;
 		}
 
+		setErrorMessage(null);
 		setGallery(data);
 	}
 
@@ -52,7 +57,7 @@ export default function GalleryDetails() {
 	}
 
 	async function removePhotoFromGallery(galleryId, userId, photoId) {
-		const { response, responseData } = await request.delete(
+		const { response, payload } = await request.delete(
 			`${host}/gallery/remove-photo-from-gallery`,
 			{
 				galleryId,
@@ -61,10 +66,10 @@ export default function GalleryDetails() {
 			}
 		);
 
-		const { data } = responseData;
+		const { data } = payload;
 
 		if (!response.ok) {
-			enqueueError(responseData.message);
+			enqueueError(payload.message);
 			return;
 		}
 
@@ -90,6 +95,14 @@ export default function GalleryDetails() {
 		}));
 	};
 
+	if (!!errorMessage) {
+		return (
+			<div className="alert alert-warning mt-3">
+				<p>{errorMessage}</p>
+			</div>
+		);
+	}
+	
 	return (
 		<div className="container mt-5 gallery-details">
 			{/* User Header */}
@@ -129,7 +142,10 @@ export default function GalleryDetails() {
 			<div className="row g-3 mt-3 mb-3">
 				{gallery.photos?.length > 0 ? (
 					gallery.photos.map((photo) => (
-						<div key={photo._id} className="col-6 col-md-4 col-lg-3">
+						<div
+							key={photo._id}
+							className="col-6 col-md-4 col-lg-3"
+						>
 							<img
 								src={photo.url}
 								alt="Gallery"

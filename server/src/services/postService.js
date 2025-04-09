@@ -2,9 +2,12 @@ import {
 	friendStatuses,
 	visibilityTypes,
 } from "../common/entityConstraints.js";
+
 import commentModel from "../models/Comment.js";
 import postModel from "../models/Post.js";
 import userModel from "../models/User.js";
+
+import userService from "./userService.js";
 import { AppError } from "../utils/errorUtils.js";
 
 const postService = {
@@ -58,6 +61,14 @@ const postService = {
 				.skip(skip)
 				.limit(pageSize)
 				.lean();
+
+			if (req.user) {
+				for (const post of posts) {
+					post.liked = post.likes.some(
+						(like) => like.toString() == req.user.id
+					);
+				}
+			}
 
 			return posts;
 		} catch (err) {
@@ -192,11 +203,12 @@ const postService = {
 
 			if (
 				post.visibility === visibilityTypes.FRIENDS &&
-				!post.user.friends.some((f) => f._id.toString() === userId)
+				!userService.checkIf2UsersAreFriends(post.user, userId)
 			) {
 				throw new AppError(
 					"Friends-only post: You must be friends to view",
-					403
+					403,
+					{ intentional: true, message: "This post is private" }
 				);
 			}
 
@@ -210,7 +222,9 @@ const postService = {
 				comment.likesCount = comment.likes.length;
 			});
 
-			post.liked = post.likes.some((obj) => obj._id.toString() === userId);
+			post.liked = post.likes.some(
+				(obj) => obj._id.toString() === userId
+			);
 
 			return post;
 		} catch (err) {
@@ -363,18 +377,29 @@ const postService = {
 			throw new AppError("Unauthorized to remove this comment", 403);
 		}
 
+		const post = await postModel
+			.findById(postId)
+			.populate({ path: "comments", match: { _id: commentId } });
+
+		if (!post) throw new AppError("Post not found", 404);
+
+		const user = await userModel.findById(userId);
+		if (!user) throw new AppError("User not found", 404);
+
 		try {
-			const post = await postModel.findById(postId);
-			if (!post) throw new AppError("Post not found", 404);
+			const comment = post.comments
+				.find((c) => c._id.toString() === commentId)
+				.toObject();
 
-			const user = await userModel.findById(userId);
-			if (!user) throw new AppError("User not found", 404);
-
-			const commentExists = post.comments.some(
-				(c) => c.toString() === commentId
-			);
-			if (!commentExists) {
+			if (!comment) {
 				throw new AppError("Comment not found on this post", 404);
+			}
+
+			if (
+				comment.user._id.toString() !== userId ||
+				post.user.toString() !== userId
+			) {
+				throw new AppError("Unauthorized to remove this comment", 403);
 			}
 
 			await userModel.findByIdAndUpdate(userId, {
@@ -420,7 +445,7 @@ const postService = {
 			const hasAlreadyLiked = comment.likes.some(
 				(uId) => uId.toString() === userId
 			);
-			
+
 			if (hasAlreadyLiked) {
 				throw new AppError("You have already liked this comment", 400);
 			}
@@ -510,19 +535,73 @@ const postService = {
 			throw new AppError("Failed to delete post", 500);
 		}
 	},
-
 	async getTrendingPosts(req) {
 		try {
-			const trendingPosts = await postModel
-				.find()
-				.sort({ likes: -1, comments: -1, date: -1 })
-				.limit(10)
-				.populate("user")
-				.populate("comments")
+			const userId = req.user?.id;
+
+			const user = await userModel
+				.findById(userId)
+				.populate("friends.friend")
 				.lean();
 
-			if (!trendingPosts.length) {
-				throw new AppError("No trending posts found", 404);
+			const posts = await postModel
+				.find()
+				.sort({ date: -1 })
+				.populate("user");
+
+			if (!posts || posts.length === 0) {
+				throw new AppError("No posts found", 404);
+			}
+
+			const filteredPosts = posts.filter((post) => {
+				const postOwnerId = post.user._id.toString();
+				let userIsFriend = false;
+
+				if (user) {
+					userIsFriend = user.friends.some(
+						(friend) => friend.friend._id.toString() === postOwnerId
+					);
+				}
+
+				if (post.visibility === visibilityTypes.PUBLIC) {
+					return true;
+				} else if (
+					post.visibility === visibilityTypes.FRIENDS &&
+					userIsFriend
+				) {
+					return true;
+				} else if (
+					post.visibility === visibilityTypes.ONLY_ME &&
+					post.user._id.toString() === userId
+				) {
+					return true;
+				}
+
+				return false;
+			});
+
+			filteredPosts.forEach((post) => {
+				post.likesCount = post.likes.length;
+				post.commentsCount = post.comments.length;
+			});
+
+			filteredPosts.sort((a, b) => {
+				if (b.likesCount === a.likesCount) {
+					return b.commentsCount - a.commentsCount;
+				}
+				return b.likesCount - a.likesCount;
+			});
+
+			const trendingPosts = filteredPosts
+				.slice(0, 10)
+				.map((p) => p.toObject());
+
+			if (req.user) {
+				for (const post of trendingPosts) {
+					post.liked = post.likes.some(
+						(like) => like.toString() === req.user.id
+					);
+				}
 			}
 
 			return trendingPosts;

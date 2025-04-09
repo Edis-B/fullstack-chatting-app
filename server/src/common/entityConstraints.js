@@ -6,8 +6,6 @@ export const urlRegex = /^https?\:\/\//;
 
 export const passwordSaltRounds = 10;
 
-
-
 export const visibilityTypes = {
     PUBLIC: "public",
     FRIENDS: "friends",

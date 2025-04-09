@@ -36,9 +36,9 @@ chatApiController.get(
 );
 
 chatApiController.get(
-	"/does-chat-exist-with-cookie",
+	"/do-dms-exist",
 	catchAsync(async (req, res) => {
-		const chatId = await chatService.checkIfDMsExistWithUser(req);
+		const chatId = await chatService.checkIfChatExistsBetween2Users(req);
 		res.json({
 			status: "success",
 			data: {

@@ -1,7 +1,6 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router";
+import { BrowserRouter, Routes, Route } from "react-router";
 
 import Layout from "./components/Layout/Layout";
-
 import Test from "./components/Test";
 import Home from "./components/Home";
 import Chat from "./components/Chatting/Chat";
@@ -16,6 +15,8 @@ import Search from "./components/Search/Search.jsx";
 import CreateGallery from "./components/Gallery/CreateGallery.jsx";
 import GalleryDetails from "./components/Gallery/GalleryDetails.jsx";
 
+import ErrorBoundary from "./components/common/ErrorBoundary.jsx";
+
 import { SearchProvider } from "./contexts/SearchContext.jsx";
 import { ProfileProvider } from "./contexts/ProfileContext.jsx";
 
@@ -26,99 +27,152 @@ function App() {
 		<BrowserRouter>
 			<Routes>
 				<Route path="/" element={<Layout />}>
-					<Route index element={<Home />} />
+					<Route
+						index
+						element={
+							<ErrorBoundary>
+								<Home />
+							</ErrorBoundary>
+						}
+					/>
 
-					{/* Protected Chat Routes */}
 					<Route
 						path="/chat"
 						element={
-							<ProtectedRoute>
-								<Chat />
-							</ProtectedRoute>
+							<ErrorBoundary>
+								<ProtectedRoute>
+									<Chat />
+								</ProtectedRoute>
+							</ErrorBoundary>
 						}
 					/>
 					<Route
 						path="/chat/:id"
 						element={
-							<ProtectedRoute>
-								<Chat />
-							</ProtectedRoute>
+							<ErrorBoundary>
+								<ProtectedRoute>
+									<Chat />
+								</ProtectedRoute>
+							</ErrorBoundary>
 						}
 					/>
 
-					{/* Search */}
 					<Route
 						path="/search"
 						element={
-							<SearchProvider>
-								<Search />
-							</SearchProvider>
+							<ErrorBoundary>
+								<SearchProvider>
+									<Search />
+								</SearchProvider>
+							</ErrorBoundary>
 						}
 					/>
 
-					{/* Authorization */}
-					<Route path="/login" element={<Login />} />
-					<Route path="/register" element={<Register />} />
+					<Route
+						path="/login"
+						element={
+							<ErrorBoundary>
+								<Login />
+							</ErrorBoundary>
+						}
+					/>
+					<Route
+						path="/register"
+						element={
+							<ErrorBoundary>
+								<Register />
+							</ErrorBoundary>
+						}
+					/>
 
-					{/* Profile */}
 					<Route
 						path="/profile"
 						element={
-							<ProfileProvider>
-								<Profile />
-							</ProfileProvider>
+							<ErrorBoundary>
+								<ProfileProvider>
+									<Profile />
+								</ProfileProvider>
+							</ErrorBoundary>
 						}
 					/>
 					<Route
 						path="/profile/:profileUserId"
 						element={
-							<ProfileProvider>
-								<Profile />
-							</ProfileProvider>
+							<ErrorBoundary>
+								<ProfileProvider>
+									<Profile />
+								</ProfileProvider>
+							</ErrorBoundary>
 						}
 					/>
 					<Route
 						path="/profile/:profileUserId/:content"
 						element={
-							<ProfileProvider>
-								<Profile />
-							</ProfileProvider>
+							<ErrorBoundary>
+								<ProfileProvider>
+									<Profile />
+								</ProfileProvider>
+							</ErrorBoundary>
 						}
 					/>
 
-					{/* Posts */}
 					<Route
 						path="/post/create"
 						element={
-							<ProtectedRoute>
-								<CreatePost />
-							</ProtectedRoute>
+							<ErrorBoundary>
+								<ProtectedRoute>
+									<CreatePost />
+								</ProtectedRoute>
+							</ErrorBoundary>
 						}
 					/>
-					<Route path="/post/:postId" element={<PostDetails />} />
+					<Route
+						path="/post/:postId"
+						element={
+							<ErrorBoundary>
+								<PostDetails />
+							</ErrorBoundary>
+						}
+					/>
 
-					{/* Galleries */}
 					<Route
 						path="/gallery/create"
 						element={
-							<ProtectedRoute>
-								<CreateGallery />
-							</ProtectedRoute>
+							<ErrorBoundary>
+								<ProtectedRoute>
+									<CreateGallery />
+								</ProtectedRoute>
+							</ErrorBoundary>
 						}
 					/>
 					<Route
 						path="/gallery/:galleryId"
 						element={
-							<ProtectedRoute>
-								<GalleryDetails />
-							</ProtectedRoute>
+							<ErrorBoundary>
+								<ProtectedRoute>
+									<GalleryDetails />
+								</ProtectedRoute>
+							</ErrorBoundary>
 						}
 					/>
 
-					{/* 404 Endpoint */}
-					<Route path="*" element={<NotFound />} />
+					<Route
+						path="/test"
+						element={
+							<ErrorBoundary>
+								<Test />
+							</ErrorBoundary>
+						}
+					/>
 
-					<Route path="/test" element={<Test />}></Route>
+					<Route
+						path="*"
+						element={
+							<ErrorBoundary>
+								<NotFound />
+							</ErrorBoundary>
+						}
+					/>
 				</Route>
 			</Routes>
 		</BrowserRouter>

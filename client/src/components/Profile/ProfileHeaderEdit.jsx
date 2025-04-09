@@ -18,14 +18,14 @@ export default function ProfileHeaderEdit() {
 
 	async function handleSaveChanges() {
 		try {
-			const { response, responseData }  = await request.put(`${host}/user/update-profile`, {
+			const { response, payload }  = await request.put(`${host}/user/update-profile`, {
 				profileData,
 			});
 
-			const { data } = responseData;
+			const { data } = payload;
 
 			if (!response.ok) {
-				enqueueError(responseData.message);
+				enqueueError(payload.message);
 				return;
 			}
 

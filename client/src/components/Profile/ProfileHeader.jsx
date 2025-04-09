@@ -68,7 +68,8 @@ export default function ProfileHeader() {
 								className="btn btn-primary"
 								onClick={() =>
 									redirectToChat(
-										profileData.username,
+										userId,
+										profileData._id,
 										navigate
 									)
 								}

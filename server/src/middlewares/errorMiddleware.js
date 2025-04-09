@@ -10,18 +10,10 @@ export const errorHandler = (err, req, res, next) => {
 	if (err.isOperational) {
 		return res.status(err.statusCode || 400).json({
 			status: "fail",
+			success: false, // Added success: false
 			message: err.message,
+			extraProps: err.extraProps,
 			...(err.extra && { details: err.extra }),
-		});
-	}
-
-	// Handle mongoose validation errors
-	if (err.name === "ValidationError") {
-		const errors = Object.values(err.errors).map((el) => el.message);
-		return res.status(400).json({
-			status: "fail",
-			message: "Validation failed",
-			errors,
 		});
 	}
 
@@ -31,23 +23,8 @@ export const errorHandler = (err, req, res, next) => {
 		const message = `${field} already exists`;
 		return res.status(400).json({
 			status: "fail",
+			success: false, // Added success: false
 			message,
-		});
-	}
-
-	// Handle JWT errors
-	if (err.name === "JsonWebTokenError") {
-		return res.status(401).json({
-			status: "fail",
-			message: "Invalid token",
-		});
-	}
-
-	// Handle token expired error
-	if (err.name === "TokenExpiredError") {
-		return res.status(401).json({
-			status: "fail",
-			message: "Token expired",
 		});
 	}
 
@@ -55,6 +32,7 @@ export const errorHandler = (err, req, res, next) => {
 	if (err.name === "CastError") {
 		return res.status(400).json({
 			status: "fail",
+			success: false, // Added success: false
 			message: `Invalid ${err.path}: ${err.value}`,
 		});
 	}
@@ -62,6 +40,7 @@ export const errorHandler = (err, req, res, next) => {
 	// Default to 500 server error for unhandled cases
 	res.status(500).json({
 		status: "error",
+		success: false, // Added success: false
 		message:
 			process.env.NODE_ENV === "development"
 				? err.message

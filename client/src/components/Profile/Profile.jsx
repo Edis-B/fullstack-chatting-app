@@ -48,14 +48,14 @@ export default function Profile() {
 
 	async function fetchProfileData(id) {
 		try {
-			const { response, responseData } = await request.get(
+			const { response, payload } = await request.get(
 				`${host}/user/get-user-profile-data`,
 				{
 					userId: id ?? "",
 				}
 			);
 
-			const { data } = responseData;
+			const { data } = payload;
 
 			if (!profileUserId) {
 				navigate(`/profile/${data}`);

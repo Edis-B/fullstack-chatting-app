@@ -32,15 +32,15 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 		
 		try {
 			const currentPhotos = gallery.photos.map((p) => p._id);
-			const { response, responseData } = await request.get(
+			const { response, payload } = await request.get(
 				`${host}/photo/get-user-photos`,
 				{ userId, excluded: currentPhotos }
 			);
 
-			const { data } = responseData;
+			const { data } = payload;
 
 			if (!response.ok) {
-				enqueueError(responseData.message);
+				enqueueError(payload.message);
 				return;
 			}
 
@@ -56,7 +56,7 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 		if (!imageUrl) return;
 
 		try {
-			const { response, responseData } = await request.post(
+			const { response, payload } = await request.post(
 				`${host}/gallery/create-image-urls-to-gallery`,
 				{
 					imageUrls: [imageUrl],
@@ -65,10 +65,10 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 				}
 			);
 
-			const { data } = responseData;
+			const { data } = payload;
 
 			if (!response.ok) {
-				enqueueError(responseData.message);
+				enqueueError(payload.message);
 				return;
 			}
 
@@ -81,7 +81,7 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 	};
 
 	async function saveEditGallery() {
-		const { response, responseData } = await request.put(
+		const { response, payload } = await request.put(
 			`${host}/gallery/edit-gallery`,
 			{
 				userId,
@@ -89,10 +89,10 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 			}
 		);
 
-		const { data } = responseData;
+		const { data } = payload;
 
 		if (!response.ok) {
-			enqueueError(responseData.message);
+			enqueueError(payload.message);
 			return;
 		}
 
@@ -100,7 +100,7 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 	}
 
 	async function deleteGallery(galleryId) {
-		const { response, responseData } = await request.delete(
+		const { response, payload } = await request.delete(
 			`${host}/gallery/delete-gallery`,
 			{
 				galleryId,
@@ -108,10 +108,10 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 			}
 		);
 
-		const { data } = responseData;
+		const { data } = payload;
 
 		if (!response.ok) {
-			enqueueError(responseData.message);
+			enqueueError(payload.message);
 			return;
 		}
 
@@ -120,7 +120,7 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 
 	const handleAddSelectedImages = async () => {
 		try {
-			const { response, responseData } = await request.post(
+			const { response, payload } = await request.post(
 				`${host}/gallery/add-photos-to-gallery`,
 				{
 					galleryId,
@@ -128,10 +128,10 @@ export default function EditGalleryMenu({ gallery, photosState }) {
 				}
 			);
 
-			const { data } = responseData;
+			const { data } = payload;
 
 			if (!response.ok) {
-				enqueueError(responseData.message);
+				enqueueError(payload.message);
 				return;
 			}
 

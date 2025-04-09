@@ -23,11 +23,14 @@ import request from "../../utils/request.js";
 export default function PostDetails() {
 	const navigate = useNavigate();
 
-	const { userId, enqueueError } = useUser();
+	const { userId, notifications } = useUser();
 	const { postId } = useParams();
 
 	const [post, setPost] = useState({});
 	const [myComment, setMyComment] = useState(null);
+
+	const [isErrorIntentional, setIsErrorIntentional] = useState(false);
+	const [errorMessage, setErrorMessage] = useState("");
 
 	const { Image, ImageModal } = useImageModal();
 
@@ -39,14 +42,29 @@ export default function PostDetails() {
 
 	async function fetchPostData() {
 		try {
-			const { response, responseData } = await request.get(`${host}/post/get-post`, {
-				postId,
-			});
+			const { response, payload } = await request.get(
+				`${host}/post/get-post`,
+				{
+					postId,
+				}
+			);
 
-			const { data } = responseData;
+			const { data } = payload;
 
 			if (!response.ok) {
-				
+				notifications.enqueueError(payload.message);
+
+				// Check if error is intentional
+				if (payload.extraProps) {
+					setIsErrorIntentional(
+						payload.extraProps.intentional || false
+					);
+					setErrorMessage(
+						payload.extraProps.message || "An error occurred."
+					);
+				}
+
+				return;
 			}
 
 			setPost(data);
@@ -69,9 +87,40 @@ export default function PostDetails() {
 		}));
 	}
 
-	if (!post.user) {
-		return <span>Loading...</span>;
+	if (!post || Object.keys(post).length === 0) {
+		return (
+			<>
+				{/* Display error message if the error was intentional */}
+				{isErrorIntentional && errorMessage ? (
+					<div className="alert alert-warning mt-3">
+						<p>{errorMessage}</p>
+					</div>
+				) : (
+					<p>Loading...</p>
+				)}
+			</>
+		);
 	}
+
+	const commentOnPostAction = async () => {
+		if (!userId) {
+			navigate("/login");
+		}
+
+		const newComment = await commentOnPost(
+			postId,
+			userId,
+			myComment,
+			notifications
+		);
+
+		if (newComment) {
+			setPost((prev) => ({
+				...prev,
+				comments: [newComment, ...prev.comments],
+			}));
+		}
+	};
 
 	return (
 		<div className="m-3 p-3 d-flex justify-content-around">
@@ -116,14 +165,14 @@ export default function PostDetails() {
 					{/* Card Body (Content) */}
 					<div className="mt-2 d-flex justify-content-start flex-wrap">
 						<p>{post.content}</p>
-						{post.images?.length > 0 && (
-							<div className="d-flex flex-wrap">
-								{post.images.map((image, index) =>
-									Image(image, index)
-								)}
-							</div>
-						)}
 					</div>
+					{post.images?.length > 0 && (
+						<div className="d-flex flex-wrap">
+							{post.images.map((image, index) =>
+								Image(image, index)
+							)}
+						</div>
+					)}
 				</div>
 
 				{/* Card Footer (Interactions) */}
@@ -159,21 +208,7 @@ export default function PostDetails() {
 
 					<button
 						className="btn btn-outline-primary"
-						onClick={async () => {
-							const newComment = await commentOnPost(
-								postId,
-								userId,
-								myComment,
-								enqueueError
-							);
-
-							if (newComment) {
-								setPost((prev) => ({
-									...prev,
-									comments: [newComment, ...prev.comments],
-								}));
-							}
-						}}
+						onClick={commentOnPostAction}
 					>
 						Post
 					</button>

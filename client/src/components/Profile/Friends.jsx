@@ -22,17 +22,17 @@ export default function Friends() {
 
 	async function fetchFriendsData() {
 		try {
-			const { response, responseData } = await request.get(
+			const { response, payload } = await request.get(
 				`${host}/user/get-user-friends`,
 				{
 					userId: profileId,
 				}
 			);
 
-			const { data } = responseData;
+			const { data } = payload;
 
 			if (!response.ok) {
-				enqueueError(responseData);
+				enqueueError(payload);
 				return;
 			}
 
@@ -114,14 +114,16 @@ export default function Friends() {
 										</span>
 									</Link>
 
-									<AutoFriendButton
-										params={{
-											status: section.status,
-											senderId: userId,
-											receiverId: friend._id,
-											changeStatus,
-										}}
-									/>
+									{friend._id != userId && (
+										<AutoFriendButton
+											params={{
+												status: section.status,
+												senderId: userId,
+												receiverId: friend._id,
+												changeStatus,
+											}}
+										/>
+									)}
 
 									<Link
 										to={`/profile/${friend._id}`}

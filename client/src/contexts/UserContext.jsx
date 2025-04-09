@@ -49,16 +49,23 @@ export function UserProvider({ children }) {
 
 	async function fetchUser() {
 		try {
-			const { response, responseData } = await request.get(
+			const { response, payload } = await request.get(
 				`${host}/user/get-current-user-data`
 			);
 
-			const { data } = responseData;
+			const { data } = payload;
 
+			if (!response.ok) {
+				setAutherized(false);
+				setUserId(null);
+				setUser({});
+				return;
+			}
+
+			setAutherized(data.autherized);
 			setUserId(data._id);
 			setUser(data);
 
-			setAutherized(data.autherized);
 			return data;
 		} catch (err) {
 			console.log(err);

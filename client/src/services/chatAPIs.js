@@ -1,40 +1,44 @@
 import request from "../utils/request.js";
 import { host } from "../common/appConstants.js";
 
-export async function redirectToChat(username, navigate) {
+export async function redirectToChat(userId, profileId, navigate) {
 	try {
+		if (!userId) {
+			navigate("/login");
+		}
+		
 		// Check if the chat already exists
-		const { data } = await request.get(
-			`${host}/chat/does-chat-exist-with-cookie`,
+		const { response, payload: chatResponse } = await request.get(
+			`${host}/chat/do-dms-exist`,
 			{
-				receiverUsername: username,
+				userId,
+				profileId,
 			}
 		);
 
 		// Redirect
-		if (data.exists) {
+		if (chatResponse.data?.chatId) {
+			const { data } = chatResponse;
 			return navigate(`/chat/${data.chatId}`);
 		}
 
-		const { data: currentUser } = await request.get(
-			`${host}/user/get-username`
-		);
-
-		const { data: chatTypes } = await request.get(
+		const { payload: chatTypes } = await request.get(
 			`${host}/chat/chat-types`
 		);
 
 		// Create a new chat
-		const { data: newChatId } = await request.post(
+		const { payload: newChatId } = await request.post(
 			`${host}/chat/create-new-chat`,
 			{
-				participants: [username, currentUser],
-				type: chatTypes.DIRECT_MESSAGES,
+				participants: [userId, profileId],
+				type: chatTypes.data.DIRECT_MESSAGES,
 			}
 		);
 
-		if (newChatId) {
-			return navigate(`/chat/${newChatId}`);
+		const chatId = newChatId.data.chatId;
+
+		if (newChatId.success) {
+			return navigate(`/chat/${chatId}`);
 		}
 	} catch (err) {
 		console.error("Error checking or creating chat:", err);

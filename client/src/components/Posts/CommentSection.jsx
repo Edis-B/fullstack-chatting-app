@@ -83,7 +83,8 @@ export default function CommentSection({ post }) {
 									}}
 								/>
 
-								{comment.user._id == userId && (
+								{(comment.user._id == userId ||
+									post.user._id == userId) && (
 									<DeleteComment
 										value={{
 											postId,

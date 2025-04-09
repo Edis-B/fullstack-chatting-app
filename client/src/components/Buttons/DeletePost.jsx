@@ -11,15 +11,15 @@ export default function DeletePost({ value }) {
 
 	async function deletePost() {
 		try {
-			const { response, responseData } = await request.delete(
+			const { response, payload } = await request.delete(
 				`${host}/post/delete-post`,
 				{ userId, postId }
 			);
 			
-			const { data } = responseData;
+			const { data } = payload;
 
 			if (!response.ok) {
-				enqueueError(responseData.message);
+				enqueueError(payload.message);
 				return;
 			}
 		} catch (err) {

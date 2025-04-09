@@ -64,17 +64,17 @@ export default function Photos() {
 
 	async function fetchUserPhotos(profileId) {
 		try {
-			const { response, responseData } = await request.get(
+			const { response, payload } = await request.get(
 				`${host}/photo/get-user-photos`,
 				{
 					userId: profileId,
 				}
 			);
 
-			const { data } = responseData;
+			const { data } = payload;
 
 			if (!response.ok) {
-				enqueueError(responseData.message);
+				enqueueError(payload.message);
 				return;
 			}
 
@@ -88,15 +88,15 @@ export default function Photos() {
 
 	async function fetchUserGalleries(profileId) {
 		try {
-			const { response, responseData } = await request.get(
+			const { response, payload } = await request.get(
 				`${host}/gallery/get-user-galleries`,
 				{ profileId }
 			);
 
-			const { data } = responseData;
+			const { data } = payload;
 
 			if (!response.ok) {
-				enqueueError(responseData.message);
+				enqueueError(payload.message);
 				return;
 			}
 
@@ -109,7 +109,7 @@ export default function Photos() {
 
 	async function uploadPhoto(userId, imageUrl) {
 		try {
-			const { response, responseData } = await request.post(
+			const { response, payload } = await request.post(
 				`${host}/photo/upload-photo`,
 				{
 					userId,
@@ -117,10 +117,10 @@ export default function Photos() {
 				}
 			);
 
-			const { data } = responseData;
+			const { data } = payload;
 
 			if (!response.ok) {
-				enqueueError(responseData.message);
+				enqueueError(payload.message);
 				return;
 			}
 

@@ -91,7 +91,7 @@ export default function ChatBox() {
 
 	async function fetchChatHistory(id, page) {
 		try {
-			const { response, responseData } = await request.get(
+			const { response, payload } = await request.get(
 				`${host}/chat/get-chat-history`,
 				{
 					chatId: id,
@@ -99,7 +99,7 @@ export default function ChatBox() {
 				}
 			);
 
-			const { data } = responseData;
+			const { data } = payload;
 
 			if (response.ok && data?.length > 0) {
 				setChatHistory((prev) => {
@@ -115,7 +115,7 @@ export default function ChatBox() {
 			}
 
 			if (!response.ok) {
-				enqueueError(responseData.message);
+				enqueueError(payload.message);
 			}
 		} catch (err) {
 			console.log(err);

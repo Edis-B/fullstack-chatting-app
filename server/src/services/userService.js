@@ -5,6 +5,13 @@ import { attachAuthCookie } from "../utils/authUtils.js";
 import photoModel from "../models/Photo.js";
 
 const userService = {
+	checkIf2UsersAreFriends(user1, user2Id) {
+		return (
+			user1.friends.some((obj) => obj.friend._id === user2Id) ||
+			user1._id.toString() === user2Id
+		);
+	},
+
 	async updateProfile(req, res) {
 		const { profileData } = req.body;
 

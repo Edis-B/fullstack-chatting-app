@@ -19,9 +19,12 @@ async function request(method, url, params) {
 
 	try {
 		const response = await fetch(url, options);
-		const responseData = await response.json();
+		const payload = await response.json();
 
-		return { response, responseData };
+		payload.success =
+			payload.success === undefined ? true : payload.success;
+
+		return { response, payload };
 	} catch (err) {
 		if (err.name !== "AbortError") {
 			console.log(`${err} at ${url}`);

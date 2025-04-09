@@ -23,7 +23,7 @@ export default function UserPosts() {
 
 	async function fetchPosts(signal) {
 		try {
-			const { response, responseData } = await request.get(
+			const { response, payload } = await request.get(
 				`${host}/post/get-user-posts`,
 				{
 					profileId,
@@ -31,10 +31,10 @@ export default function UserPosts() {
 				}
 			);
 
-			const { data } = responseData;
+			const { data } = payload;
 
 			if (!response.ok) {
-				enqueueError(responseData.message);
+				enqueueError(payload.message);
 				return;
 			}
 
@@ -68,7 +68,7 @@ export default function UserPosts() {
 						key={post._id}
 						post={post}
 						user={postsData.user}
-						likeState={likeStateChange}
+						likeStateChange={likeStateChange}
 					/>
 				))
 			) : (

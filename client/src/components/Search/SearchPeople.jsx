@@ -28,15 +28,15 @@ export default function SearchPeople() {
 
 	async function fetchPeopleByQuery(query, page) {
 		try {
-			const { response, responseData } = await request.get(
+			const { response, payload } = await request.get(
 				`${host}/user/get-users-by-username`,
 				{ usernameSubstr: query || "", page, exclude: true }
 			);
 		
-			const { data } = responseData;
+			const { data } = payload;
 
 			if (!response.ok) {
-				enqueueError(responseData.message);
+				enqueueError(payload.message);
 				return;
 			}
 
@@ -100,7 +100,8 @@ export default function SearchPeople() {
 										className="btn btn-primary"
 										onClick={() =>
 											redirectToChat(
-												person.username,
+												userId,
+												person._id,
 												navigate
 											)
 										}

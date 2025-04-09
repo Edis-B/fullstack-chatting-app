@@ -11,7 +11,7 @@ import Post from "../Posts/Post";
 export default function SearchPosts() {
 	const { enqueueError } = useUser();
 	const { searchParams } = useSearch();
-	const { query } = searchParams;
+	const query = searchParams.get("query");
 
 	const [posts, setPosts] = useState([]);
 
@@ -21,15 +21,15 @@ export default function SearchPosts() {
 
 	async function fetchPosts(query) {
 		try {
-			const { response, responseData } = await request.get(
-				`${host}/post/get-posts-by-query`,
+			const { response, payload } = await request.get(
+				`${host}/post/get-posts-by-content`,
 				{ query: query || "" }
 			);
-		
-			const { data } = responseData;
+
+			const { data } = payload;
 
 			if (!response.ok) {
-				enqueueError(responseData.message);
+				enqueueError(payload.message);
 				return;
 			}
 
@@ -39,12 +39,30 @@ export default function SearchPosts() {
 		}
 	}
 
+	const changeLikeState = (postId) => {
+		setPosts((prev) =>
+			prev.map((post) =>
+				postId === post._id
+					? {
+							...post,
+							liked: !post.liked,
+					  }
+					: post
+			)
+		);
+	};
+
 	return (
 		<div className="d-flex flex-column align-items-center">
 			<h3>Posts</h3>
 			{posts.length > 0 ? (
 				posts.map((post) => (
-					<Post key={post._id} post={post} user={post.user} />
+					<Post
+						key={post._id}
+						post={post}
+						user={post.user}
+						likeStateChange={changeLikeState}
+					/>
 				))
 			) : (
 				<p>No posts found!</p>

@@ -25,7 +25,7 @@ export default function Register() {
 		e.preventDefault();
 
 		try {
-			const { response, responseData } = await request.post(
+			const { response, payload } = await request.post(
 				`${host}/user/register`,
 				{
 					email,
@@ -35,10 +35,10 @@ export default function Register() {
 				}
 			);
 
-			const { data } = responseData;
+			const { data } = payload;
 
 			if (!response.ok) {
-				enqueueError(responseData.message);
+				enqueueError(payload.message);
 				return;
 			}
 

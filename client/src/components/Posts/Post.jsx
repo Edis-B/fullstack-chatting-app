@@ -5,7 +5,7 @@ import { likePost } from "../../services/postAPIs.js";
 import LikePost from "../Buttons/LikePost.jsx";
 import { useImageModal } from "../../hooks/photos.jsx";
 
-export default function Post({ post, user, likeState }) {
+export default function Post({ post, user, likeStateChange }) {
 	if (!post) {
 		return <p>Loading...</p>;
 	}
@@ -38,7 +38,6 @@ export default function Post({ post, user, likeState }) {
 						<p className="text-muted small mb-0">
 							{dateToString(post.date)}
 						</p>
-						<p>{post.visibility}</p>
 					</div>
 				</Link>
 
@@ -63,7 +62,7 @@ export default function Post({ post, user, likeState }) {
 				>
 					View Details
 				</Link>
-				<LikePost value={{ post, stateFlip: likeState }} />
+				<LikePost value={{ post, likeStateChange }} />
 				<Link
 					to={`/post/${post._id}`}
 					className="btn btn-outline-secondary btn-sm"

@@ -2,7 +2,7 @@ import { useUser } from "../../contexts/UserContext";
 import { removeCommentFromPost } from "../../services/postAPIs";
 
 export default function DeleteComment({ value }) {
-	const { userId, enqueueError } = useUser();
+	const { userId, notifications } = useUser();
 	const { postId, commentId, stateChange } = value;
 
 	return (
@@ -16,11 +16,11 @@ export default function DeleteComment({ value }) {
 
 					if (!allow) return;
 
-					await removeCommentFromPost(
+					const result = await removeCommentFromPost(
 						postId,
 						userId,
 						commentId,
-						enqueueError
+						notifications
 					);
 
 					stateChange(commentId);
