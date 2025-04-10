@@ -1,0 +1,121 @@
+[{
+
+  "_id": {
+
+    "$oid": "67f7ec71e5da82ea795f2919"
+  },
+  "dateCreated": {
+    "$date": "2025-04-10T16:06:09.743Z"
+  },
+  "name": "Gyms",
+  "visibility": "public",
+  "description": "A collection of my favorite gyms!",
+  "user": {
+    "$oid": "67f7c7a2f43164ac8d5ce11f"
+  },
+  "photos": [
+    {
+      "$oid": "67f7ec38e5da82ea795f2902"
+    },
+    {
+      "$oid": "67f7ec4ee5da82ea795f2907"
+    },
+    {
+      "$oid": "67f7ec56e5da82ea795f290c"
+    },
+    {
+      "$oid": "67f7ec5ce5da82ea795f2911"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7ecffe5da82ea795f29aa"
+  },
+  "dateCreated": {
+    "$date": "2025-04-10T16:08:31.403Z"
+  },
+  "name": "My first Gallery!",
+  "visibility": "public",
+  "description": "A gallery of aesthetic photos I have taken!",
+  "user": {
+    "$oid": "67f7c7adf43164ac8d5ce12c"
+  },
+  "photos": [
+    {
+      "$oid": "67f7eccde5da82ea795f2993"
+    },
+    {
+      "$oid": "67f7ecd4e5da82ea795f2998"
+    },
+    {
+      "$oid": "67f7ecd9e5da82ea795f299d"
+    },
+    {
+      "$oid": "67f7ece3e5da82ea795f29a2"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7f1d5e5da82ea795f2c92"
+  },
+  "dateCreated": {
+    "$date": "2025-04-10T16:29:09.440Z"
+  },
+  "name": "Images of Seas",
+  "visibility": "public",
+  "description": "",
+  "user": {
+    "$oid": "67f7c6faf43164ac8d5ce0d1"
+  },
+  "photos": [
+    {
+      "$oid": "67f7f1bee5da82ea795f2c80"
+    },
+    {
+      "$oid": "67f7f1c4e5da82ea795f2c85"
+    },
+    {
+      "$oid": "67f7f1c8e5da82ea795f2c8a"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7f360e5da82ea795f2f82"
+  },
+  "dateCreated": {
+    "$date": "2025-04-10T16:35:44.156Z"
+  },
+  "name": "Italy",
+  "visibility": "public",
+  "description": "A collection of my images, from when i went to italy!",
+  "user": {
+    "$oid": "67f7c7caf43164ac8d5ce146"
+  },
+  "photos": [
+    {
+      "$oid": "67f7f334e5da82ea795f2f61"
+    },
+    {
+      "$oid": "67f7f338e5da82ea795f2f66"
+    },
+    {
+      "$oid": "67f7f33be5da82ea795f2f6b"
+    },
+    {
+      "$oid": "67f7f342e5da82ea795f2f75"
+    },
+    {
+      "$oid": "67f7f33fe5da82ea795f2f70"
+    },
+    {
+      "$oid": "67f7f349e5da82ea795f2f7a"
+    }
+  ],
+  "__v": 0
+}]

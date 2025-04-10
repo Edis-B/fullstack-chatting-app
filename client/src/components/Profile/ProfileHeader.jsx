@@ -65,7 +65,7 @@ export default function ProfileHeader() {
 					!!userId && (
 						<div className="ms-auto">
 							<button
-								className="btn btn-primary"
+								className="btn btn-primary m-2"
 								onClick={() =>
 									redirectToChat(
 										userId,

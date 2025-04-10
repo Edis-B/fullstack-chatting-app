@@ -19,6 +19,7 @@
     "express": "^4.21.2",
     "express-handlebars": "^8.0.1",
     "foreground-child": "^3.3.0",
+    "fs": "^0.0.1-security",
     "glob": "^11.0.1",
     "graceful-fs": "^4.2.11",
     "handlebars": "^4.7.8",

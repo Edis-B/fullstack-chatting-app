@@ -21,6 +21,7 @@ export default function CreatePost() {
 	async function addImage() {
 		if (!httpUrlRegex.test(imageInput)) {
 			enqueueError("Image must start with http:// or https://");
+			return;
 		}
 
 		if (images?.length >= 10) {
@@ -99,7 +100,7 @@ export default function CreatePost() {
 										<button
 											type="button"
 											onClick={() => removeImage(index)}
-											className="m-2"
+											className="m-2 btn btn-danger"
 										>
 											Remove image
 										</button>

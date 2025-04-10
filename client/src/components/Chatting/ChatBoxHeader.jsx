@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
 
-import { host } from "../../common/appConstants.js";
+import { errorImage, host } from "../../common/appConstants.js";
 import { useChat } from "../../contexts/ChatContext.jsx";
 import { useUser } from "../../contexts/UserContext.jsx";
 import request from "../../utils/request.js";
@@ -51,7 +51,7 @@ export default function ChatBoxHeader() {
 		<Link to={`/profile/${header._id}`}>
 			<div className="chat-header d-flex align-items-center p-3 border-bottom">
 				<img
-					src={header.image || "https://via.placeholder.com/40"}
+					src={header.image || errorImage}
 					alt="User Profile"
 					className="rounded-circle me-2"
 					width="40"

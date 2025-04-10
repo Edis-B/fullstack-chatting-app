@@ -21,6 +21,8 @@ import { SearchProvider } from "./contexts/SearchContext.jsx";
 import { ProfileProvider } from "./contexts/ProfileContext.jsx";
 
 import "./css/site.css";
+import { ChatProvider } from "./contexts/ChatContext.jsx";
+import Catalog from "./components/Catalog.jsx";
 
 function App() {
 	return (
@@ -39,21 +41,25 @@ function App() {
 					<Route
 						path="/chat"
 						element={
-							<ErrorBoundary>
-								<ProtectedRoute>
-									<Chat />
-								</ProtectedRoute>
-							</ErrorBoundary>
+							<ChatProvider>
+								<ErrorBoundary>
+									<ProtectedRoute>
+										<Chat />
+									</ProtectedRoute>
+								</ErrorBoundary>
+							</ChatProvider>
 						}
 					/>
 					<Route
 						path="/chat/:id"
 						element={
-							<ErrorBoundary>
-								<ProtectedRoute>
-									<Chat />
-								</ProtectedRoute>
-							</ErrorBoundary>
+							<ChatProvider>
+								<ErrorBoundary>
+									<ProtectedRoute>
+										<Chat />
+									</ProtectedRoute>
+								</ErrorBoundary>
+							</ChatProvider>
 						}
 					/>
 
@@ -145,6 +151,7 @@ function App() {
 							</ErrorBoundary>
 						}
 					/>
+
 					<Route
 						path="/gallery/:galleryId"
 						element={
@@ -152,6 +159,15 @@ function App() {
 								<ProtectedRoute>
 									<GalleryDetails />
 								</ProtectedRoute>
+							</ErrorBoundary>
+						}
+					/>
+
+					<Route
+						path="/catalog"
+						element={
+							<ErrorBoundary>
+								<Catalog />
 							</ErrorBoundary>
 						}
 					/>

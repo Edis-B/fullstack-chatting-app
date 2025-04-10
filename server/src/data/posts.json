@@ -1,0 +1,782 @@
+[{
+  "_id": {
+    "$oid": "67f7d3b4e8e95921119b0337"
+  },
+  "date": {
+    "$date": "2025-04-10T14:20:36.019Z"
+  },
+  "content": "Just tried this new coffee spot downtown — 10/10 would recommend ☕️",
+  "user": {
+    "$oid": "67f7c757f43164ac8d5ce0eb"
+  },
+  "visibility": "public",
+  "images": [
+    "https://t4.ftcdn.net/jpg/04/00/30/19/360_F_400301933_wSZa4W0kFge2blbLKpcOBEjuQiFhqMJc.jpg"
+  ],
+  "likes": [
+    {
+      "$oid": "67f7c6faf43164ac8d5ce0d1"
+    },
+    {
+      "$oid": "67f7c757f43164ac8d5ce0eb"
+    },
+    {
+      "$oid": "67f7c7a2f43164ac8d5ce11f"
+    }
+  ],
+  "comments": [
+    {
+      "$oid": "67f7f0c7e5da82ea795f2b8e"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7d3cae8e95921119b033e"
+  },
+  "date": {
+    "$date": "2025-04-10T14:20:58.237Z"
+  },
+  "content": "Anyone else feel like time is flying this year? 🕒",
+  "user": {
+    "$oid": "67f7c757f43164ac8d5ce0eb"
+  },
+  "visibility": "public",
+  "images": [
+    "https://partnersinfire.com/wp-content/uploads/2022/11/time-flies-so-fast.png.webp"
+  ],
+  "likes": [
+    {
+      "$oid": "67f7c6faf43164ac8d5ce0d1"
+    },
+    {
+      "$oid": "67f7c76cf43164ac8d5ce0f8"
+    },
+    {
+      "$oid": "67f7c78ff43164ac8d5ce112"
+    },
+    {
+      "$oid": "67f7c7a2f43164ac8d5ce11f"
+    }
+  ],
+  "comments": [
+    {
+      "$oid": "67f7e9e7e5da82ea795f2727"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7d3fce8e95921119b0350"
+  },
+  "date": {
+    "$date": "2025-04-10T14:21:48.919Z"
+  },
+  "content": "Finished reading *Atomic Habits*. Game changer. Highly recommend!",
+  "user": {
+    "$oid": "67f7c748f43164ac8d5ce0de"
+  },
+  "visibility": "public",
+  "images": [
+    "https://hughesmarino.com/boston/wp-content/uploads/sites/20/Six-Takeaways-from-James-Clear-Featured-Image.jpg"
+  ],
+  "likes": [
+    {
+      "$oid": "67f7c6faf43164ac8d5ce0d1"
+    },
+    {
+      "$oid": "67f7c757f43164ac8d5ce0eb"
+    },
+    {
+      "$oid": "67f7c78ff43164ac8d5ce112"
+    }
+  ],
+  "comments": [
+    {
+      "$oid": "67f7ec04e5da82ea795f28e4"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7d436e8e95921119b0357"
+  },
+  "date": {
+    "$date": "2025-04-10T14:22:46.101Z"
+  },
+  "content": "Rainy day vibes and lo-fi beats 🎶🌧️",
+  "user": {
+    "$oid": "67f7c748f43164ac8d5ce0de"
+  },
+  "visibility": "public",
+  "images": [
+    "https://t4.ftcdn.net/jpg/03/16/49/27/360_F_316492713_lLyBATL53sLed01LQvkfSYSrsa58Kgew.jpg"
+  ],
+  "likes": [
+    {
+      "$oid": "67f7c7baf43164ac8d5ce139"
+    },
+    {
+      "$oid": "67f7c7caf43164ac8d5ce146"
+    },
+    {
+      "$oid": "67f7c6faf43164ac8d5ce0d1"
+    }
+  ],
+  "comments": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7d45ee8e95921119b036a"
+  },
+  "date": {
+    "$date": "2025-04-10T14:23:26.559Z"
+  },
+  "content": "Started learning how to code — it's challenging but super rewarding",
+  "user": {
+    "$oid": "67f7c76cf43164ac8d5ce0f8"
+  },
+  "visibility": "public",
+  "images": [
+    "https://images.squarespace-cdn.com/content/v1/5d72bfd58cd4bf332c64cacd/1613411995205-QG05WDGB1NF2AT3OCGTH/image-asset.jpeg?format=1500w"
+  ],
+  "likes": [
+    {
+      "$oid": "67f7c7baf43164ac8d5ce139"
+    },
+    {
+      "$oid": "67f7c7caf43164ac8d5ce146"
+    },
+    {
+      "$oid": "67f7c7a2f43164ac8d5ce11f"
+    },
+    {
+      "$oid": "67f7c7adf43164ac8d5ce12c"
+    },
+    {
+      "$oid": "67f7c78ff43164ac8d5ce112"
+    }
+  ],
+  "comments": [
+    {
+      "$oid": "67f7d6e3e8e95921119b0481"
+    },
+    {
+      "$oid": "67f7f0e4e5da82ea795f2bb2"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7d47be8e95921119b0371"
+  },
+  "date": {
+    "$date": "2025-04-10T14:23:55.901Z"
+  },
+  "content": "Can someone explain why my cat knocked over my plant *again*? 😂",
+  "user": {
+    "$oid": "67f7c76cf43164ac8d5ce0f8"
+  },
+  "visibility": "public",
+  "images": [
+    "https://thumbs.dreamstime.com/b/cat-broke-terracotta-flower-pot-anthurium-flower-broken-cat-broke-terracotta-flower-pot-anthurium-flower-344821590.jpg"
+  ],
+  "likes": [
+    {
+      "$oid": "67f7c7baf43164ac8d5ce139"
+    },
+    {
+      "$oid": "67f7c7caf43164ac8d5ce146"
+    },
+    {
+      "$oid": "67f7c7d6f43164ac8d5ce153"
+    },
+    {
+      "$oid": "67f7c76cf43164ac8d5ce0f8"
+    },
+    {
+      "$oid": "67f7c7a2f43164ac8d5ce11f"
+    }
+  ],
+  "comments": [
+    {
+      "$oid": "67f7ea65e5da82ea795f2763"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7d4a6e8e95921119b0384"
+  },
+  "date": {
+    "$date": "2025-04-10T14:24:38.136Z"
+  },
+  "content": "Throwback to one of the best sunsets I’ve ever seen 🌅",
+  "user": {
+    "$oid": "67f7c783f43164ac8d5ce105"
+  },
+  "visibility": "public",
+  "images": [
+    "https://platform.vox.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/19397812/1048232144.jpg.jpg?quality=90&strip=all&crop=0%2C10.736513278159%2C100%2C78.526973443682&w=1200"
+  ],
+  "likes": [
+    {
+      "$oid": "67f7c6faf43164ac8d5ce0d1"
+    },
+    {
+      "$oid": "67f7c76cf43164ac8d5ce0f8"
+    },
+    {
+      "$oid": "67f7c7a2f43164ac8d5ce11f"
+    }
+  ],
+  "comments": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7d4c7e8e95921119b038b"
+  },
+  "date": {
+    "$date": "2025-04-10T14:25:11.606Z"
+  },
+  "content": "Working on a new side project. Excited to share more soon!",
+  "user": {
+    "$oid": "67f7c783f43164ac8d5ce105"
+  },
+  "visibility": "public",
+  "images": [],
+  "likes": [
+    {
+      "$oid": "67f7c783f43164ac8d5ce105"
+    },
+    {
+      "$oid": "67f7c7baf43164ac8d5ce139"
+    },
+    {
+      "$oid": "67f7c7caf43164ac8d5ce146"
+    },
+    {
+      "$oid": "67f7c7d6f43164ac8d5ce153"
+    },
+    {
+      "$oid": "67f7c6faf43164ac8d5ce0d1"
+    },
+    {
+      "$oid": "67f7c78ff43164ac8d5ce112"
+    },
+    {
+      "$oid": "67f7c7adf43164ac8d5ce12c"
+    }
+  ],
+  "comments": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7d518e8e95921119b03a9"
+  },
+  "date": {
+    "$date": "2025-04-10T14:26:32.790Z"
+  },
+  "content": "Mondays are hard. Coffee helps. ☕ #mondaymood",
+  "user": {
+    "$oid": "67f7c78ff43164ac8d5ce112"
+  },
+  "visibility": "public",
+  "images": [
+    "https://c8.alamy.com/comp/MX003E/overworked-businesswoman-sleeping-at-workplace-with-laptop-and-coffee-to-go-in-office-MX003E.jpg"
+  ],
+  "likes": [
+    {
+      "$oid": "67f7c7baf43164ac8d5ce139"
+    },
+    {
+      "$oid": "67f7c7caf43164ac8d5ce146"
+    },
+    {
+      "$oid": "67f7c7d6f43164ac8d5ce153"
+    },
+    {
+      "$oid": "67f7c6faf43164ac8d5ce0d1"
+    },
+    {
+      "$oid": "67f7c78ff43164ac8d5ce112"
+    },
+    {
+      "$oid": "67f7c7adf43164ac8d5ce12c"
+    },
+    {
+      "$oid": "67f7c748f43164ac8d5ce0de"
+    }
+  ],
+  "comments": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7d54be8e95921119b03bb"
+  },
+  "date": {
+    "$date": "2025-04-10T14:27:23.001Z"
+  },
+  "content": "Just hit a new PR at the gym today. Let’s gooo 💪",
+  "user": {
+    "$oid": "67f7c7a2f43164ac8d5ce11f"
+  },
+  "visibility": "public",
+  "images": [
+    "https://cdn.muscleandstrength.com/sites/default/files/field/feature-wide-image/article/strong-man-barbell-bench-press-1000_0.jpg"
+  ],
+  "likes": [
+    {
+      "$oid": "67f7c7baf43164ac8d5ce139"
+    },
+    {
+      "$oid": "67f7c7caf43164ac8d5ce146"
+    },
+    {
+      "$oid": "67f7c7d6f43164ac8d5ce153"
+    },
+    {
+      "$oid": "67f7c6faf43164ac8d5ce0d1"
+    },
+    {
+      "$oid": "67f7c78ff43164ac8d5ce112"
+    }
+  ],
+  "comments": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7d58ee8e95921119b03c2"
+  },
+  "date": {
+    "$date": "2025-04-10T14:28:30.785Z"
+  },
+  "content": "Finally made it through the week. Is it just me or does Friday feel like the longest day? 😂",
+  "user": {
+    "$oid": "67f7c7a2f43164ac8d5ce11f"
+  },
+  "visibility": "public",
+  "images": [
+    "https://media.tenor.com/nC8ZHCOpaOYAAAAe/sally-and-linus-linus-and-sally.png"
+  ],
+  "likes": [
+    {
+      "$oid": "67f7c7baf43164ac8d5ce139"
+    },
+    {
+      "$oid": "67f7c7caf43164ac8d5ce146"
+    },
+    {
+      "$oid": "67f7c6faf43164ac8d5ce0d1"
+    },
+    {
+      "$oid": "67f7c78ff43164ac8d5ce112"
+    },
+    {
+      "$oid": "67f7c748f43164ac8d5ce0de"
+    }
+  ],
+  "comments": [
+    {
+      "$oid": "67f7f0fce5da82ea795f2bcb"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7d615e8e95921119b03e2"
+  },
+  "date": {
+    "$date": "2025-04-10T14:30:45.495Z"
+  },
+  "content": "Caffeine and good vibes only today. ☕✨",
+  "user": {
+    "$oid": "67f7c7adf43164ac8d5ce12c"
+  },
+  "visibility": "public",
+  "images": [
+    "https://img.freepik.com/free-photo/cup-tea-chill-woman-lying-couch-holding-legs-coffee-table-drinking-hot-coffee-enjoying-morning-being-dreamy-relaxed-mood-girl-oversized-shirt-takes-break-home_176420-11905.jpg"
+  ],
+  "likes": [
+    {
+      "$oid": "67f7c7baf43164ac8d5ce139"
+    },
+    {
+      "$oid": "67f7c7d6f43164ac8d5ce153"
+    },
+    {
+      "$oid": "67f7c6faf43164ac8d5ce0d1"
+    },
+    {
+      "$oid": "67f7c757f43164ac8d5ce0eb"
+    },
+    {
+      "$oid": "67f7c76cf43164ac8d5ce0f8"
+    },
+    {
+      "$oid": "67f7c7adf43164ac8d5ce12c"
+    }
+  ],
+  "comments": [
+    {
+      "$oid": "67f7f0b2e5da82ea795f2b74"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7d62ee8e95921119b03e9"
+  },
+  "date": {
+    "$date": "2025-04-10T14:31:10.024Z"
+  },
+  "content": "Caught up on my favorite show last night — why do all the plot twists happen in the final 5 minutes?!",
+  "user": {
+    "$oid": "67f7c7adf43164ac8d5ce12c"
+  },
+  "visibility": "public",
+  "images": [],
+  "likes": [
+    {
+      "$oid": "67f7c7baf43164ac8d5ce139"
+    },
+    {
+      "$oid": "67f7c7caf43164ac8d5ce146"
+    },
+    {
+      "$oid": "67f7c6faf43164ac8d5ce0d1"
+    },
+    {
+      "$oid": "67f7c757f43164ac8d5ce0eb"
+    },
+    {
+      "$oid": "67f7c76cf43164ac8d5ce0f8"
+    },
+    {
+      "$oid": "67f7c78ff43164ac8d5ce112"
+    },
+    {
+      "$oid": "67f7c7a2f43164ac8d5ce11f"
+    }
+  ],
+  "comments": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7d686e8e95921119b043e"
+  },
+  "date": {
+    "$date": "2025-04-10T14:32:38.044Z"
+  },
+  "content": "Tried a new recipe today — not sure what I did wrong, but it turned out… interesting. 😂",
+  "user": {
+    "$oid": "67f7c7baf43164ac8d5ce139"
+  },
+  "visibility": "public",
+  "images": [
+    "https://munchiesbymallory.com/wp-content/uploads/2024/04/31d4ca_38d9d6bd237a4d3988798219b4b2e0d0mv2.webp"
+  ],
+  "likes": [
+    {
+      "$oid": "67f7c6faf43164ac8d5ce0d1"
+    },
+    {
+      "$oid": "67f7c757f43164ac8d5ce0eb"
+    }
+  ],
+  "comments": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7d6ace8e95921119b0445"
+  },
+  "date": {
+    "$date": "2025-04-10T14:33:16.674Z"
+  },
+  "content": "It's the little things: fresh laundry and a good book. 🧺📚",
+  "user": {
+    "$oid": "67f7c7baf43164ac8d5ce139"
+  },
+  "visibility": "public",
+  "images": [
+    "https://cdn.hswstatic.com/gif/green-laundry-cleaning-tips-2.jpg"
+  ],
+  "likes": [
+    {
+      "$oid": "67f7c6faf43164ac8d5ce0d1"
+    },
+    {
+      "$oid": "67f7c78ff43164ac8d5ce112"
+    },
+    {
+      "$oid": "67f7c7a2f43164ac8d5ce11f"
+    },
+    {
+      "$oid": "67f7c748f43164ac8d5ce0de"
+    }
+  ],
+  "comments": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7d72de8e95921119b04b4"
+  },
+  "date": {
+    "$date": "2025-04-10T14:35:25.826Z"
+  },
+  "content": "The way the sun hits the city in the evening is something else. 🌇",
+  "user": {
+    "$oid": "67f7c7caf43164ac8d5ce146"
+  },
+  "visibility": "public",
+  "images": [
+    "https://images.stockcake.com/public/e/8/a/e8a35ae1-6e9d-4f09-bca6-155dd66c4cfb_large/sunset-city-skyline-stockcake.jpg"
+  ],
+  "likes": [
+    {
+      "$oid": "67f7c6faf43164ac8d5ce0d1"
+    },
+    {
+      "$oid": "67f7c78ff43164ac8d5ce112"
+    },
+    {
+      "$oid": "67f7c748f43164ac8d5ce0de"
+    }
+  ],
+  "comments": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7d74ee8e95921119b04c1"
+  },
+  "date": {
+    "$date": "2025-04-10T14:35:58.271Z"
+  },
+  "content": "Anyone else feel like they've been in a creative slump lately? Need some inspiration",
+  "user": {
+    "$oid": "67f7c7caf43164ac8d5ce146"
+  },
+  "visibility": "public",
+  "images": [
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRurH2iZ2BtXmnUAi6t8eiA7TBPc6Gb6QNdEQ&s"
+  ],
+  "likes": [
+    {
+      "$oid": "67f7c76cf43164ac8d5ce0f8"
+    },
+    {
+      "$oid": "67f7c78ff43164ac8d5ce112"
+    }
+  ],
+  "comments": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7d761e8e95921119b04c8"
+  },
+  "date": {
+    "$date": "2025-04-10T14:36:17.027Z"
+  },
+  "content": "Currently obsessing over podcasts. Got any recommendations? 🎧",
+  "user": {
+    "$oid": "67f7c7caf43164ac8d5ce146"
+  },
+  "visibility": "public",
+  "images": [
+    "https://books.forbes.com/wp-content/uploads/2022/11/podcast-checklist.png"
+  ],
+  "likes": [
+    {
+      "$oid": "67f7c7d6f43164ac8d5ce153"
+    },
+    {
+      "$oid": "67f7c6faf43164ac8d5ce0d1"
+    },
+    {
+      "$oid": "67f7c757f43164ac8d5ce0eb"
+    }
+  ],
+  "comments": [
+    {
+      "$oid": "67f7ea23e5da82ea795f273d"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7d7bde8e95921119b04fb"
+  },
+  "date": {
+    "$date": "2025-04-10T14:37:49.064Z"
+  },
+  "content": "Nothing like the smell of fresh rain on concrete. 🌧️💧",
+  "user": {
+    "$oid": "67f7c7d6f43164ac8d5ce153"
+  },
+  "visibility": "public",
+  "images": [
+    "https://media.istockphoto.com/id/982222848/photo/view-of-the-street-surface-during-rain.jpg?s=612x612&w=0&k=20&c=vRp4EPhgelsquHkOihBpW1_m8qWAFeCATfhEh8J9440="
+  ],
+  "likes": [
+    {
+      "$oid": "67f7c6faf43164ac8d5ce0d1"
+    },
+    {
+      "$oid": "67f7c757f43164ac8d5ce0eb"
+    },
+    {
+      "$oid": "67f7c7adf43164ac8d5ce12c"
+    },
+    {
+      "$oid": "67f7c7baf43164ac8d5ce139"
+    }
+  ],
+  "comments": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7d7d4e8e95921119b0502"
+  },
+  "date": {
+    "$date": "2025-04-10T14:38:12.568Z"
+  },
+  "content": "Learning to be more mindful and present. It's a journey, but I’m here for it.",
+  "user": {
+    "$oid": "67f7c7d6f43164ac8d5ce153"
+  },
+  "visibility": "public",
+  "images": [
+    "https://cdn.tinybuddha.com/wp-content/uploads/2013/07/Meditating-1.jpg"
+  ],
+  "likes": [
+    {
+      "$oid": "67f7c7d6f43164ac8d5ce153"
+    },
+    {
+      "$oid": "67f7c76cf43164ac8d5ce0f8"
+    },
+    {
+      "$oid": "67f7c78ff43164ac8d5ce112"
+    },
+    {
+      "$oid": "67f7c748f43164ac8d5ce0de"
+    }
+  ],
+  "comments": [
+    {
+      "$oid": "67f7f111e5da82ea795f2bda"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7d83be8e95921119b0527"
+  },
+  "date": {
+    "$date": "2025-04-10T14:39:55.570Z"
+  },
+  "content": "Had the best weekend getaway — nature really does wonders for the soul. 🌲✨",
+  "user": {
+    "$oid": "67f7c6faf43164ac8d5ce0d1"
+  },
+  "visibility": "public",
+  "images": [
+    "https://natureconservancy-h.assetsadobe.com/is/image/content/dam/tnc/nature/en/photos/z/u/Zugpsitze_mountain.jpg?crop=0%2C214%2C3008%2C1579&wid=1200&hei=630&scl=2.506666666666667"
+  ],
+  "likes": [
+    {
+      "$oid": "67f7c6faf43164ac8d5ce0d1"
+    },
+    {
+      "$oid": "67f7c783f43164ac8d5ce105"
+    },
+    {
+      "$oid": "67f7c78ff43164ac8d5ce112"
+    },
+    {
+      "$oid": "67f7c7a2f43164ac8d5ce11f"
+    }
+  ],
+  "comments": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7d861e8e95921119b052e"
+  },
+  "date": {
+    "$date": "2025-04-10T14:40:33.034Z"
+  },
+  "content": "Is it just me, or does music always sound better when you're driving with the windows down? 🎶🚗",
+  "user": {
+    "$oid": "67f7c6faf43164ac8d5ce0d1"
+  },
+  "visibility": "public",
+  "images": [
+    "https://www.shutterstock.com/image-photo/driving-down-road-260nw-290435684.jpg"
+  ],
+  "likes": [
+    {
+      "$oid": "67f7c6faf43164ac8d5ce0d1"
+    },
+    {
+      "$oid": "67f7c783f43164ac8d5ce105"
+    },
+    {
+      "$oid": "67f7c7adf43164ac8d5ce12c"
+    }
+  ],
+  "comments": [
+    {
+      "$oid": "67f7ea85e5da82ea795f2796"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7d86ae8e95921119b0535"
+  },
+  "date": {
+    "$date": "2025-04-10T14:40:42.413Z"
+  },
+  "content": "Caught up with an old friend today — how does time fly so fast?! 🕰️",
+  "user": {
+    "$oid": "67f7c6faf43164ac8d5ce0d1"
+  },
+  "visibility": "public",
+  "images": [],
+  "likes": [
+    {
+      "$oid": "67f7c76cf43164ac8d5ce0f8"
+    },
+    {
+      "$oid": "67f7c7a2f43164ac8d5ce11f"
+    },
+    {
+      "$oid": "67f7c7adf43164ac8d5ce12c"
+    }
+  ],
+  "comments": [],
+  "__v": 0
+}]

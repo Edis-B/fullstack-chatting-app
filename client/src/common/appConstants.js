@@ -8,6 +8,9 @@ export const httpUrlRegex = /^https?\:\/\//i;
 
 export const unauthorizedString = "Unauthorized!";
 
+export const errorImage =
+	"https://cdn0.iconfinder.com/data/icons/shift-free/32/Error-512.png";
+
 export const visibilityTypes = {
 	PUBLIC: "public",
 	FRIENDS: "friends",

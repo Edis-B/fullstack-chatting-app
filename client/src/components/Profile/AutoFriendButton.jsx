@@ -14,28 +14,40 @@ export default function AutoFriendButton({ params }) {
 	const { autherized, enqueueError, enqueueInfo } = useUser();
 	const userFunctions = { enqueueError, enqueueInfo };
 
-	const handleCancelRequest = () => {
-		cancelFriendRequest(senderId, receiverId, userFunctions);
+	const handleCancelRequest = async () => {
+		if (!confirm("Are you sure you want to cancel your request?")) {
+			return;
+		}
+
+		await cancelFriendRequest(senderId, receiverId, userFunctions);
 		changeStatus({ prevType: friendStatuses.OUTGOING_REQUEST, type: null, id: receiverId });
 	};
 
-	const handleDeclineRequest = () => {
-		declineFriendRequest(senderId, receiverId, userFunctions);
+	const handleDeclineRequest = async () => {
+		if (!confirm("Are you sure you want to decline request?")) {
+			return;
+		}
+
+		await declineFriendRequest(senderId, receiverId, userFunctions);
 		changeStatus({ prevType: friendStatuses.INCOMING_REQUEST, type: null, id: receiverId });
 	};
 
-	const handleAcceptRequest = () => {
-		acceptFriendRequest(senderId, receiverId, userFunctions);
+	const handleAcceptRequest = async () => {
+		await acceptFriendRequest(senderId, receiverId, userFunctions);
 		changeStatus({ prevType: friendStatuses.INCOMING_REQUEST, type: friendStatuses.FRIENDS, id: receiverId });
 	};
 
-	const handleUnfriend = () => {
-		unfriend(senderId, receiverId, userFunctions);
+	const handleUnfriend = async () => {
+		if (!confirm("Are you sure you want to unfriend user?")) {
+			return;
+		}
+
+		await unfriend(senderId, receiverId, userFunctions);
 		changeStatus({ prevType: friendStatuses.FRIENDS, type: null, id: receiverId });
 	};
 
-	const handleSendFriendRequest = () => {
-		sendFriendRequest(senderId, receiverId, userFunctions);
+	const handleSendFriendRequest = async () => {
+		await sendFriendRequest(senderId, receiverId, userFunctions);
 		changeStatus({ prevType: null, type: friendStatuses.OUTGOING_REQUEST, id: receiverId });
 	};
 

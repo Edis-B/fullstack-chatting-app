@@ -538,6 +538,9 @@ const postService = {
 	async getTrendingPosts(req) {
 		try {
 			const userId = req.user?.id;
+			const page = parseInt(req.query.page) || 1;
+			const limit = 10;
+			const skip = (page - 1) * limit;
 
 			const user = await userModel
 				.findById(userId)
@@ -585,26 +588,31 @@ const postService = {
 				post.commentsCount = post.comments.length;
 			});
 
-			filteredPosts.sort((a, b) => {
-				if (b.likesCount === a.likesCount) {
-					return b.commentsCount - a.commentsCount;
-				}
-				return b.likesCount - a.likesCount;
-			});
+			filteredPosts.sort(() => Math.random() - 0.5); // Randomly shuffle the posts
 
-			const trendingPosts = filteredPosts
-				.slice(0, 10)
-				.map((p) => p.toObject());
+			const paginatedPosts = filteredPosts
+				.slice(skip, skip + limit)
+				.map((x) => x.toObject());
 
 			if (req.user) {
-				for (const post of trendingPosts) {
+				for (const post of paginatedPosts) {
 					post.liked = post.likes.some(
 						(like) => like.toString() === req.user.id
 					);
 				}
 			}
 
-			return trendingPosts;
+			const totalPosts = filteredPosts.length;
+			const totalPages = Math.ceil(totalPosts / limit);
+
+			return {
+				posts: paginatedPosts,
+				pagination: {
+					currentPage: page,
+					totalPages,
+					totalPosts,
+				},
+			};
 		} catch (error) {
 			console.error("Error fetching trending posts:", error);
 			throw new AppError("Failed to fetch trending posts", 500);

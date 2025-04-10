@@ -27,7 +27,7 @@ export default function PostDetails() {
 	const { postId } = useParams();
 
 	const [post, setPost] = useState({});
-	const [myComment, setMyComment] = useState(null);
+	const [myComment, setMyComment] = useState("");
 
 	const [isErrorIntentional, setIsErrorIntentional] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
@@ -115,6 +115,7 @@ export default function PostDetails() {
 		);
 
 		if (newComment) {
+			setMyComment("");
 			setPost((prev) => ({
 				...prev,
 				comments: [newComment, ...prev.comments],
@@ -187,10 +188,6 @@ export default function PostDetails() {
 					)}
 
 					<LikePost value={{ post, likeStateChange }} />
-
-					<button className="btn btn-outline-success btn-sm">
-						Share
-					</button>
 				</div>
 			</div>
 
@@ -203,6 +200,7 @@ export default function PostDetails() {
 						type="text"
 						className="form-control"
 						onChange={(e) => setMyComment(e.target.value)}
+						value={myComment}
 						placeholder="Add a comment..."
 					/>
 

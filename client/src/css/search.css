@@ -1,6 +1,5 @@
 .filter-menu {
 	width: 250px;
-	height: 100vh;
 	padding: 15px;
 	background-color: #f8f9fa;
 	border-right: 1px solid #ddd;
@@ -21,6 +20,7 @@
 }
 
 .container-fluid {
+	height: 100%;
 	padding-left: 0;
 }
 

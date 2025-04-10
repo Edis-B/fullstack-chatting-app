@@ -1,0 +1,144 @@
+[{
+  "_id": {
+    "$oid": "67f7d9b8e8e95921119b05ac"
+  },
+  "text": "Hey Grace, how are you?",
+  "date": {
+    "$date": "2025-04-10T14:46:16.206Z"
+  },
+  "chat": {
+    "$oid": "67f7d9abe8e95921119b059d"
+  },
+  "user": {
+    "$oid": "67f7c6faf43164ac8d5ce0d1"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7e36be8e95921119b062f"
+  },
+  "text": "Hey, where are you? I am waiting for you",
+  "date": {
+    "$date": "2025-04-10T15:27:39.317Z"
+  },
+  "chat": {
+    "$oid": "67f7e352e8e95921119b061d"
+  },
+  "user": {
+    "$oid": "67f7c6faf43164ac8d5ce0d1"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7f210e5da82ea795f2ce1"
+  },
+  "text": "Hey Brian, where is this coffee place exactly?",
+  "date": {
+    "$date": "2025-04-10T16:30:08.296Z"
+  },
+  "chat": {
+    "$oid": "67f7f1e5e5da82ea795f2cbf"
+  },
+  "user": {
+    "$oid": "67f7c6faf43164ac8d5ce0d1"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7f273e5da82ea795f2dee"
+  },
+  "text": "Hey Alice",
+  "date": {
+    "$date": "2025-04-10T16:31:47.669Z"
+  },
+  "chat": {
+    "$oid": "67f7f26de5da82ea795f2dd8"
+  },
+  "user": {
+    "$oid": "67f7c757f43164ac8d5ce0eb"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7f27ae5da82ea795f2df6"
+  },
+  "text": "Would you like to go on a date?",
+  "date": {
+    "$date": "2025-04-10T16:31:54.516Z"
+  },
+  "chat": {
+    "$oid": "67f7f26de5da82ea795f2dd8"
+  },
+  "user": {
+    "$oid": "67f7c757f43164ac8d5ce0eb"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7f2afe5da82ea795f2e5e"
+  },
+  "text": "How is your coding journey going?",
+  "date": {
+    "$date": "2025-04-10T16:32:47.469Z"
+  },
+  "chat": {
+    "$oid": "67f7f2a6e5da82ea795f2e4f"
+  },
+  "user": {
+    "$oid": "67f7c78ff43164ac8d5ce112"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7f2c7e5da82ea795f2e92"
+  },
+  "text": "Want to go out this saturday?",
+  "date": {
+    "$date": "2025-04-10T16:33:11.506Z"
+  },
+  "chat": {
+    "$oid": "67f7f2bee5da82ea795f2e80"
+  },
+  "user": {
+    "$oid": "67f7c78ff43164ac8d5ce112"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7f30ae5da82ea795f2f41"
+  },
+  "text": "I was in a lecture sorry.",
+  "date": {
+    "$date": "2025-04-10T16:34:18.529Z"
+  },
+  "chat": {
+    "$oid": "67f7e352e8e95921119b061d"
+  },
+  "user": {
+    "$oid": "67f7c7caf43164ac8d5ce146"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7f311e5da82ea795f2f49"
+  },
+  "text": "I am comin",
+  "date": {
+    "$date": "2025-04-10T16:34:25.818Z"
+  },
+  "chat": {
+    "$oid": "67f7e352e8e95921119b061d"
+  },
+  "user": {
+    "$oid": "67f7c7caf43164ac8d5ce146"
+  },
+  "__v": 0
+}]

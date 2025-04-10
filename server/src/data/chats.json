@@ -1,0 +1,286 @@
+[{
+  "_id": {
+    "$oid": "67f7d9abe8e95921119b059d"
+  },
+  "updatedAt": {
+    "$date": "2025-04-10T14:46:16.212Z"
+  },
+  "type": "direct messages",
+  "participants": [
+    {
+      "participant": {
+        "$oid": "67f7c6faf43164ac8d5ce0d1"
+      }
+    },
+    {
+      "participant": {
+        "$oid": "67f7c7adf43164ac8d5ce12c"
+      }
+    }
+  ],
+  "messages": [
+    {
+      "$oid": "67f7d9b8e8e95921119b05ac"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7e352e8e95921119b061d"
+  },
+  "updatedAt": {
+    "$date": "2025-04-10T16:34:25.821Z"
+  },
+  "type": "direct messages",
+  "participants": [
+    {
+      "participant": {
+        "$oid": "67f7c6faf43164ac8d5ce0d1"
+      }
+    },
+    {
+      "participant": {
+        "$oid": "67f7c7caf43164ac8d5ce146"
+      }
+    }
+  ],
+  "messages": [
+    {
+      "$oid": "67f7e36be8e95921119b062f"
+    },
+    {
+      "$oid": "67f7f30ae5da82ea795f2f41"
+    },
+    {
+      "$oid": "67f7f311e5da82ea795f2f49"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7f1a8e5da82ea795f2c5b"
+  },
+  "updatedAt": {
+    "$date": "2025-04-10T16:28:24.146Z"
+  },
+  "type": "direct messages",
+  "participants": [
+    {
+      "participant": {
+        "$oid": "67f7c6faf43164ac8d5ce0d1"
+      }
+    },
+    {
+      "participant": {
+        "$oid": "67f7c783f43164ac8d5ce105"
+      }
+    }
+  ],
+  "messages": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7f1e5e5da82ea795f2cbf"
+  },
+  "updatedAt": {
+    "$date": "2025-04-10T16:30:08.300Z"
+  },
+  "type": "direct messages",
+  "participants": [
+    {
+      "participant": {
+        "$oid": "67f7c6faf43164ac8d5ce0d1"
+      }
+    },
+    {
+      "participant": {
+        "$oid": "67f7c757f43164ac8d5ce0eb"
+      }
+    }
+  ],
+  "messages": [
+    {
+      "$oid": "67f7f210e5da82ea795f2ce1"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7f234e5da82ea795f2d36"
+  },
+  "updatedAt": {
+    "$date": "2025-04-10T16:30:44.685Z"
+  },
+  "type": "direct messages",
+  "participants": [
+    {
+      "participant": {
+        "$oid": "67f7c757f43164ac8d5ce0eb"
+      }
+    },
+    {
+      "participant": {
+        "$oid": "67f7c7d6f43164ac8d5ce153"
+      }
+    }
+  ],
+  "messages": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7f23ce5da82ea795f2d70"
+  },
+  "updatedAt": {
+    "$date": "2025-04-10T16:30:52.044Z"
+  },
+  "type": "direct messages",
+  "participants": [
+    {
+      "participant": {
+        "$oid": "67f7c757f43164ac8d5ce0eb"
+      }
+    },
+    {
+      "participant": {
+        "$oid": "67f7c783f43164ac8d5ce105"
+      }
+    }
+  ],
+  "messages": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7f26de5da82ea795f2dd8"
+  },
+  "updatedAt": {
+    "$date": "2025-04-10T16:31:54.520Z"
+  },
+  "type": "direct messages",
+  "participants": [
+    {
+      "participant": {
+        "$oid": "67f7c757f43164ac8d5ce0eb"
+      }
+    },
+    {
+      "participant": {
+        "$oid": "67f7c748f43164ac8d5ce0de"
+      }
+    }
+  ],
+  "messages": [
+    {
+      "$oid": "67f7f273e5da82ea795f2dee"
+    },
+    {
+      "$oid": "67f7f27ae5da82ea795f2df6"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7f2a6e5da82ea795f2e4f"
+  },
+  "updatedAt": {
+    "$date": "2025-04-10T16:32:47.474Z"
+  },
+  "type": "direct messages",
+  "participants": [
+    {
+      "participant": {
+        "$oid": "67f7c78ff43164ac8d5ce112"
+      }
+    },
+    {
+      "participant": {
+        "$oid": "67f7c76cf43164ac8d5ce0f8"
+      }
+    }
+  ],
+  "messages": [
+    {
+      "$oid": "67f7f2afe5da82ea795f2e5e"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7f2bee5da82ea795f2e80"
+  },
+  "updatedAt": {
+    "$date": "2025-04-10T16:33:11.510Z"
+  },
+  "type": "direct messages",
+  "participants": [
+    {
+      "participant": {
+        "$oid": "67f7c78ff43164ac8d5ce112"
+      }
+    },
+    {
+      "participant": {
+        "$oid": "67f7c783f43164ac8d5ce105"
+      }
+    }
+  ],
+  "messages": [
+    {
+      "$oid": "67f7f2c7e5da82ea795f2e92"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7f2fae5da82ea795f2f1f"
+  },
+  "updatedAt": {
+    "$date": "2025-04-10T16:34:02.407Z"
+  },
+  "type": "direct messages",
+  "participants": [
+    {
+      "participant": {
+        "$oid": "67f7c7caf43164ac8d5ce146"
+      }
+    },
+    {
+      "participant": {
+        "$oid": "67f7c748f43164ac8d5ce0de"
+      }
+    }
+  ],
+  "messages": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7f36ce5da82ea795f2f9c"
+  },
+  "updatedAt": {
+    "$date": "2025-04-10T16:35:56.918Z"
+  },
+  "type": "direct messages",
+  "participants": [
+    {
+      "participant": {
+        "$oid": "67f7c7caf43164ac8d5ce146"
+      }
+    },
+    {
+      "participant": {
+        "$oid": "67f7c7a2f43164ac8d5ce11f"
+      }
+    }
+  ],
+  "messages": [],
+  "__v": 0
+}]

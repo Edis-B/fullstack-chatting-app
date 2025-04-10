@@ -1,0 +1,1404 @@
+[{
+  "_id": {
+    "$oid": "67f7c6faf43164ac8d5ce0d1"
+  },
+  "username": "John Doe",
+  "password": "$2b$10$TwDLLYf3UcOugW3jrOGbyOqBsoUGNQzU7s0./9rShDiyTvaRT67.2",
+  "email": "JohnDoe@gmail.com",
+  "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTugGK9j-9h5_GoIWKVFC4m2yg-Sxs-N50A-w&s",
+  "photos": [
+    {
+      "$oid": "67f7f1bee5da82ea795f2c80"
+    },
+    {
+      "$oid": "67f7f1c4e5da82ea795f2c85"
+    },
+    {
+      "$oid": "67f7f1c8e5da82ea795f2c8a"
+    }
+  ],
+  "posts": [
+    {
+      "$oid": "67f7d83be8e95921119b0527"
+    },
+    {
+      "$oid": "67f7d861e8e95921119b052e"
+    },
+    {
+      "$oid": "67f7d86ae8e95921119b0535"
+    }
+  ],
+  "likedPosts": [
+    {
+      "$oid": "67f7d861e8e95921119b052e"
+    },
+    {
+      "$oid": "67f7d62ee8e95921119b03e9"
+    },
+    {
+      "$oid": "67f7d615e8e95921119b03e2"
+    },
+    {
+      "$oid": "67f7d58ee8e95921119b03c2"
+    },
+    {
+      "$oid": "67f7d436e8e95921119b0357"
+    },
+    {
+      "$oid": "67f7d83be8e95921119b0527"
+    },
+    {
+      "$oid": "67f7d4c7e8e95921119b038b"
+    },
+    {
+      "$oid": "67f7d6ace8e95921119b0445"
+    },
+    {
+      "$oid": "67f7d3fce8e95921119b0350"
+    },
+    {
+      "$oid": "67f7d761e8e95921119b04c8"
+    },
+    {
+      "$oid": "67f7d4a6e8e95921119b0384"
+    },
+    {
+      "$oid": "67f7d518e8e95921119b03a9"
+    },
+    {
+      "$oid": "67f7d686e8e95921119b043e"
+    },
+    {
+      "$oid": "67f7d72de8e95921119b04b4"
+    },
+    {
+      "$oid": "67f7d3b4e8e95921119b0337"
+    },
+    {
+      "$oid": "67f7d54be8e95921119b03bb"
+    },
+    {
+      "$oid": "67f7d3cae8e95921119b033e"
+    },
+    {
+      "$oid": "67f7d7bde8e95921119b04fb"
+    }
+  ],
+  "comments": [],
+  "galleries": [
+    {
+      "$oid": "67f7f1d5e5da82ea795f2c92"
+    }
+  ],
+  "friends": [
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c7adf43164ac8d5ce12c"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c783f43164ac8d5ce105"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c78ff43164ac8d5ce112"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c757f43164ac8d5ce0eb"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c7caf43164ac8d5ce146"
+      }
+    },
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c7a2f43164ac8d5ce11f"
+      }
+    },
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c7d6f43164ac8d5ce153"
+      }
+    }
+  ],
+  "chats": [
+    {
+      "chat": {
+        "$oid": "67f7d9abe8e95921119b059d"
+      }
+    },
+    {
+      "chat": {
+        "$oid": "67f7e352e8e95921119b061d"
+      }
+    },
+    {
+      "chat": {
+        "$oid": "67f7f1a8e5da82ea795f2c5b"
+      }
+    },
+    {
+      "chat": {
+        "$oid": "67f7f1e5e5da82ea795f2cbf"
+      }
+    }
+  ],
+  "__v": 7,
+  "about": "Nature lover.",
+  "banner": "https://natureconservancy-h.assetsadobe.com/is/image/content/dam/tnc/nature/en/photos/z/u/Zugpsitze_mountain.jpg?crop=0%2C214%2C3008%2C1579&wid=1200&hei=630&scl=2.506666666666667"
+},
+{
+  "_id": {
+    "$oid": "67f7c748f43164ac8d5ce0de"
+  },
+  "username": "Alice Johnson",
+  "password": "$2b$10$lpqA04KiL9soCOrfcKHBWePdH.p1PMjJOM7SpoZLne.2rWh.t6ZYi",
+  "email": "alice.johnson@example.com",
+  "image": "https://www.shutterstock.com/shutterstock/photos/1865153395/display_1500/stock-photo-portrait-of-young-smiling-woman-looking-at-camera-with-crossed-arms-happy-girl-standing-in-1865153395.jpg",
+  "photos": [
+    {
+      "$oid": "67f7f047e5da82ea795f2b3b"
+    },
+    {
+      "$oid": "67f7f055e5da82ea795f2b40"
+    },
+    {
+      "$oid": "67f7f059e5da82ea795f2b45"
+    },
+    {
+      "$oid": "67f7f05ee5da82ea795f2b4a"
+    }
+  ],
+  "posts": [
+    {
+      "$oid": "67f7c8b2f43164ac8d5ce167"
+    },
+    {
+      "$oid": "67f7c943f43164ac8d5ce173"
+    },
+    {
+      "$oid": "67f7d3fce8e95921119b0350"
+    },
+    {
+      "$oid": "67f7d436e8e95921119b0357"
+    }
+  ],
+  "likedPosts": [
+    {
+      "$oid": "67f7c8b2f43164ac8d5ce167"
+    },
+    {
+      "$oid": "67f7c943f43164ac8d5ce173"
+    },
+    {
+      "$oid": "67f7d6ace8e95921119b0445"
+    },
+    {
+      "$oid": "67f7d72de8e95921119b04b4"
+    },
+    {
+      "$oid": "67f7d518e8e95921119b03a9"
+    },
+    {
+      "$oid": "67f7d58ee8e95921119b03c2"
+    },
+    {
+      "$oid": "67f7d7d4e8e95921119b0502"
+    }
+  ],
+  "comments": [
+    {
+      "$oid": "67f7f0b2e5da82ea795f2b74"
+    },
+    {
+      "$oid": "67f7f0c7e5da82ea795f2b8e"
+    },
+    {
+      "$oid": "67f7f0e4e5da82ea795f2bb2"
+    },
+    {
+      "$oid": "67f7f0fce5da82ea795f2bcb"
+    },
+    {
+      "$oid": "67f7f111e5da82ea795f2bda"
+    }
+  ],
+  "galleries": [],
+  "friends": [
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c757f43164ac8d5ce0eb"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c783f43164ac8d5ce105"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c78ff43164ac8d5ce112"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c7a2f43164ac8d5ce11f"
+      }
+    },
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c7adf43164ac8d5ce12c"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c7d6f43164ac8d5ce153"
+      }
+    },
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c7caf43164ac8d5ce146"
+      }
+    }
+  ],
+  "chats": [
+    {
+      "chat": {
+        "$oid": "67f7f26de5da82ea795f2dd8"
+      }
+    },
+    {
+      "chat": {
+        "$oid": "67f7f2fae5da82ea795f2f1f"
+      }
+    }
+  ],
+  "__v": 7,
+  "about": "I love to read books!",
+  "banner": "https://detail-cdn.s3.eu-central-1.amazonaws.com/media/wysiwyg/G298_05_Bibliothek_1598x440px_1.jpg"
+},
+{
+  "_id": {
+    "$oid": "67f7c757f43164ac8d5ce0eb"
+  },
+  "username": "Brian Chen",
+  "password": "$2b$10$O0d2rXaPOh8cKAvPz9wskOZCbaMFFQgcKZXiYaiAWIS5ydtVSqi5K",
+  "email": "brian.chen@example.com",
+  "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTugGK9j-9h5_GoIWKVFC4m2yg-Sxs-N50A-w&s",
+  "photos": [],
+  "posts": [
+    {
+      "$oid": "67f7d3b4e8e95921119b0337"
+    },
+    {
+      "$oid": "67f7d3cae8e95921119b033e"
+    }
+  ],
+  "likedPosts": [
+    {
+      "$oid": "67f7d7bde8e95921119b04fb"
+    },
+    {
+      "$oid": "67f7d615e8e95921119b03e2"
+    },
+    {
+      "$oid": "67f7d62ee8e95921119b03e9"
+    },
+    {
+      "$oid": "67f7d3b4e8e95921119b0337"
+    },
+    {
+      "$oid": "67f7d3fce8e95921119b0350"
+    },
+    {
+      "$oid": "67f7d761e8e95921119b04c8"
+    },
+    {
+      "$oid": "67f7d686e8e95921119b043e"
+    }
+  ],
+  "comments": [],
+  "galleries": [],
+  "friends": [
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c6faf43164ac8d5ce0d1"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c7baf43164ac8d5ce139"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c76cf43164ac8d5ce0f8"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c7a2f43164ac8d5ce11f"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c748f43164ac8d5ce0de"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c7adf43164ac8d5ce12c"
+      }
+    },
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c783f43164ac8d5ce105"
+      }
+    },
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c78ff43164ac8d5ce112"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c7d6f43164ac8d5ce153"
+      }
+    },
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c7caf43164ac8d5ce146"
+      }
+    }
+  ],
+  "chats": [
+    {
+      "chat": {
+        "$oid": "67f7f1e5e5da82ea795f2cbf"
+      }
+    },
+    {
+      "chat": {
+        "$oid": "67f7f234e5da82ea795f2d36"
+      }
+    },
+    {
+      "chat": {
+        "$oid": "67f7f23ce5da82ea795f2d70"
+      }
+    },
+    {
+      "chat": {
+        "$oid": "67f7f26de5da82ea795f2dd8"
+      }
+    }
+  ],
+  "__v": 11
+},
+{
+  "_id": {
+    "$oid": "67f7c76cf43164ac8d5ce0f8"
+  },
+  "username": "Carmen Rodriguez",
+  "password": "$2b$10$vO98EKbTnm25j00cwNRpuODiOfc.Ivdb8U5lv1GK/txCIE7Q.ucEC",
+  "email": "carmen.rodriguez@example.com",
+  "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTugGK9j-9h5_GoIWKVFC4m2yg-Sxs-N50A-w&s",
+  "photos": [],
+  "posts": [
+    {
+      "$oid": "67f7d45ee8e95921119b036a"
+    },
+    {
+      "$oid": "67f7d47be8e95921119b0371"
+    }
+  ],
+  "likedPosts": [
+    {
+      "$oid": "67f7d3cae8e95921119b033e"
+    },
+    {
+      "$oid": "67f7d615e8e95921119b03e2"
+    },
+    {
+      "$oid": "67f7d4a6e8e95921119b0384"
+    },
+    {
+      "$oid": "67f7d47be8e95921119b0371"
+    },
+    {
+      "$oid": "67f7d62ee8e95921119b03e9"
+    },
+    {
+      "$oid": "67f7d7d4e8e95921119b0502"
+    },
+    {
+      "$oid": "67f7d74ee8e95921119b04c1"
+    },
+    {
+      "$oid": "67f7d86ae8e95921119b0535"
+    }
+  ],
+  "comments": [
+    {
+      "$oid": "67f7e9e7e5da82ea795f2727"
+    },
+    {
+      "$oid": "67f7ea23e5da82ea795f273d"
+    },
+    {
+      "$oid": "67f7ea65e5da82ea795f2763"
+    }
+  ],
+  "galleries": [],
+  "friends": [
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c757f43164ac8d5ce0eb"
+      }
+    },
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c783f43164ac8d5ce105"
+      }
+    },
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c78ff43164ac8d5ce112"
+      }
+    },
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c7a2f43164ac8d5ce11f"
+      }
+    },
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c7adf43164ac8d5ce12c"
+      }
+    },
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c7baf43164ac8d5ce139"
+      }
+    },
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c7d6f43164ac8d5ce153"
+      }
+    },
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c7caf43164ac8d5ce146"
+      }
+    }
+  ],
+  "chats": [
+    {
+      "chat": {
+        "$oid": "67f7f2a6e5da82ea795f2e4f"
+      }
+    }
+  ],
+  "__v": 8
+},
+{
+  "_id": {
+    "$oid": "67f7c783f43164ac8d5ce105"
+  },
+  "username": "Daniel Smith",
+  "password": "$2b$10$9mziAJ/QAY3d72Koi5P4.uO/wav3vkC9k2yFiNaa0jhR7U7drR4lW",
+  "email": "daniel.smith@example.com",
+  "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTugGK9j-9h5_GoIWKVFC4m2yg-Sxs-N50A-w&s",
+  "photos": [],
+  "posts": [
+    {
+      "$oid": "67f7d4a6e8e95921119b0384"
+    },
+    {
+      "$oid": "67f7d4c7e8e95921119b038b"
+    }
+  ],
+  "likedPosts": [
+    {
+      "$oid": "67f7d4c7e8e95921119b038b"
+    },
+    {
+      "$oid": "67f7d83be8e95921119b0527"
+    },
+    {
+      "$oid": "67f7d861e8e95921119b052e"
+    }
+  ],
+  "comments": [
+    {
+      "$oid": "67f7ea85e5da82ea795f2796"
+    }
+  ],
+  "galleries": [],
+  "friends": [
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c6faf43164ac8d5ce0d1"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c748f43164ac8d5ce0de"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c757f43164ac8d5ce0eb"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c7a2f43164ac8d5ce11f"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c7adf43164ac8d5ce12c"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c76cf43164ac8d5ce0f8"
+      }
+    },
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c78ff43164ac8d5ce112"
+      }
+    },
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c7baf43164ac8d5ce139"
+      }
+    },
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c7d6f43164ac8d5ce153"
+      }
+    }
+  ],
+  "chats": [
+    {
+      "chat": {
+        "$oid": "67f7f1a8e5da82ea795f2c5b"
+      }
+    },
+    {
+      "chat": {
+        "$oid": "67f7f23ce5da82ea795f2d70"
+      }
+    },
+    {
+      "chat": {
+        "$oid": "67f7f2bee5da82ea795f2e80"
+      }
+    }
+  ],
+  "__v": 9
+},
+{
+  "_id": {
+    "$oid": "67f7c78ff43164ac8d5ce112"
+  },
+  "username": "Ella Nguyen",
+  "password": "$2b$10$7He.oPQ/LEd3GPbi3njBBunTyE88D9NvS8Ad.krFbQEe9bUvdebc2",
+  "email": "ella.nguyen@example.com",
+  "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTugGK9j-9h5_GoIWKVFC4m2yg-Sxs-N50A-w&s",
+  "photos": [],
+  "posts": [
+    {
+      "$oid": "67f7d518e8e95921119b03a9"
+    }
+  ],
+  "likedPosts": [
+    {
+      "$oid": "67f7d7d4e8e95921119b0502"
+    },
+    {
+      "$oid": "67f7d3cae8e95921119b033e"
+    },
+    {
+      "$oid": "67f7d62ee8e95921119b03e9"
+    },
+    {
+      "$oid": "67f7d4c7e8e95921119b038b"
+    },
+    {
+      "$oid": "67f7d6ace8e95921119b0445"
+    },
+    {
+      "$oid": "67f7d58ee8e95921119b03c2"
+    },
+    {
+      "$oid": "67f7d518e8e95921119b03a9"
+    },
+    {
+      "$oid": "67f7d54be8e95921119b03bb"
+    },
+    {
+      "$oid": "67f7d74ee8e95921119b04c1"
+    },
+    {
+      "$oid": "67f7d3fce8e95921119b0350"
+    },
+    {
+      "$oid": "67f7d83be8e95921119b0527"
+    },
+    {
+      "$oid": "67f7d72de8e95921119b04b4"
+    },
+    {
+      "$oid": "67f7d45ee8e95921119b036a"
+    }
+  ],
+  "comments": [],
+  "galleries": [],
+  "friends": [
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c6faf43164ac8d5ce0d1"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c783f43164ac8d5ce105"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c76cf43164ac8d5ce0f8"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c748f43164ac8d5ce0de"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c7adf43164ac8d5ce12c"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c7a2f43164ac8d5ce11f"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c757f43164ac8d5ce0eb"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c7d6f43164ac8d5ce153"
+      }
+    },
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c7caf43164ac8d5ce146"
+      }
+    }
+  ],
+  "chats": [
+    {
+      "chat": {
+        "$oid": "67f7f2a6e5da82ea795f2e4f"
+      }
+    },
+    {
+      "chat": {
+        "$oid": "67f7f2bee5da82ea795f2e80"
+      }
+    }
+  ],
+  "__v": 10
+},
+{
+  "_id": {
+    "$oid": "67f7c7a2f43164ac8d5ce11f"
+  },
+  "username": "Felix Thompson",
+  "password": "$2b$10$0As7XMn8Qw8dfGD0H7vR.umP4H4smHNzpBKJBWVIdfQumwXvtVrQe",
+  "email": "felix.thompson@example.com",
+  "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTugGK9j-9h5_GoIWKVFC4m2yg-Sxs-N50A-w&s",
+  "photos": [
+    {
+      "$oid": "67f7ec38e5da82ea795f2902"
+    },
+    {
+      "$oid": "67f7ec4ee5da82ea795f2907"
+    },
+    {
+      "$oid": "67f7ec56e5da82ea795f290c"
+    },
+    {
+      "$oid": "67f7ec5ce5da82ea795f2911"
+    }
+  ],
+  "posts": [
+    {
+      "$oid": "67f7d54be8e95921119b03bb"
+    },
+    {
+      "$oid": "67f7d58ee8e95921119b03c2"
+    }
+  ],
+  "likedPosts": [
+    {
+      "$oid": "67f7d4a6e8e95921119b0384"
+    },
+    {
+      "$oid": "67f7d6ace8e95921119b0445"
+    },
+    {
+      "$oid": "67f7d45ee8e95921119b036a"
+    },
+    {
+      "$oid": "67f7d47be8e95921119b0371"
+    },
+    {
+      "$oid": "67f7d86ae8e95921119b0535"
+    },
+    {
+      "$oid": "67f7d83be8e95921119b0527"
+    },
+    {
+      "$oid": "67f7d62ee8e95921119b03e9"
+    },
+    {
+      "$oid": "67f7d3b4e8e95921119b0337"
+    },
+    {
+      "$oid": "67f7d3cae8e95921119b033e"
+    }
+  ],
+  "comments": [
+    {
+      "$oid": "67f7ec04e5da82ea795f28e4"
+    }
+  ],
+  "galleries": [
+    {
+      "$oid": "67f7ec71e5da82ea795f2919"
+    }
+  ],
+  "friends": [
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c757f43164ac8d5ce0eb"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c783f43164ac8d5ce105"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c78ff43164ac8d5ce112"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c76cf43164ac8d5ce0f8"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c748f43164ac8d5ce0de"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c6faf43164ac8d5ce0d1"
+      }
+    },
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c7baf43164ac8d5ce139"
+      }
+    },
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c7d6f43164ac8d5ce153"
+      }
+    },
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c7caf43164ac8d5ce146"
+      }
+    }
+  ],
+  "chats": [
+    {
+      "chat": {
+        "$oid": "67f7f36ce5da82ea795f2f9c"
+      }
+    }
+  ],
+  "__v": 9
+},
+{
+  "_id": {
+    "$oid": "67f7c7adf43164ac8d5ce12c"
+  },
+  "username": "Grace Lee",
+  "password": "$2b$10$60/uDSE7ZZAYf3S6UiDxSepS7gOTKWDxHLX8OMS/6ejWP5MO3Y5hy",
+  "email": "grace.lee@example.com",
+  "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTugGK9j-9h5_GoIWKVFC4m2yg-Sxs-N50A-w&s",
+  "photos": [
+    {
+      "$oid": "67f7eccde5da82ea795f2993"
+    },
+    {
+      "$oid": "67f7ecd4e5da82ea795f2998"
+    },
+    {
+      "$oid": "67f7ecd9e5da82ea795f299d"
+    },
+    {
+      "$oid": "67f7ece3e5da82ea795f29a2"
+    }
+  ],
+  "posts": [
+    {
+      "$oid": "67f7d615e8e95921119b03e2"
+    },
+    {
+      "$oid": "67f7d62ee8e95921119b03e9"
+    }
+  ],
+  "likedPosts": [
+    {
+      "$oid": "67f7d86ae8e95921119b0535"
+    },
+    {
+      "$oid": "67f7d518e8e95921119b03a9"
+    },
+    {
+      "$oid": "67f7d861e8e95921119b052e"
+    },
+    {
+      "$oid": "67f7d45ee8e95921119b036a"
+    },
+    {
+      "$oid": "67f7d7bde8e95921119b04fb"
+    },
+    {
+      "$oid": "67f7d615e8e95921119b03e2"
+    },
+    {
+      "$oid": "67f7d4c7e8e95921119b038b"
+    }
+  ],
+  "comments": [],
+  "galleries": [
+    {
+      "$oid": "67f7ecffe5da82ea795f29aa"
+    }
+  ],
+  "friends": [
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c6faf43164ac8d5ce0d1"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c757f43164ac8d5ce0eb"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c783f43164ac8d5ce105"
+      }
+    },
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c78ff43164ac8d5ce112"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c76cf43164ac8d5ce0f8"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c748f43164ac8d5ce0de"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c7caf43164ac8d5ce146"
+      }
+    },
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c7baf43164ac8d5ce139"
+      }
+    },
+    {
+      "status": "incoming request",
+      "friend": {
+        "$oid": "67f7c7d6f43164ac8d5ce153"
+      }
+    }
+  ],
+  "chats": [
+    {
+      "chat": {
+        "$oid": "67f7d9abe8e95921119b059d"
+      }
+    }
+  ],
+  "__v": 9
+},
+{
+  "_id": {
+    "$oid": "67f7c7baf43164ac8d5ce139"
+  },
+  "username": "Hassan Ali",
+  "password": "$2b$10$BNS/NZhP7m7fsNYhAKh2m.zp59usvO4uNOG6yOeJMu1DoE3MmyATu",
+  "email": "hassan.ali@example.com",
+  "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTugGK9j-9h5_GoIWKVFC4m2yg-Sxs-N50A-w&s",
+  "photos": [
+    {
+      "$oid": "67f7ee99e5da82ea795f2a44"
+    },
+    {
+      "$oid": "67f7eea0e5da82ea795f2a49"
+    },
+    {
+      "$oid": "67f7eea7e5da82ea795f2a4e"
+    }
+  ],
+  "posts": [
+    {
+      "$oid": "67f7d686e8e95921119b043e"
+    },
+    {
+      "$oid": "67f7d6ace8e95921119b0445"
+    }
+  ],
+  "likedPosts": [
+    {
+      "$oid": "67f7d4c7e8e95921119b038b"
+    },
+    {
+      "$oid": "67f7d615e8e95921119b03e2"
+    },
+    {
+      "$oid": "67f7d62ee8e95921119b03e9"
+    },
+    {
+      "$oid": "67f7d58ee8e95921119b03c2"
+    },
+    {
+      "$oid": "67f7d54be8e95921119b03bb"
+    },
+    {
+      "$oid": "67f7d518e8e95921119b03a9"
+    },
+    {
+      "$oid": "67f7d47be8e95921119b0371"
+    },
+    {
+      "$oid": "67f7d45ee8e95921119b036a"
+    },
+    {
+      "$oid": "67f7d436e8e95921119b0357"
+    },
+    {
+      "$oid": "67f7d7bde8e95921119b04fb"
+    }
+  ],
+  "comments": [],
+  "galleries": [],
+  "friends": [
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c757f43164ac8d5ce0eb"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c76cf43164ac8d5ce0f8"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c783f43164ac8d5ce105"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c7a2f43164ac8d5ce11f"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c7adf43164ac8d5ce12c"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c7caf43164ac8d5ce146"
+      }
+    }
+  ],
+  "chats": [],
+  "__v": 6,
+  "banner": "https://www.shutterstock.com/image-photo/ultra-wide-photo-mountains-river-260nw-1755037052.jpg",
+  "about": "My name is Hassan and I enjoy taking hikes."
+},
+{
+  "_id": {
+    "$oid": "67f7c7caf43164ac8d5ce146"
+  },
+  "username": "Isabelle Dupont",
+  "password": "$2b$10$R.nLGAXYC04kWS1W6k5GwumlVasOE1tp1zxnp32u2esX9UcRRHbz2",
+  "email": "isabelle.dupont@example.com",
+  "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTugGK9j-9h5_GoIWKVFC4m2yg-Sxs-N50A-w&s",
+  "photos": [
+    {
+      "$oid": "67f7f334e5da82ea795f2f61"
+    },
+    {
+      "$oid": "67f7f338e5da82ea795f2f66"
+    },
+    {
+      "$oid": "67f7f33be5da82ea795f2f6b"
+    },
+    {
+      "$oid": "67f7f33fe5da82ea795f2f70"
+    },
+    {
+      "$oid": "67f7f342e5da82ea795f2f75"
+    },
+    {
+      "$oid": "67f7f349e5da82ea795f2f7a"
+    }
+  ],
+  "posts": [
+    {
+      "$oid": "67f7d72de8e95921119b04b4"
+    },
+    {
+      "$oid": "67f7d74ee8e95921119b04c1"
+    },
+    {
+      "$oid": "67f7d761e8e95921119b04c8"
+    }
+  ],
+  "likedPosts": [
+    {
+      "$oid": "67f7d4c7e8e95921119b038b"
+    },
+    {
+      "$oid": "67f7d62ee8e95921119b03e9"
+    },
+    {
+      "$oid": "67f7d58ee8e95921119b03c2"
+    },
+    {
+      "$oid": "67f7d54be8e95921119b03bb"
+    },
+    {
+      "$oid": "67f7d518e8e95921119b03a9"
+    },
+    {
+      "$oid": "67f7d47be8e95921119b0371"
+    },
+    {
+      "$oid": "67f7d436e8e95921119b0357"
+    },
+    {
+      "$oid": "67f7d45ee8e95921119b036a"
+    }
+  ],
+  "comments": [
+    {
+      "$oid": "67f7d6e3e8e95921119b0481"
+    }
+  ],
+  "galleries": [
+    {
+      "$oid": "67f7f360e5da82ea795f2f82"
+    }
+  ],
+  "friends": [
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c6faf43164ac8d5ce0d1"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c7adf43164ac8d5ce12c"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c7baf43164ac8d5ce139"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c7d6f43164ac8d5ce153"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c7a2f43164ac8d5ce11f"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c78ff43164ac8d5ce112"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c76cf43164ac8d5ce0f8"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c757f43164ac8d5ce0eb"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c748f43164ac8d5ce0de"
+      }
+    }
+  ],
+  "chats": [
+    {
+      "chat": {
+        "$oid": "67f7e352e8e95921119b061d"
+      }
+    },
+    {
+      "chat": {
+        "$oid": "67f7f2fae5da82ea795f2f1f"
+      }
+    },
+    {
+      "chat": {
+        "$oid": "67f7f36ce5da82ea795f2f9c"
+      }
+    }
+  ],
+  "__v": 9
+},
+{
+  "_id": {
+    "$oid": "67f7c7d6f43164ac8d5ce153"
+  },
+  "username": "Jamal Wright",
+  "password": "$2b$10$hYQPLu0aaNOpAWt/U0m8aud5SiDisee954UDKusmdOvVXwX76JJdq",
+  "email": "jamal.wright@example.com",
+  "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Outdoors-man-portrait_%28cropped%29.jpg/1200px-Outdoors-man-portrait_%28cropped%29.jpg",
+  "photos": [
+    {
+      "$oid": "67f7efc7e5da82ea795f2ad5"
+    },
+    {
+      "$oid": "67f7efcce5da82ea795f2ada"
+    }
+  ],
+  "posts": [
+    {
+      "$oid": "67f7d7bde8e95921119b04fb"
+    },
+    {
+      "$oid": "67f7d7d4e8e95921119b0502"
+    }
+  ],
+  "likedPosts": [
+    {
+      "$oid": "67f7d4c7e8e95921119b038b"
+    },
+    {
+      "$oid": "67f7d54be8e95921119b03bb"
+    },
+    {
+      "$oid": "67f7d518e8e95921119b03a9"
+    },
+    {
+      "$oid": "67f7d47be8e95921119b0371"
+    },
+    {
+      "$oid": "67f7d615e8e95921119b03e2"
+    },
+    {
+      "$oid": "67f7d761e8e95921119b04c8"
+    },
+    {
+      "$oid": "67f7d7d4e8e95921119b0502"
+    }
+  ],
+  "comments": [],
+  "galleries": [],
+  "friends": [
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c748f43164ac8d5ce0de"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c76cf43164ac8d5ce0f8"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c783f43164ac8d5ce105"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c78ff43164ac8d5ce112"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c7adf43164ac8d5ce12c"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c7caf43164ac8d5ce146"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c6faf43164ac8d5ce0d1"
+      }
+    },
+    {
+      "status": "friends",
+      "friend": {
+        "$oid": "67f7c757f43164ac8d5ce0eb"
+      }
+    },
+    {
+      "status": "outgoing request",
+      "friend": {
+        "$oid": "67f7c7a2f43164ac8d5ce11f"
+      }
+    }
+  ],
+  "chats": [
+    {
+      "chat": {
+        "$oid": "67f7f234e5da82ea795f2d36"
+      }
+    }
+  ],
+  "__v": 9,
+  "banner": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1XHNkSZPMR18v2YkwDCBflo8lUPJgz7XK5Q&s"
+}]

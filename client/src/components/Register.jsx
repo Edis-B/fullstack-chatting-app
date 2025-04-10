@@ -24,6 +24,10 @@ export default function Register() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
+		if (password !== confirmPassword) {
+			return enqueueError("Passwords are not matching!");
+		}
+		
 		try {
 			const { response, payload } = await request.post(
 				`${host}/user/register`,

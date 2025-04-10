@@ -1,0 +1,188 @@
+[{
+  "_id": {
+    "$oid": "67f7d6e3e8e95921119b0481"
+  },
+  "date": {
+    "$date": "2025-04-10T14:34:11.569Z"
+  },
+  "content": "Me too! Its going well, slowly but surely.",
+  "user": {
+    "$oid": "67f7c7caf43164ac8d5ce146"
+  },
+  "likes": [
+    {
+      "$oid": "67f7c7caf43164ac8d5ce146"
+    },
+    {
+      "$oid": "67f7c748f43164ac8d5ce0de"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7e9e7e5da82ea795f2727"
+  },
+  "date": {
+    "$date": "2025-04-10T15:55:19.776Z"
+  },
+  "content": "It really does! 2020 feels like last year!",
+  "user": {
+    "$oid": "67f7c76cf43164ac8d5ce0f8"
+  },
+  "likes": [
+    {
+      "$oid": "67f7c76cf43164ac8d5ce0f8"
+    },
+    {
+      "$oid": "67f7c748f43164ac8d5ce0de"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7ea23e5da82ea795f273d"
+  },
+  "date": {
+    "$date": "2025-04-10T15:56:19.578Z"
+  },
+  "content": "Listen to Joe Rogan's podcast!",
+  "user": {
+    "$oid": "67f7c76cf43164ac8d5ce0f8"
+  },
+  "likes": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7ea65e5da82ea795f2763"
+  },
+  "date": {
+    "$date": "2025-04-10T15:57:25.718Z"
+  },
+  "content": "He doesn't like it.",
+  "user": {
+    "$oid": "67f7c76cf43164ac8d5ce0f8"
+  },
+  "likes": [
+    {
+      "$oid": "67f7c76cf43164ac8d5ce0f8"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7ea85e5da82ea795f2796"
+  },
+  "date": {
+    "$date": "2025-04-10T15:57:57.061Z"
+  },
+  "content": "Very true!",
+  "user": {
+    "$oid": "67f7c783f43164ac8d5ce105"
+  },
+  "likes": [
+    {
+      "$oid": "67f7c783f43164ac8d5ce105"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7ec04e5da82ea795f28e4"
+  },
+  "date": {
+    "$date": "2025-04-10T16:04:20.042Z"
+  },
+  "content": "Nice! I might pick it up too.",
+  "user": {
+    "$oid": "67f7c7a2f43164ac8d5ce11f"
+  },
+  "likes": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7f0b2e5da82ea795f2b74"
+  },
+  "date": {
+    "$date": "2025-04-10T16:24:18.841Z"
+  },
+  "content": "My weekend in a nutshell.",
+  "user": {
+    "$oid": "67f7c748f43164ac8d5ce0de"
+  },
+  "likes": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7f0c7e5da82ea795f2b8e"
+  },
+  "date": {
+    "$date": "2025-04-10T16:24:39.884Z"
+  },
+  "content": "Looks nice, I will try it out!",
+  "user": {
+    "$oid": "67f7c748f43164ac8d5ce0de"
+  },
+  "likes": [
+    {
+      "$oid": "67f7c748f43164ac8d5ce0de"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7f0e4e5da82ea795f2bb2"
+  },
+  "date": {
+    "$date": "2025-04-10T16:25:08.781Z"
+  },
+  "content": "Sounds difficult!",
+  "user": {
+    "$oid": "67f7c748f43164ac8d5ce0de"
+  },
+  "likes": [
+    {
+      "$oid": "67f7c748f43164ac8d5ce0de"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7f0fce5da82ea795f2bcb"
+  },
+  "date": {
+    "$date": "2025-04-10T16:25:32.904Z"
+  },
+  "content": "Wish it was friday right now.",
+  "user": {
+    "$oid": "67f7c748f43164ac8d5ce0de"
+  },
+  "likes": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f7f111e5da82ea795f2bda"
+  },
+  "date": {
+    "$date": "2025-04-10T16:25:53.614Z"
+  },
+  "content": "Let me know how it goes! :)",
+  "user": {
+    "$oid": "67f7c748f43164ac8d5ce0de"
+  },
+  "likes": [
+    {
+      "$oid": "67f7c748f43164ac8d5ce0de"
+    }
+  ],
+  "__v": 0
+}]

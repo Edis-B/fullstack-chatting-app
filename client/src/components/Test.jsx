@@ -1,4 +1,6 @@
 export default function Test() {
+	return;
+	
 	return (
 		<div className="chatbox-container flex flex-col h-screen border-2 border-gray-300 rounded-lg overflow-hidden">
 			{/* Chat Box Header */}
