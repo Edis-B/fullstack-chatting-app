@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 
 import { host } from "../../common/appConstants";
@@ -102,26 +102,32 @@ export default function GalleryDetails() {
 			</div>
 		);
 	}
-	
+
 	return (
 		<div className="container mt-5 gallery-details">
 			{/* User Header */}
 			<div className="gallery.user-header d-flex align-items-center m-2">
-				<img
-					src={gallery.user?.image || "/default-avatar.png"}
-					alt="User Profile"
-					className="rounded-circle"
-					style={{
-						width: "50px",
-						height: "50px",
-						objectFit: "cover",
-					}}
-				/>
-				<div className="m-3">
-					<h4 className="m-0">
-						{gallery.user?.username || "Anonymous"}
-					</h4>
-				</div>
+				<Link
+					to={`/profile/${gallery.user?._id}`}
+					className="d-flex flex-row"
+				>
+					<img
+						src={gallery.user?.image || "/default-avatar.png"}
+						alt="User Profile"
+						className="rounded-circle"
+						style={{
+							width: "50px",
+							height: "50px",
+							objectFit: "cover",
+						}}
+					/>
+
+					<div className="m-3">
+						<h4 className="m-0">
+							{gallery.user?.username || "Anonymous"}
+						</h4>
+					</div>
+				</Link>
 
 				<div className="ms-auto">
 					<p className="m-0 p-1">Publicity: {gallery.visibility}</p>

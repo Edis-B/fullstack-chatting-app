@@ -58,7 +58,7 @@ export default function AutoFriendButton({ params }) {
 	if (status === friendStatuses.OUTGOING_REQUEST) {
 		return (
 			<button
-				className="btn btn-outline-secondary"
+				className="btn btn-outline-secondary m-2"
 				onClick={handleCancelRequest}
 			>
 				Cancel request
@@ -68,14 +68,14 @@ export default function AutoFriendButton({ params }) {
 		return (
 			<>
 				<button
-					className="btn btn-outline-secondary"
+					className="btn btn-outline-secondary m-2"
 					onClick={handleDeclineRequest}
 					>
 					Decline request
 				</button>
 
 				<button
-					className="btn btn-outline-secondary"
+					className="btn btn-outline-secondary m-2"
 					onClick={handleAcceptRequest}
 					>
 					Accept request
@@ -85,7 +85,7 @@ export default function AutoFriendButton({ params }) {
 	} else if (status === friendStatuses.FRIENDS) {
 		return (
 			<button
-			className="btn btn-outline-secondary"
+			className="btn btn-outline-secondary m-2"
 			onClick={handleUnfriend}
 			>
 				Remove friend
@@ -94,7 +94,7 @@ export default function AutoFriendButton({ params }) {
 	} else if (!status || status === friendStatuses.NOT_FRIENDS) {
 		return (
 			<button
-			className="btn btn-outline-secondary"
+			className="btn btn-outline-secondary m-2"
 			onClick={handleSendFriendRequest}
 			>
 				Add friend

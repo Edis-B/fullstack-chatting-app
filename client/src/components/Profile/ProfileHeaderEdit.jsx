@@ -117,7 +117,7 @@ export default function ProfileHeaderEdit() {
 			</div>
 
 			<div className="ms-auto d-flex justify-content-end">
-				<button onClick={handleSaveChanges} className="btn btn-primary">
+				<button onClick={handleSaveChanges} className="btn btn-primary me-2">
 					Save Changes
 				</button>
 				<button
