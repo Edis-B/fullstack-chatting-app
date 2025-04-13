@@ -99,7 +99,7 @@ export default function UserList() {
 		return chats.map((chat) => (
 			<li
 				key={chat.chatId}
-				className="list-group-item d-flex cursor-pointer"
+				className="list-group-item d-flex cursor-pointer p-1"
 			>
 				<Link
 					to={`/chat/${chat.chatId}`}
@@ -107,11 +107,10 @@ export default function UserList() {
 				>
 					<img
 						src={chat.chatImage}
-						className="rounded-circle m-2"
+						className="person-avatar m-2"
 						style={{
 							width: "40px",
 							height: "40px",
-							objectFit: "cover",
 						}}
 					/>
 					<div>

@@ -20,9 +20,10 @@ import ErrorBoundary from "./components/common/ErrorBoundary.jsx";
 import { SearchProvider } from "./contexts/SearchContext.jsx";
 import { ProfileProvider } from "./contexts/ProfileContext.jsx";
 
-import "./css/site.css";
 import { ChatProvider } from "./contexts/ChatContext.jsx";
 import Catalog from "./components/Catalog.jsx";
+
+import "./css/site.css";
 
 function App() {
 	return (
@@ -50,6 +51,7 @@ function App() {
 							</ChatProvider>
 						}
 					/>
+					
 					<Route
 						path="/chat/:id"
 						element={

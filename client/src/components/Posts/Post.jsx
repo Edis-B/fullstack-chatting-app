@@ -28,10 +28,12 @@ export default function Post({ post, user, likeStateChange }) {
 				>
 					<img
 						src={user.image}
-						className="rounded-circle me-2"
+						className="person-avatar me-2"
 						alt="Profile"
-						width="40"
-						height="40"
+						style={{
+							width: "48px",
+							height: "48px",
+						}}
 					/>
 					<div>
 						<h6 className="mb-0">{user.username}</h6>

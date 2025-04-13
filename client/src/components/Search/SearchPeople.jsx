@@ -32,7 +32,7 @@ export default function SearchPeople() {
 				`${host}/user/get-users-by-username`,
 				{ usernameSubstr: query || "", page, exclude: true }
 			);
-		
+
 			const { data } = payload;
 
 			if (!response.ok) {
@@ -73,9 +73,7 @@ export default function SearchPeople() {
 								<img
 									src={person.image}
 									alt={person.username}
-									className="mr-3 rounded-circle"
-									width="64"
-									height="64"
+									className="person-avatar"
 								/>
 
 								<span className="fw-bold p-2">

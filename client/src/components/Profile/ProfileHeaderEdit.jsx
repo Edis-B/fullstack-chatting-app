@@ -54,7 +54,7 @@ export default function ProfileHeaderEdit() {
 					<img
 						src={profileData.image ? profileData.image : null}
 						alt="Profile"
-						className="rounded-circle profile-pic"
+						className="person-avatar"
 					/>
 
 					<div className="ms-3">

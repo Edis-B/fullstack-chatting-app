@@ -222,7 +222,9 @@ const galleryService = {
 	async removePhotoFromGallery(req) {
 		const { galleryId, userId, photoId } = req.body;
 
-		if (userId != req.user?.id) {
+		const gallery = await galleryModel.findById(galleryId);
+
+		if (userId !== gallery.user.toString()) {
 			throw new AppError("Unauthorized", 401);
 		}
 

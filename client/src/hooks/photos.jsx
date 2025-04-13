@@ -71,11 +71,10 @@ export function useImageModal() {
 							<img
 								src={user?.image || "/default-pfp.png"}
 								alt="User PFP"
-								className="rounded-circle m-2"
+								className="person-avatar m-2"
 								style={{
 									width: "50px",
 									height: "50px",
-									objectFit: "cover",
 								}}
 							/>
 							<div>

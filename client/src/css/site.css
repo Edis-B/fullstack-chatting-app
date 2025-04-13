@@ -94,3 +94,12 @@ a {
 footer {
 	z-index: 1000;
 }
+
+.person-avatar {
+	width: 64px;
+	height: 64px;
+	border-radius: 50%;
+	object-fit: cover;
+	aspect-ratio: 1 / 1;
+	overflow: hidden;
+}

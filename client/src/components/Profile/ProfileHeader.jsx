@@ -37,7 +37,7 @@ export default function ProfileHeader() {
 				<img
 					src={profileData.image}
 					alt="Profile"
-					className="rounded-circle profile-pic"
+					className="person-avatar"
 				/>
 
 				<div className="ms-3">

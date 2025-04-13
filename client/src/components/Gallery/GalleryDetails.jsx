@@ -109,17 +109,12 @@ export default function GalleryDetails() {
 			<div className="gallery.user-header d-flex align-items-center m-2">
 				<Link
 					to={`/profile/${gallery.user?._id}`}
-					className="d-flex flex-row"
+					className="d-flex flex-row align-items-center"
 				>
 					<img
 						src={gallery.user?.image || "/default-avatar.png"}
 						alt="User Profile"
-						className="rounded-circle"
-						style={{
-							width: "50px",
-							height: "50px",
-							objectFit: "cover",
-						}}
+						className="person-avatar"
 					/>
 
 					<div className="m-3">
@@ -159,31 +154,34 @@ export default function GalleryDetails() {
 								onClick={() => setSelectedImage(photo)}
 							/>
 
-							<div className="d-flex justify-content-end m-1">
-								<Button
-									variant="danger"
-									onClick={() => {
-										const rep = confirm(
-											"Are you sure you want to remove this photo from the gallery?"
-										);
+							{gallery.user._id === userId && (
+								<div className="d-flex justify-content-end m-1">
+									<Button
+										variant="danger"
+										onClick={() => {
+											const rep = confirm(
+												"Are you sure you want to remove this photo from the gallery?"
+											);
 
-										if (!rep) {
-											return;
-										}
+											if (!rep) {
+												return;
+											}
 
-										const result = removePhotoFromGallery(
-											galleryId,
-											userId,
-											photo._id
-										);
-									}}
-								>
-									<i
-										className="bi bi-trash align-items-center d-flex flex-row m-1"
-										style={{ fontSize: "1.2rem" }}
-									/>
-								</Button>
-							</div>
+											const result =
+												removePhotoFromGallery(
+													galleryId,
+													userId,
+													photo._id
+												);
+										}}
+									>
+										<i
+											className="bi bi-trash align-items-center d-flex flex-row m-1"
+											style={{ fontSize: "1.2rem" }}
+										/>
+									</Button>
+								</div>
+							)}
 						</div>
 					))
 				) : (

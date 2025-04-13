@@ -182,11 +182,10 @@ export default function ChatBox() {
 										<img
 											src={message.user.image}
 											alt={message.user.username}
-											className="rounded-circle ms-2"
+											className="person-avatar ms-2"
 											style={{
 												width: "48px",
 												height: "48px",
-												objectFit: "cover",
 											}}
 										/>
 									</div>
@@ -200,11 +199,10 @@ export default function ChatBox() {
 										<img
 											src={message.user.image}
 											alt={message.user.username}
-											className="rounded-circle me-2"
+											className="person-avatar me-2"
 											style={{
 												width: "48px",
 												height: "48px",
-												objectFit: "cover",
 											}}
 										/>
 										{/* Message Content */}

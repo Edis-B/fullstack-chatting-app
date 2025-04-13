@@ -53,9 +53,11 @@ export default function ChatBoxHeader() {
 				<img
 					src={header.image || errorImage}
 					alt="User Profile"
-					className="rounded-circle me-2"
-					width="40"
-					height="40"
+					className="person-avatar me-2"
+					style={{
+						width: "40px",
+						height: "40px",
+					}}
 				/>
 
 				<h5 className="mb-0">{header.name || "Unknown User"}</h5>

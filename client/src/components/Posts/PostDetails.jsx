@@ -136,10 +136,12 @@ export default function PostDetails() {
 						>
 							<img
 								src={post.user.image}
-								className="rounded-circle me-2"
+								className="person-avatar me-2"
 								alt="Profile"
-								width="40"
-								height="40"
+								style={{
+									width: "40px",
+									height: "40px",
+								}}
 							/>
 							<div>
 								<h6 className="mb-0">{post.user.username}</h6>
