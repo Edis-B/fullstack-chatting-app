@@ -12,6 +12,7 @@
 			"webRoot": "${workspaceFolder}/client"
 		},
 		{
+			"type": "node",
 			"console": "integratedTerminal",
 			"internalConsoleOptions": "openOnSessionStart",
 			"name": "nodemon",
@@ -21,14 +22,26 @@
 			"restart": true,
 			"runtimeExecutable": "nodemon",
 			"skipFiles": ["<node_internals>/**"],
-			"type": "node",
 			"sourceMaps": true
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "vite frontend",
+			"runtimeExecutable": "npm",
+			"runtimeArgs": ["run", "dev"],
+			"cwd": "${workspaceFolder}/client",
+			"console": "integratedTerminal"
 		}
 	],
 	"compounds": [
 		{
 			"name": "Launch Full Stack",
-			"configurations": ["Launch Chrome against localhost", "nodemon"]
+			"configurations": [
+				"Launch Chrome against localhost",
+				"vite frontend",
+				"nodemon"
+			]
 		}
 	]
 }

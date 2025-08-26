@@ -34,6 +34,7 @@ try {
 	console.log("Could not connect to DB");
 	console.log(err.message);
 }
+
 // Middleware
 app.use(cookieParser(cookieProtectorKey));
 app.use(express.urlencoded({ extended: false }));
