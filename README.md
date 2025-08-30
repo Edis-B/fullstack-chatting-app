@@ -2,7 +2,7 @@
 
 This is a fullstack web application built with:
 
--   💻 **Frontend**: React + Vite + Tailwind CSS
+-   💻 **Frontend**: React + Vite
 -   🖥️ **Backend**: Node.js + Express
 -   🗃️ **Database**: MongoDB
 
@@ -24,12 +24,12 @@ This is a fullstack web application built with:
 
     - **Clone the Repository**:
         ```bash
-        git clone https://github.com/Edis-B/ReactJS_CourseProject_Febr2025.git
-        cd ReactJS_CourseProject_Febr2025
+        git clone https://github.com/Edis-B/fullstack-chatting-app.git
+        cd fullstack-chatting-app
         ```
 
     - **Download as ZIP**:
-        1. Go to the [GitHub repository page](https://github.com/Edis-B/ReactJS_CourseProject_Febr2025).
+        1. Go to the [GitHub repository page](https://github.com/Edis-B/fullstack-chatting-app).
         2. Click on the "Code" button and select "Download ZIP".
         3. Extract the ZIP file and navigate to the extracted folder in your terminal:
         ```bash

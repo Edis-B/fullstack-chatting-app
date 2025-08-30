@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import { host } from "../common/appConstants.js";
 import { useUser } from "../contexts/UserContext.jsx";
 import { useNavigate } from "react-router";
+
+import { Link } from "react-router";
+import Button from "react-bootstrap/Button";
+
 import request from "../utils/request.js";
 
 export default function Login() {
@@ -81,6 +85,20 @@ export default function Login() {
 						/>
 						<label className="form-label">Remember me?</label>
 					</div>
+					<div className="mb-3">
+						<label className="form-label">
+							Don't have an account?
+							<Button
+								as={Link}
+								to="/Register"
+								variant="link"
+								className="p-0 align-baseline"
+							>
+								Register
+							</Button>
+						</label>
+					</div>
+
 					<button type="submit" className="btn btn-primary w-100">
 						Login
 					</button>

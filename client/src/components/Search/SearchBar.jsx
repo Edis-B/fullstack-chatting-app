@@ -9,7 +9,7 @@ export default function SearchBar() {
 
 	const handleSearch = () => {
 		if (!searchQuery) {
-			enqueueError("Search requires a value!");
+			enqueueError("Input search query!");
 			return;
 		}
 
